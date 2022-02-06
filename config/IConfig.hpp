@@ -11,6 +11,8 @@ namespace config {
 			// parse file on path in argument and fill config data
 			// throw exeption in case of bad config file
 			virtual void parse(const std::string& filename) = 0;
+
+			// TODO add get_logger and get_server
 	};
 }; /* namespace config */
 

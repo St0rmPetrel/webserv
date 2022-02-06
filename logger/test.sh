@@ -6,10 +6,10 @@ GOT_FILE_NAME="temp_got"
 
 SRC_TEST_CODE='
 #include <iostream>
-#include "LoggerMock.hpp"
+#include "Logger.hpp"
 
 int main() {
-	logger::LoggerMock l;
+	logger::Logger l;
 
 	std::cerr << std::endl;
 
