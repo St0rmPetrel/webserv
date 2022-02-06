@@ -10,6 +10,7 @@ namespace logger {
 		public:
 			virtual ~ILogger() { }
 
+			// set_up logger according to cofiguration
 			virtual void set_up(const config::ILoggerConfig& conf) = 0;
 
 			// Prints message to the stderr

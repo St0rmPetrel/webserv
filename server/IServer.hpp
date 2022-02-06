@@ -9,6 +9,7 @@ namespace server {
 		public:
 			virtual ~IServer() { }
 
+			// set_up server according to cofiguration
 			virtual void set_up(const config::IServerConfig& conf) = 0;
 
 			// serve_http major function of the project
