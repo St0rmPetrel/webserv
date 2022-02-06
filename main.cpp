@@ -3,9 +3,9 @@
 #include "server/Server.hpp"
 
 int main(int argc, char *argv[]) {
-	config::Config conf;
 	logger::Logger log;
-	server::Server serv;
+	config::Config conf(log);
+	server::Server serv(log);
 
 	// Check that number of command line arguments is strictly one - name
 	//  of configuration file of a web server
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
 
 	// Set up logger and server according to configuration file
 	log.set_up(conf.get_logger());
-	serv.set_up(log, conf.get_server());
+	serv.set_up(conf.get_server());
 
 	// Serve HTTP connections
 	try {

@@ -1,5 +1,5 @@
-#ifndef LOGGER_OPTION_HPP
-# define LOGGER_OPTION_HPP
+#ifndef LOGGER_OPTIONS_HPP
+# define LOGGER_OPTIONS_HPP
 
 namespace logger {
 	class Option {
