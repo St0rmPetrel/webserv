@@ -5,20 +5,20 @@
 
 using namespace config;
 
-Config::Config(const logger::ILogger& log) : log(log) { }
+Config::Config(const logger::ILogger& log) : _log(log) { }
 
 Config::~Config() { }
 
 void Config::parse(const std::string& filename) {
-	log.debug("parse file: " + filename);
+	_log.debug("parse file: " + filename);
 }
 
 const ILoggerConfig& Config::get_logger() const {
-	return (this->log_conf);
+	return (this->_log_conf);
 }
 
 const IServerConfig& Config::get_server() const {
-	return (this->serv_conf);
+	return (this->_serv_conf);
 }
 
 Config::LoggerConfig::LoggerConfig() { }

@@ -9,30 +9,30 @@ using namespace logger;
 
 Logger::Logger() { }
 
-Logger::Logger(const Logger& src) : fields(src.fields) { }
+Logger::Logger(const Logger& src) : _fields(src._fields) { }
 
-Logger::Logger(const std::string& fields) : fields(fields) { }
+Logger::Logger(const std::string& fields) : _fields(fields) { }
 
 Logger::~Logger() { }
 
 void Logger::debug(const std::string& msg) const {
-	std::cerr << "[DEBUG] " << msg << " " << this->fields << std::endl;
+	std::cerr << "[DEBUG] " << msg << " " << this->_fields << std::endl;
 }
 
 void Logger::info(const std::string& msg) const {
-	std::cerr << "[INFO] " << msg << " " << this->fields << std::endl;
+	std::cerr << "[INFO] " << msg << " " << this->_fields << std::endl;
 }
 
 void Logger::warn(const std::string& msg) const {
-	std::cerr << "[WARN] " << msg << " " << this->fields << std::endl;
+	std::cerr << "[WARN] " << msg << " " << this->_fields << std::endl;
 }
 
 void Logger::fatal(const std::string& msg) const {
-	std::cerr << "[FATAL] " << msg << " " << this->fields << std::endl;
+	std::cerr << "[FATAL] " << msg << " " << this->_fields << std::endl;
 }
 
 ILogger& Logger::with_field(const std::string& key, const std::string& value) {
-	this->fields += " " + key + "=" + value;
+	this->_fields += " " + key + "=" + value;
 	return *this;
 }
 

@@ -20,10 +20,10 @@ namespace config {
 					~ServerConfig();
 			};
 		private:
-			ServerConfig serv_conf;
-			LoggerConfig log_conf;
+			ServerConfig _serv_conf;
+			LoggerConfig _log_conf;
 
-			const logger::ILogger& log;
+			const logger::ILogger& _log;
 		public:
 			Config(const logger::ILogger& log);
 			~Config();

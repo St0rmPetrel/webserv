@@ -10,7 +10,7 @@ namespace logger {
 	// Logger super easy implementation of ILogger interface
 	class Logger : public ILogger {
 		private:
-			std::string fields;
+			std::string _fields;
 		public:
 			Logger();
 			Logger(const std::string& fields);

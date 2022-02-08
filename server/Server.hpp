@@ -8,7 +8,7 @@
 namespace server {
 	class Server : public IServer {
 		private:
-			const logger::ILogger& log;
+			const logger::ILogger& _log;
 		public:
 			Server(const logger::ILogger& log);
 			~Server();
