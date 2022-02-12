@@ -6,24 +6,19 @@ GOT_FILE_NAME="temp_got"
 
 SRC_TEST_CODE='
 #include <iostream>
-#include "Logger.hpp"
+
+#include "Config.hpp"
+#include "../logger/Logger.hpp"
 
 int main() {
-	logger::Logger l;
-
-	std::cerr << std::endl;
-
-	l.debug("Hello World!");
-	l.with_field("name", "Sandro").debug("Hello again!");
+	logger::Logger log;
+	config::Config conf(log);
 
 	std::cerr << std::endl;
 }
 '
 
-WANT='
-[DEBUG] Hello World! 
-[DEBUG] Hello again!  name=Sandro
-'
+WANT=''
 
 clean () {
 	rm -f $EXEC_FILE_NAME
@@ -33,7 +28,7 @@ clean () {
 
 compile () {
 	echo "$SRC_TEST_CODE" |
-	clang++ -std="c++98" -Wall -Wextra -Werror -o $EXEC_FILE_NAME -x c++ - *.cpp
+	clang++ -std="c++98" -Wall -Wextra -Werror -o $EXEC_FILE_NAME -x c++ - *.cpp ../logger/*.cpp
 }
 
 test_fail () {
