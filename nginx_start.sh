@@ -1,1 +1,1 @@
-nginx -c $PWD/nginx.conf -g 'daemon off;'
+nginx -c $PWD/webserv.conf -g 'daemon off;'
