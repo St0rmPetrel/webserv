@@ -2,15 +2,23 @@
 #define LOGGERMOCK_HPP
 
 #include <string>
+#include <ctime>
+#include <iomanip>
+#include <fstream>
 
 #include "ILogger.hpp"
 #include "../config/IConfig.hpp"
+#include "../config/Config.hpp"
 
 namespace logger {
+
 	// Logger super easy implementation of ILogger interface
 	class Logger : public ILogger {
 		private:
-			std::string _fields;
+			std::string		_fields;
+			std::ostream	*_stream;
+			int				_enabled_level;
+
 		public:
 			Logger();
 			Logger(const std::string& fields);
@@ -26,6 +34,10 @@ namespace logger {
 
 			// TODO make it better
 			ILogger& with_field(const std::string& key, const std::string& value);
+
+	private:
+			void _print_message(const std::string & level, const std::string & msg) const;
+			std::string _generate_time_code(void) const;
 	};
 }; /* namespace logger */
 

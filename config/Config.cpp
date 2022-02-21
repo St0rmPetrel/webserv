@@ -21,9 +21,29 @@ const IServerConfig& Config::get_server() const {
 	return (this->_serv_conf);
 }
 
-Config::LoggerConfig::LoggerConfig() { }
+Config::LoggerConfig::LoggerConfig() : _logfile(""), _level(logger::DEBUG) { }
 
 Config::LoggerConfig::~LoggerConfig() { }
+
+void Config::LoggerConfig::setLogfile(const std::string &logfile)
+{
+	_logfile = logfile;
+}
+
+void Config::LoggerConfig::setLevel(int level)
+{
+	_level = level;
+}
+
+const std::string &Config::LoggerConfig::getLogfile() const
+{
+	return _logfile;
+}
+
+int Config::LoggerConfig::getLevel() const
+{
+	return _level;
+}
 
 Config::ServerConfig::ServerConfig() { }
 

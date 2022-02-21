@@ -6,6 +6,19 @@
 #include "../config/IConfig.hpp"
 
 namespace logger {
+
+	#define DEBUG_MSG " [debug] "
+	#define INFO_MSG " [info] "
+	#define WARN_MSG " [WARN] "
+	#define FATAL_MSG " [fatal] "
+
+	enum {
+		DEBUG,
+		INFO,
+		WARN,
+		FATAL
+	};
+
 	class ILogger {
 		public:
 			virtual ~ILogger() { }
