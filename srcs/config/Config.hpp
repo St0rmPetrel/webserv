@@ -2,6 +2,7 @@
 # define CONFIG_HPP
 
 #include <string>
+#include <vector>
 
 #include "IConfig.hpp"
 #include "../logger/ILogger.hpp"
@@ -19,6 +20,17 @@ namespace config {
 					ServerConfig();
 					~ServerConfig();
 			};
+
+			struct Directive {
+				std::string              name;
+				std::vector<std::string> args;
+			};
+			struct Module {
+				Module();
+				~Module();
+				std::vector<Module>    scopes;
+				std::vector<Directive> derctives;
+			};
 		private:
 			ServerConfig _serv_conf;
 			LoggerConfig _log_conf;
@@ -32,6 +44,10 @@ namespace config {
 
 			const ILoggerConfig& get_logger() const;
 			const IServerConfig& get_server() const;
+		private:
+			const std::vector<std::string> _lexing(const std::string& filename) const;
+			const Module                   _parsing(const std::vector<std::string>& tokens) const;
+			void                           _fill_options(const Module& global_module);
 	};
 };
 
