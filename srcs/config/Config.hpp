@@ -28,7 +28,7 @@ namespace config {
 			struct Module {
 				Module();
 				~Module();
-				std::vector<Module>    scopes;
+				std::vector<Module>    modules;
 				std::vector<Directive> derctives;
 			};
 		private:
