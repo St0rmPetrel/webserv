@@ -1,3 +1,0 @@
-2022/02/12 14:01:41 [warn] 22581#0: 512 worker_connections exceed open file resource limit: 256
-2022/02/12 14:02:02 [warn] 22822#0: 512 worker_connections exceed open file resource limit: 256
-2022/02/12 14:05:34 [warn] 25321#0: 512 worker_connections exceed open file resource limit: 256
