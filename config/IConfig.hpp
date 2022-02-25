@@ -7,6 +7,12 @@ namespace config {
 	class ILoggerConfig {
 		public:
 			virtual ~ILoggerConfig() { }
+
+			virtual void setLogfile(const std::string &logfile) = 0;
+			virtual void setLevel(int level) = 0;
+
+			virtual const std::string	&getLogfile() const = 0;
+			virtual int 				getLevel() const = 0;
 	};
 
 	class IServerConfig {

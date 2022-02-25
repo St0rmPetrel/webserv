@@ -10,6 +10,13 @@
 #include "../config/IConfig.hpp"
 #include "../config/Config.hpp"
 
+// TODO: transfer defines to common.h
+#define BLANK "\033[0m"
+#define RED "\033[31m"
+#define GREEN "\033[32m"
+#define YELLOW "\033[33m"
+#define BLUE "\033[34m"
+
 namespace logger {
 
 	// Logger super easy implementation of ILogger interface
@@ -17,6 +24,8 @@ namespace logger {
 		private:
 			std::string		_fields;
 			std::ostream	*_stream;
+			std::fstream	_file_stream;
+			bool			_bfile_output;
 			int				_enabled_level;
 
 		public:
@@ -36,7 +45,7 @@ namespace logger {
 			ILogger& with_field(const std::string& key, const std::string& value);
 
 	private:
-			void _print_message(const std::string & level, const std::string & msg) const;
+			void _print_message(const std::string & level, const std::string & msg, const std::string & color) const;
 			std::string _generate_time_code(void) const;
 	};
 }; /* namespace logger */
