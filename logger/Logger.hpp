@@ -12,10 +12,10 @@
 
 // TODO: transfer defines to common.h
 #define BLANK "\033[0m"
-#define RED "\033[31m"
-#define GREEN "\033[32m"
-#define YELLOW "\033[33m"
-#define BLUE "\033[34m"
+#define RED "\033[31m\xf0\x9f\x94\xa5 "
+#define GREEN "\033[32m\xf0\x9f\x93\x8c\xef\xb8\x8f "
+#define YELLOW "\033[33m\xe2\x9d\x97\xef\xb8\x8f "
+#define BLUE "\033[34m\xf0\x9f\x90\x9e "
 
 namespace logger {
 
