@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "../config/IConfig.hpp"
+#include "Options.hpp"
 
 namespace logger {
 	class ILogger {
@@ -11,7 +11,7 @@ namespace logger {
 			virtual ~ILogger() { }
 
 			// set_up logger according to cofiguration
-			virtual void set_up(const config::ILoggerConfig& conf) = 0;
+			virtual void set_up(const Options& opts) = 0;
 
 			// Prints message to the stderr
 			virtual void debug(const std::string& msg) const = 0;

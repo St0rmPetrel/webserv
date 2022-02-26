@@ -1,6 +1,6 @@
 #include "Server.hpp"
+#include "Options.hpp"
 #include "../logger/ILogger.hpp"
-#include "../config/IConfig.hpp"
 
 using namespace server;
 
@@ -12,6 +12,6 @@ void Server::serve_http() {
 	_log.info("start serve http on port bla bla");
 }
 
-void Server::set_up(const config::IServerConfig& conf) {
-	(void)conf;
+void Server::set_up(const Options& opts) {
+	this->_opts = opts;
 }

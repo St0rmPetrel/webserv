@@ -7,20 +7,12 @@
 #include "IConfig.hpp"
 #include "../logger/ILogger.hpp"
 
+#include "../logger/Options.hpp"
+#include "../server/Options.hpp"
+
 namespace config {
 	class Config : public IConfig {
 		private:
-			class LoggerConfig : public ILoggerConfig {
-				public:
-					LoggerConfig();
-					~LoggerConfig();
-			};
-			class ServerConfig : public IServerConfig {
-				public:
-					ServerConfig();
-					~ServerConfig();
-			};
-
 			struct Directive {
 				std::string              name;
 				std::vector<std::string> args;
@@ -32,8 +24,8 @@ namespace config {
 				std::vector<Directive> derctives;
 			};
 		private:
-			ServerConfig _serv_conf;
-			LoggerConfig _log_conf;
+			server::Options _serv_opts;
+			logger::Options _log_opts;
 
 			const logger::ILogger& _log;
 		public:
@@ -42,8 +34,8 @@ namespace config {
 
 			void parse(const std::string& filename);
 
-			const ILoggerConfig& get_logger() const;
-			const IServerConfig& get_server() const;
+			const logger::Options& get_logger() const;
+			const server::Options& get_server() const;
 		private:
 			const std::vector<std::string> _lexing(const std::string& filename) const;
 			const Module                   _parsing(const std::vector<std::string>& tokens) const;

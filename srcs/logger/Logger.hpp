@@ -4,20 +4,21 @@
 #include <string>
 
 #include "ILogger.hpp"
-#include "../config/IConfig.hpp"
+#include "Options.hpp"
 
 namespace logger {
 	// Logger super easy implementation of ILogger interface
 	class Logger : public ILogger {
 		private:
 			std::string _fields;
+			Options     _opts;
 		public:
 			Logger();
 			Logger(const std::string& fields);
 			Logger(const Logger& src);
 			~Logger();
 
-			void set_up(const config::ILoggerConfig& conf);
+			void set_up(const Options& opts);
 
 			void debug(const std::string& msg) const;
 			void info(const std::string& msg) const;

@@ -3,17 +3,10 @@
 
 #include <string>
 
+#include "../logger/Options.hpp"
+#include "../server/Options.hpp"
+
 namespace config {
-	class ILoggerConfig {
-		public:
-			virtual ~ILoggerConfig() { }
-	};
-
-	class IServerConfig {
-		public:
-			virtual ~IServerConfig() { }
-	};
-
 	class IConfig {
 		public:
 			virtual ~IConfig() { }
@@ -22,10 +15,10 @@ namespace config {
 			// throw exeption in case of bad config file
 			virtual void parse(const std::string& filename) = 0;
 
-			// return logger configuration
-			virtual const ILoggerConfig& get_logger() const = 0;
-			// return server configuration
-			virtual const IServerConfig& get_server() const = 0;
+			// return logger configuration options
+			virtual const logger::Options& get_logger() const = 0;
+			// return server configuration options
+			virtual const server::Options& get_server() const = 0;
 	};
 }; /* namespace config */
 
