@@ -2,6 +2,8 @@
 # define ICONFIG_HPP
 
 #include <string>
+#include <ILogger.hpp>
+#include "../logger/ILogger.hpp"
 
 namespace config {
 	class ILoggerConfig {
@@ -9,10 +11,10 @@ namespace config {
 			virtual ~ILoggerConfig() { }
 
 			virtual void setLogfile(const std::string &logfile) = 0;
-			virtual void setLevel(int level) = 0;
+			virtual void setLevel(logger::Level level) = 0;
 
 			virtual const std::string	&getLogfile() const = 0;
-			virtual int 				getLevel() const = 0;
+			virtual logger::Level 				getLevel() const = 0;
 	};
 
 	class IServerConfig {

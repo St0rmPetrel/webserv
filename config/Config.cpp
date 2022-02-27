@@ -1,7 +1,6 @@
 #include <string>
 
 #include "Config.hpp"
-#include "../logger/ILogger.hpp"
 
 using namespace config;
 
@@ -30,7 +29,7 @@ void Config::LoggerConfig::setLogfile(const std::string &logfile)
 	_logfile = logfile;
 }
 
-void Config::LoggerConfig::setLevel(int level)
+void Config::LoggerConfig::setLevel(logger::Level level)
 {
 	_level = level;
 }
@@ -40,7 +39,7 @@ const std::string &Config::LoggerConfig::getLogfile() const
 	return _logfile;
 }
 
-int Config::LoggerConfig::getLevel() const
+logger::Level Config::LoggerConfig::getLevel() const
 {
 	return _level;
 }

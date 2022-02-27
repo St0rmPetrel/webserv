@@ -7,12 +7,12 @@
 
 namespace logger {
 
-	#define DEBUG_MSG " [debug] "
-	#define INFO_MSG " [info] "
-	#define WARN_MSG " [WARN] "
-	#define FATAL_MSG " [fatal] "
+	const std::string DEBUG_MSG = " [DEBUG] ";
+	const std::string INFO_MSG = " [INFO] ";
+	const std::string WARN_MSG = " [WARN] ";
+	const std::string FATAL_MSG = " [FATAL] ";
 
-	enum {
+	enum Level {
 		DEBUG,
 		INFO,
 		WARN,

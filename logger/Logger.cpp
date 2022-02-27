@@ -10,7 +10,7 @@ using namespace logger;
 Logger::Logger() : _stream(&std::cerr), _bfile_output(false), _enabled_level(DEBUG) {
 }
 
-Logger::Logger(const Logger& src) : _fields(src._fields), _stream(src._stream), _bfile_output(false), _enabled_level(src._enabled_level) { }
+Logger::Logger(const Logger& src) : _fields(src._fields), _stream(src._stream), _bfile_output(src._bfile_output), _enabled_level(src._enabled_level) { }
 
 Logger::Logger(const std::string& fields) : _fields(fields), _stream(&std::cerr), _bfile_output(false), _enabled_level(DEBUG) { }
 
@@ -70,9 +70,13 @@ std::string Logger::_generate_time_code(void) const
 	tm = std::localtime(&_time);
 
 	// date
-	_str << (tm->tm_year + 1900) << "/" << std::setfill('0') << std::setw(2) << (tm->tm_mon + 1) << "/" << std::setfill('0') << std::setw(2) << (tm->tm_mday);
+	_str << (tm->tm_year + 1900) << "/";
+	_str << std::setfill('0') << std::setw(2) << (tm->tm_mon + 1) << "/";
+	_str << std::setfill('0') << std::setw(2) << (tm->tm_mday);
 	// time
-	_str << " " << std::setfill('0') << std::setw(2) << tm->tm_hour << ":" << std::setfill('0') << std::setw(2) << tm->tm_min << ":" << std::setfill('0') << std::setw(2) << tm->tm_sec;
+	_str << " " << std::setfill('0') << std::setw(2) << tm->tm_hour << ":";
+	_str << std::setfill('0') << std::setw(2) << tm->tm_min << ":";
+	_str << std::setfill('0') << std::setw(2) << tm->tm_sec;
 
 	return (_str.str());
 }
