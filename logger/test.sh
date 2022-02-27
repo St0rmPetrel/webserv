@@ -1,8 +1,6 @@
 TEST_NAME="Logger Test"
 
 EXEC_FILE_NAME="temp_exec"
-WANT_FILE_NAME="temp_want"
-GOT_FILE_NAME="temp_got"
 
 SRC_TEST_CODE='
 #include <iostream>
@@ -13,22 +11,15 @@ int main() {
 
 	std::cerr << std::endl;
 
-	l.debug("Hello World!");
 	l.with_field("name", "Sandro").debug("Hello again!");
+	l.debug("Hello World!");
 
 	std::cerr << std::endl;
 }
 '
 
-WANT='
-[DEBUG] Hello World! 
-[DEBUG] Hello again!  name=Sandro
-'
-
 clean () {
 	rm -f $EXEC_FILE_NAME
-	rm -f $WANT_FILE_NAME
-	rm -f $GOT_FILE_NAME
 }
 
 compile () {
@@ -48,13 +39,7 @@ then
 	test_fail
 fi
 
-./$EXEC_FILE_NAME 2> $GOT_FILE_NAME
-echo -e "$WANT" > $WANT_FILE_NAME
-
-if ! diff -c $GOT_FILE_NAME $WANT_FILE_NAME
-then
-	test_fail
-fi
+./$EXEC_FILE_NAME
 
 clean
 echo

@@ -13,17 +13,6 @@ namespace config {
 				public:
 					LoggerConfig();
 					~LoggerConfig();
-
-					void setLogfile(const std::string &logfile);
-					void setLevel(logger::Level level);
-
-					const std::string	&getLogfile() const;
-				logger::Level 				getLevel() const;
-
-				private:
-					std::string	_logfile;
-				logger::Level 		_level;
-
 			};
 			class ServerConfig : public IServerConfig {
 				public:

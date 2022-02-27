@@ -1,6 +1,7 @@
 #include <string>
 
 #include "Config.hpp"
+#include "../logger/ILogger.hpp"
 
 using namespace config;
 
@@ -20,29 +21,9 @@ const IServerConfig& Config::get_server() const {
 	return (this->_serv_conf);
 }
 
-Config::LoggerConfig::LoggerConfig() : _logfile(""), _level(logger::DEBUG) { }
+Config::LoggerConfig::LoggerConfig() { }
 
 Config::LoggerConfig::~LoggerConfig() { }
-
-void Config::LoggerConfig::setLogfile(const std::string &logfile)
-{
-	_logfile = logfile;
-}
-
-void Config::LoggerConfig::setLevel(logger::Level level)
-{
-	_level = level;
-}
-
-const std::string &Config::LoggerConfig::getLogfile() const
-{
-	return _logfile;
-}
-
-logger::Level Config::LoggerConfig::getLevel() const
-{
-	return _level;
-}
 
 Config::ServerConfig::ServerConfig() { }
 

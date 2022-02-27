@@ -44,20 +44,21 @@ ILogger& Logger::with_field(const std::string& key, const std::string& value) {
 	return *this;
 }
 
-void Logger::set_up(const config::ILoggerConfig& conf) {
-	const std::string & file = conf.getLogfile();
-	if (!file.empty())
-	{
-		_file_stream.open(file, std::fstream::out | std::fstream::app);
-		if (_file_stream.is_open())
-		{
-			_stream = &_file_stream;
-			_bfile_output = true;
-		}
-		else
-			this->warn("logfile error");
-	}
-	_enabled_level = conf.getLevel();
+void Logger::set_up(const Options& opts) {
+	(void)opts;
+	//const std::string & file = conf.getLogfile();
+	//if (!file.empty())
+	//{
+	//	_file_stream.open(file, std::fstream::out | std::fstream::app);
+	//	if (_file_stream.is_open())
+	//	{
+	//		_stream = &_file_stream;
+	//		_bfile_output = true;
+	//	}
+	//	else
+	//		this->warn("logfile error");
+	//}
+	//_enabled_level = conf.getLevel();
 }
 
 std::string Logger::_generate_time_code(void) const
@@ -66,7 +67,7 @@ std::string Logger::_generate_time_code(void) const
 	std::time_t _time;
 	std::tm* tm;
 
-	_time = time(nullptr);
+	_time = time(NULL);
 	tm = std::localtime(&_time);
 
 	// date

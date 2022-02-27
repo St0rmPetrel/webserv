@@ -2,19 +2,11 @@
 # define ICONFIG_HPP
 
 #include <string>
-#include <ILogger.hpp>
-#include "../logger/ILogger.hpp"
 
 namespace config {
 	class ILoggerConfig {
 		public:
 			virtual ~ILoggerConfig() { }
-
-			virtual void setLogfile(const std::string &logfile) = 0;
-			virtual void setLevel(logger::Level level) = 0;
-
-			virtual const std::string	&getLogfile() const = 0;
-			virtual logger::Level 				getLevel() const = 0;
 	};
 
 	class IServerConfig {
@@ -27,7 +19,7 @@ namespace config {
 			virtual ~IConfig() { }
 
 			// parse file on path in argument and fill config data
-			// throw exception in case of bad config file
+			// throw exeption in case of bad config file
 			virtual void parse(const std::string& filename) = 0;
 
 			// return logger configuration

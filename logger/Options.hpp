@@ -2,7 +2,7 @@
 # define LOGGER_OPTIONS_HPP
 
 namespace logger {
-	class Option {
+	struct Options {
 	};
 }; /* namespace logger */
 

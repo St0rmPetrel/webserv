@@ -7,8 +7,7 @@
 #include <fstream>
 
 #include "ILogger.hpp"
-#include "../config/IConfig.hpp"
-#include "../config/Config.hpp"
+#include "Options.hpp"
 
 const std::string BLANK =  "\033[0m";
 const std::string RED = "\033[31m\xf0\x9f\x94\xa5 ";
@@ -33,7 +32,7 @@ namespace logger {
 			Logger(const Logger& src);
 			~Logger();
 
-			void set_up(const config::ILoggerConfig& conf);
+			void set_up(const Options& conf);
 
 			void debug(const std::string& msg) const;
 			void info(const std::string& msg) const;
