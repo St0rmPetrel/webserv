@@ -30,7 +30,7 @@ const server::Options& Config::get_server() const {
 
 const std::vector<std::string> Config::_lexing(const std::string& filename) const {
 	_log.debug("start procesing a file: " + filename);
-	_log.debug("lexing: read all file, delete comments, process includes, and splitting words into tokens");
+	_log.debug("lexing: read all file, delete comments  and splitting words into tokens");
 	return std::vector<std::string>();
 }
 
