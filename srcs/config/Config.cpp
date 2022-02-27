@@ -46,6 +46,10 @@ void Config::_fill_options(const Config::Module& global_module) {
 	_log.debug("start filling configuration staf in to logger and server options");
 }
 
-Config::Module::Module() { }
+const char* Config::LexingErrorException::what () const throw () {
+	return "lexing error";
+}
 
-Config::Module::~Module() { }
+const char* Config::ParsingErrorException::what () const throw () {
+	return "lexing error";
+}
