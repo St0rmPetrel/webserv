@@ -10,10 +10,10 @@
 #include "Options.hpp"
 
 const std::string BLANK =  "\033[0m";
-const std::string RED = "\033[31m\xf0\x9f\x94\xa5 ";
-const std::string GREEN = "\033[32m\xf0\x9f\x93\x8c\xef\xb8\x8f ";
-const std::string YELLOW = "\033[33m\xe2\x9d\x97\xef\xb8\x8f ";
-const std::string BLUE = "\033[34m\xf0\x9f\x90\x9e ";
+const std::string RED = "\033[31m\xf0\x9f\x94\xa5";
+const std::string GREEN = "\033[32m\xf0\x9f\x93\x8c\xef\xb8\x8f";
+const std::string YELLOW = "\033[33m\xe2\x9d\x97\xef\xb8\x8f";
+const std::string BLUE = "\033[34m\xf0\x9f\x90\x9e";
 
 namespace logger {
 
@@ -21,10 +21,11 @@ namespace logger {
 	class Logger : public ILogger {
 		private:
 			std::string		_fields;
-			std::ostream	*_stream;
-			std::fstream	_file_stream;
-			bool			_bfile_output;
-			Level			_enabled_level;
+			Options			_opt;
+//			std::ostream	*_stream;
+//			std::fstream	_file_stream;
+//			bool			_bfile_output;
+//			Level			_enabled_level;
 
 		public:
 			Logger();
@@ -34,16 +35,16 @@ namespace logger {
 
 			void set_up(const Options& conf);
 
-			void debug(const std::string& msg) const;
-			void info(const std::string& msg) const;
-			void warn(const std::string& msg) const;
-			void fatal(const std::string& msg) const;
+			void debug(const std::string& msg);
+			void info(const std::string& msg);
+			void warn(const std::string& msg);
+			void fatal(const std::string& msg);
 
 			// TODO make it better
 			ILogger& with_field(const std::string& key, const std::string& value);
 
 	private:
-			void _print_message(const std::string & level, const std::string & msg, const std::string & color) const;
+			void _print_message(const std::string & level, const std::string & msg, const std::string & color);
 			std::string _generate_time_code(void) const;
 	};
 }; /* namespace logger */

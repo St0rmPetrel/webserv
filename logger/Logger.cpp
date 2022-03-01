@@ -7,36 +7,39 @@
 
 using namespace logger;
 
-Logger::Logger() : _stream(&std::cerr), _bfile_output(false), _enabled_level(DEBUG) {
+Logger::Logger() : _opt(), _fields("") {
 }
 
-Logger::Logger(const Logger& src) : _fields(src._fields), _stream(src._stream), _bfile_output(src._bfile_output), _enabled_level(src._enabled_level) { }
+Logger::Logger(const Logger& src) : _opt(src._opt), _fields(src._fields) { }
 
-Logger::Logger(const std::string& fields) : _fields(fields), _stream(&std::cerr), _bfile_output(false), _enabled_level(DEBUG) { }
+Logger::Logger(const std::string& fields) : _opt(), _fields(fields) { }
 
 Logger::~Logger() {
-	if (_bfile_output)
-		_file_stream.close();
+
 }
 
-void Logger::debug(const std::string& msg) const {
-	if (_enabled_level <= DEBUG)
+void Logger::debug(const std::string& msg) {
+	if (_opt._enabled_level <= DEBUG)
 		_print_message(DEBUG_MSG, msg, BLUE);
+	_fields = "";
 }
 
-void Logger::info(const std::string& msg) const {
-	if (_enabled_level <= INFO)
+void Logger::info(const std::string& msg) {
+	if (_opt._enabled_level <= INFO)
 		_print_message(INFO_MSG, msg, GREEN);
+	_fields = "";
 }
 
-void Logger::warn(const std::string& msg) const {
-	if (_enabled_level <= WARN)
+void Logger::warn(const std::string& msg) {
+	if (_opt._enabled_level <= WARN)
 		_print_message(WARN_MSG, msg, YELLOW);
+	_fields = "";
 }
 
-void Logger::fatal(const std::string& msg) const {
-	if (_enabled_level <= FATAL)
+void Logger::fatal(const std::string& msg) {
+	if (_opt._enabled_level <= FATAL)
 		_print_message(FATAL_MSG, msg, RED);
+	_fields = "";
 }
 
 ILogger& Logger::with_field(const std::string& key, const std::string& value) {
@@ -82,11 +85,11 @@ std::string Logger::_generate_time_code(void) const
 	return (_str.str());
 }
 
-void Logger::_print_message(const std::string & level, const std::string &msg, const std::string & color) const
+void Logger::_print_message(const std::string & level, const std::string &msg, const std::string & color)
 {
-	if (!_bfile_output)
-		*_stream << color;
-	*_stream << _generate_time_code() << level << msg << _fields << std::endl;
-	if (!_bfile_output)
-		*_stream << BLANK;
+	if (!_opt._bfile_output)
+		_opt._file_stream << _generate_time_code() << " " << color;
+	_opt._file_stream << level << msg << _fields << std::endl;
+	if (!_opt._bfile_output)
+		_opt._file_stream << BLANK;
 }

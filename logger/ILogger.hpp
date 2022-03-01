@@ -12,13 +12,6 @@ namespace logger {
 	const std::string WARN_MSG = " [WARN] ";
 	const std::string FATAL_MSG = " [FATAL] ";
 
-	enum Level {
-		DEBUG,
-		INFO,
-		WARN,
-		FATAL
-	};
-
 	class ILogger {
 		public:
 			virtual ~ILogger() { }
@@ -27,10 +20,10 @@ namespace logger {
 			virtual void set_up(const Options& conf) = 0;
 
 			// Prints message to the stderr
-			virtual void debug(const std::string& msg) const = 0;
-			virtual void info(const std::string& msg) const = 0;
-			virtual void warn(const std::string& msg) const = 0;
-			virtual void fatal(const std::string& msg) const = 0;
+			virtual void debug(const std::string& msg) = 0;
+			virtual void info(const std::string& msg) = 0;
+			virtual void warn(const std::string& msg) = 0;
+			virtual void fatal(const std::string& msg) = 0;
 
 			// Return new logger with predefined output fields
 			// TODO make it better
