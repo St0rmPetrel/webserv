@@ -9,7 +9,7 @@
 
 using namespace config;
 
-Config::Config(const logger::ILogger& log) : _log(log) { }
+Config::Config(logger::Logger log) : _log(log) { }
 
 Config::~Config() { }
 
@@ -31,11 +31,13 @@ const server::Options& Config::get_server() const {
 const std::vector<std::string> Config::_lexing(const std::string& filename) const {
 	_log.debug("start procesing a file: " + filename);
 	_log.debug("lexing: read all file, delete comments  and splitting words into tokens");
+	(void)filename;
 	return std::vector<std::string>();
 }
 
 const Config::Module Config::_parsing(const std::vector<std::string>& tokens) const {
 	(void)tokens;
+
 	_log.debug("start parsing tokens into global module structure");
 	_log.debug("splitting directives and modules");
 	return Config::Module();
@@ -51,5 +53,5 @@ const char* Config::LexingErrorException::what () const throw () {
 }
 
 const char* Config::ParsingErrorException::what () const throw () {
-	return "lexing error";
+	return "parsing error";
 }

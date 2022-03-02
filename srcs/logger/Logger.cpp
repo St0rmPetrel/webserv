@@ -47,8 +47,10 @@ ILogger& Logger::with_field(const std::string& key, const std::string& value) {
 	return *this;
 }
 
-void Logger::set_up(const Options& opts) {
-	this->_opts = opts;
+void Logger::set_up(const Options& opts)
+{
+	this->_opt = opts;
+}
 
 std::string Logger::_generate_time_code(void) const
 {

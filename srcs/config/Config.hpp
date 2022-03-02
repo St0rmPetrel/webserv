@@ -6,7 +6,7 @@
 #include <exception>
 
 #include "IConfig.hpp"
-#include "../logger/ILogger.hpp"
+#include "../logger/Logger.hpp"
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
@@ -50,9 +50,9 @@ namespace config {
 			// progress of the program
 			logger::Options _log_opts;
 
-			const logger::ILogger& _log;
+			logger::Logger _log;
 		public:
-			Config(const logger::ILogger& log);
+			Config(logger::Logger log);
 			~Config();
 
 			// parse take name of configuration file and read it
