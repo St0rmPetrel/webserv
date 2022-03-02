@@ -22,11 +22,11 @@ CONFIG_DIR = $(OBJSDIR)/config
 
 SERVER_DIR = $(OBJSDIR)/server
 
-LOGGER =    Logger
+LOGGER =    Logger Options
 
 CONFIG =	Config
 
-SERVER	=	Server
+SERVER	=	Server Options
 
 MAIN 	=	main
 

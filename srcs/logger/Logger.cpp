@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "Logger.hpp"
-#include "../config/IConfig.hpp"
+#include "Options.hpp"
 
 using namespace logger;
 
@@ -36,6 +36,6 @@ ILogger& Logger::with_field(const std::string& key, const std::string& value) {
 	return *this;
 }
 
-void Logger::set_up(const config::ILoggerConfig& conf) {
-	(void)conf;
+void Logger::set_up(const Options& opts) {
+	this->_opts = opts;
 }
