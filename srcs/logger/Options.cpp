@@ -19,7 +19,7 @@ logger::Options &logger::Options::operator=(const logger::Options &rh) {
 	file_stream.close();
 
 	file_name = rh.file_name;
-	file_stream.open(file_name); // todo: add check
+	file_stream.open(file_name, std::fstream::out | std::fstream::app); // todo: add check
 	bfile_output = rh.bfile_output;
 	enabled_level = rh.enabled_level;
 

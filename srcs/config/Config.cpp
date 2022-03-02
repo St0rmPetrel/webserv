@@ -28,14 +28,14 @@ const server::Options& Config::get_server() const {
 	return (this->_serv_opts);
 }
 
-const std::vector<std::string> Config::_lexing(const std::string& filename) const {
+const std::vector<std::string> Config::_lexing(const std::string& filename) {
 	_log.debug("start procesing a file: " + filename);
 	_log.debug("lexing: read all file, delete comments  and splitting words into tokens");
 	(void)filename;
 	return std::vector<std::string>();
 }
 
-const Config::Module Config::_parsing(const std::vector<std::string>& tokens) const {
+const Config::Module Config::_parsing(const std::vector<std::string>& tokens) {
 	(void)tokens;
 
 	_log.debug("start parsing tokens into global module structure");

@@ -86,7 +86,7 @@ namespace config {
 			// May throw exception in case of bad syntax of configuration file
 			//   example of bad syntax: "daemon off;;", "events {{ }", "events {; }"
 			//   (wrong token sequence)
-			const std::vector<std::string> _lexing(const std::string& filename) const;
+			const std::vector<std::string> _lexing(const std::string& filename);
 			// _parsing sort tokens into Module structure
 			//   example:
 			//     {"daemon", "off", ";", "events", "{", "}"}
@@ -101,7 +101,7 @@ namespace config {
 			// May throw exception in case of bad syntax
 			//   example of bad syntax: {"daemon", "off", ";", "events", "{"}
 			//   (don't close curly bracket)
-			const Module                   _parsing(const std::vector<std::string>& tokens) const;
+			const Module                   _parsing(const std::vector<std::string>& tokens);
 			// _fill_options sort data from Module structure to options of other classes
 			// will be expend during the progress of creation program
 			// May throw exception in case of bad directive or module name,
