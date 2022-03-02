@@ -5,6 +5,7 @@
 
 #include "IConfig.hpp"
 #include "../logger/ILogger.hpp"
+#include "../logger/Logger.hpp"
 
 namespace config {
 	class Config : public IConfig {
@@ -23,9 +24,9 @@ namespace config {
 			ServerConfig _serv_conf;
 			LoggerConfig _log_conf;
 
-			const logger::ILogger& _log;
+			logger::Logger _log;
 		public:
-			Config(const logger::ILogger& log);
+			Config(logger::Logger log);
 			~Config();
 
 			void parse(const std::string& filename);

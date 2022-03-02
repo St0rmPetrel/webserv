@@ -19,11 +19,10 @@ namespace logger {
 
 		Options& operator=(const Options& rh);
 
-//		std::ostream	*_stream;
-// todo: add file name
-		std::ofstream	_file_stream;
-		bool			_bfile_output;
-		Level			_enabled_level;
+		std::string		file_name;
+		std::ofstream	file_stream;
+		bool			bfile_output;
+		Level			enabled_level;
 
 	};
 }; /* namespace logger */

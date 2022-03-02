@@ -5,7 +5,7 @@
 
 using namespace config;
 
-Config::Config(const logger::ILogger& log) : _log(log) { }
+Config::Config(logger::Logger log) : _log(log) { }
 
 Config::~Config() { }
 

@@ -1,6 +1,6 @@
 #include "Options.hpp"
 
-logger::Options::Options() : _file_stream("/dev/stderr"), _bfile_output(false), _enabled_level(DEBUG)
+logger::Options::Options() : file_name(""), file_stream("/dev/stderr"), bfile_output(false), enabled_level(DEBUG)
 {
 }
 
@@ -10,18 +10,18 @@ logger::Options::Options(const logger::Options &ref) {
 
 
 logger::Options::~Options() {
-	_file_stream.close();
+	file_stream.close();
 }
 
 logger::Options &logger::Options::operator=(const logger::Options &rh) {
 	if (this == &rh)
 		return (*this);
+	file_stream.close();
 
-	_file_stream.close();
-
-//	_file_stream(rh._file_stream); // отсутствует конструктор копирование
-	_bfile_output = rh._bfile_output;
-	_enabled_level = rh._enabled_level;
+	file_name = rh.file_name;
+	file_stream.open(file_name); // todo: add check
+	bfile_output = rh.bfile_output;
+	enabled_level = rh.enabled_level;
 
 	return (*this);
 }

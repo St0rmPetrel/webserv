@@ -22,10 +22,6 @@ namespace logger {
 		private:
 			std::string		_fields;
 			Options			_opt;
-//			std::ostream	*_stream;
-//			std::fstream	_file_stream;
-//			bool			_bfile_output;
-//			Level			_enabled_level;
 
 		public:
 			Logger();

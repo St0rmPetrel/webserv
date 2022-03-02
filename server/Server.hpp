@@ -8,9 +8,9 @@
 namespace server {
 	class Server : public IServer {
 		private:
-			const logger::ILogger& _log;
+			logger::Logger _log;
 		public:
-			Server(const logger::ILogger& log);
+			Server(logger::Logger log);
 			~Server();
 
 			void serve_http();
