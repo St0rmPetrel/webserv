@@ -17,7 +17,7 @@ namespace logger {
 			virtual ~ILogger() { }
 
 			// set_up logger according to cofiguration
-			virtual void set_up(const Options& conf) = 0;
+			virtual void set_up(const Options& opts) = 0;
 
 			// Prints message to the stderr
 			virtual void debug(const std::string& msg) = 0;

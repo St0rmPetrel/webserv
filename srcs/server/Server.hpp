@@ -2,19 +2,20 @@
 # define SERVER_HPP
 
 #include "IServer.hpp"
-#include "../logger/ILogger.hpp"
-#include "../config/IConfig.hpp"
+#include "Options.hpp"
+#include "../logger/Logger.hpp"
 
 namespace server {
 	class Server : public IServer {
 		private:
 			logger::Logger _log;
+			Options	_opts;
 		public:
 			Server(logger::Logger log);
 			~Server();
 
 			void serve_http();
-			void set_up(const config::IServerConfig& conf);
+			void set_up(const Options& opts);
 	};
 };
 

@@ -9,6 +9,7 @@
 #include "ILogger.hpp"
 #include "Options.hpp"
 
+
 const std::string BLANK =  "\033[0m";
 const std::string RED = "\033[31m\xf0\x9f\x94\xa5";
 const std::string GREEN = "\033[32m\xf0\x9f\x93\x8c\xef\xb8\x8f";
@@ -29,7 +30,7 @@ namespace logger {
 			Logger(const Logger& src);
 			~Logger();
 
-			void set_up(const Options& conf);
+			void set_up(const Options& opts);
 
 			void debug(const std::string& msg);
 			void info(const std::string& msg);

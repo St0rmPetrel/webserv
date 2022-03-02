@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "Logger.hpp"
-#include "../config/IConfig.hpp"
+#include "Options.hpp"
 
 using namespace logger;
 
@@ -48,8 +48,7 @@ ILogger& Logger::with_field(const std::string& key, const std::string& value) {
 }
 
 void Logger::set_up(const Options& opts) {
-	_opt = opts;
-}
+	this->_opts = opts;
 
 std::string Logger::_generate_time_code(void) const
 {
