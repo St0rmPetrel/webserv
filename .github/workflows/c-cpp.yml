@@ -12,7 +12,7 @@ jobs:
     - name: logger_test
       run: cd ./srcs/logger/ ; ./test.sh
     - name: config_test
-      run cd ./srcs/config/ ; ./test.sh
+      run: cd ./srcs/config/ ; ./test.sh
     - name: server_test
       run: cd ./srcs/server/ ; ./test.sh
     - name: webserv
