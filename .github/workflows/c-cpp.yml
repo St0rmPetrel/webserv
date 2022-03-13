@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Webserv CI
 
 on: [push, pull_request]
 
@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: logger_test
-      run: $BASIC_TEST
+      run: cd $DIRECTORY ; ./test.sh
       env:
         DIRECTORY: ./srcs/logger/
     - name: config_test
