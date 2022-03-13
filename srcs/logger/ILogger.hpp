@@ -24,10 +24,6 @@ namespace logger {
 			virtual void info(const std::string& msg) = 0;
 			virtual void warn(const std::string& msg) = 0;
 			virtual void fatal(const std::string& msg) = 0;
-
-			// Return new logger with predefined output fields
-			// TODO make it better
-			virtual ILogger& with_field(const std::string& key, const std::string& value) = 0;
 	};
 }; /* namespace logger */
 

@@ -11,7 +11,6 @@ int main() {
 
 	std::cerr << std::endl;
 
-	l.with_field("name", "Sandro").debug("Hello again!");
 	l.debug("Hello World!");
 
 	std::cerr << std::endl;

@@ -19,10 +19,8 @@ namespace logger {
 
 		Options& operator=(const Options& rh);
 
-		std::string		file_name;
-		std::ofstream	file_stream;
-		bool			bfile_output;
 		Level			enabled_level;
+		std::string		file_name;
 
 	};
 }; /* namespace logger */
