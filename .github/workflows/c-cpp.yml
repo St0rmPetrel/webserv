@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: logger_test
-      run: ./srcs/logger/test.sh
+      run: cd ./srcs/logger/ ; ./test.sh
