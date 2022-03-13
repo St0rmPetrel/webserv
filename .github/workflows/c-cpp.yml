@@ -6,14 +6,22 @@ jobs:
   build:
 
     runs-on: macos-latest
+    env:
+      BASIC_TEST: "cd $DIRECTORY ; ./test.sh"
 
     steps:
     - uses: actions/checkout@v2
     - name: logger_test
-      run: cd ./srcs/logger/ ; ./test.sh
+      run: $BASIC_TEST
+      env:
+        DIRECTORY: ./srcs/logger/
     - name: config_test
-      run: cd ./srcs/config/ ; ./test.sh
+      run: $BASIC_TEST
+      env:
+        DIRECTORY: ./srcs/config/
     - name: server_test
-      run: cd ./srcs/server/ ; ./test.sh
+      run: $BASIC_TEST
+      env:
+        DIRECTORY: ./srcs/server/
     - name: webserv
       run: make
