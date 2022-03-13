@@ -7,7 +7,7 @@ jobs:
 
     runs-on: macos-latest
     env:
-      BASIC_TEST: "cd $DIRECTORY ; ./test.sh"
+      BASIC_TEST: "cd ${DIRECTORY} ; ./test.sh"
 
     steps:
     - uses: actions/checkout@v2
