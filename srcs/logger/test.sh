@@ -32,6 +32,7 @@ clean () {
 }
 
 compile () {
+  pwd
 	echo "$SRC_TEST_CODE" |
 	clang++ -std="c++98" -Wall -Wextra -Werror -o $EXEC_FILE_NAME -x c++ - *.cpp
 }
