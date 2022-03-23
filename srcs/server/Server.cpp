@@ -4,7 +4,7 @@
 
 using namespace server;
 
-Server::Server(logger::Logger log) : _log(log) { }
+Server::Server(const logger::Logger &log) : _log(log) { }
 
 Server::~Server() { }
 

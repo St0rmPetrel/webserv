@@ -9,7 +9,7 @@
 
 using namespace config;
 
-Config::Config(logger::Logger log) : _log(log) { }
+Config::Config(const logger::Logger &log) : _log(log) { }
 
 Config::~Config() { }
 

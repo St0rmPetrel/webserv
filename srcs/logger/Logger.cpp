@@ -8,41 +8,43 @@
 using namespace logger;
 
 Logger::Logger() : _opt() {
-	_file_stream.open("/dev/stderr", std::fstream::out | std::fstream::app);
+	_base_stream.open("/dev/stderr", std::fstream::out | std::fstream::app);
+	_file_stream = &_base_stream;
 }
 
 Logger::Logger(const Logger& src) : _opt(src._opt)
 {
 	_bfile_output = src._bfile_output;
-	_file_stream.open(src._opt.file_name, std::fstream::out | std::fstream::app);
-	if (!_file_stream.is_open())
+	_base_stream.open(src._opt.file_name, std::fstream::out | std::fstream::app);
+	if (!_base_stream.is_open())
 	{
 		_bfile_output = false;
-		_file_stream.open("/dev/stderr", std::fstream::out | std::fstream::app);
+		_base_stream.open("/dev/stderr", std::fstream::out | std::fstream::app);
 		// todo: check if it's open
 	}
+	_file_stream = &_base_stream;
 }
 
 Logger::~Logger() {
-	_file_stream.close();
+	_base_stream.close();
 }
 
-void Logger::debug(const std::string& msg) {
+void Logger::debug(const std::string& msg) const {
 	if (_opt.enabled_level <= DEBUG)
 		_print_message(DEBUG_MSG, msg, BLUE);
 }
 
-void Logger::info(const std::string& msg) {
+void Logger::info(const std::string& msg) const {
 	if (_opt.enabled_level <= INFO)
 		_print_message(INFO_MSG, msg, GREEN);
 }
 
-void Logger::warn(const std::string& msg) {
+void Logger::warn(const std::string& msg) const {
 	if (_opt.enabled_level <= WARN)
 		_print_message(WARN_MSG, msg, YELLOW);
 }
 
-void Logger::fatal(const std::string& msg) {
+void Logger::fatal(const std::string& msg) const {
 	if (_opt.enabled_level <= FATAL)
 		_print_message(FATAL_MSG, msg, RED);
 }
@@ -73,11 +75,11 @@ std::string Logger::_generate_time_code(void) const
 	return (str.str());
 }
 
-void Logger::_print_message(const std::string & level, const std::string &msg, const std::string & color)
+void Logger::_print_message(const std::string & level, const std::string &msg, const std::string & color) const
 {
 	if (!_bfile_output)
-		_file_stream << _generate_time_code() << " " << color;
-	_file_stream << level << msg << std::endl;
+		*_file_stream << _generate_time_code() << " " << color;
+	*_file_stream << level << msg << std::endl;
 	if (!_bfile_output)
-		_file_stream << BLANK;
+		*_file_stream << BLANK;
 }

@@ -21,7 +21,8 @@ namespace logger {
 	// Logger super easy implementation of ILogger interface
 	class Logger : public ILogger {
 		private:
-			std::ofstream	_file_stream;
+			std::ostream	*_file_stream;
+			std::ofstream	_base_stream;
 			bool			_bfile_output;
 			Options			 _opt;
 
@@ -32,13 +33,13 @@ namespace logger {
 
 			void set_up(const Options& opts);
 
-			void debug(const std::string& msg);
-			void info(const std::string& msg);
-			void warn(const std::string& msg);
-			void fatal(const std::string& msg);
+			void debug(const std::string& msg) const;
+			void info(const std::string& msg) const;
+			void warn(const std::string& msg) const;
+			void fatal(const std::string& msg) const;
 
 	private:
-			void _print_message(const std::string & level, const std::string & msg, const std::string & color);
+			void _print_message(const std::string & level, const std::string & msg, const std::string & color) const;
 			std::string _generate_time_code(void) const;
 	};
 }; /* namespace logger */

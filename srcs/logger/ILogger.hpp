@@ -20,10 +20,10 @@ namespace logger {
 			virtual void set_up(const Options& opts) = 0;
 
 			// Prints message to the stderr
-			virtual void debug(const std::string& msg) = 0;
-			virtual void info(const std::string& msg) = 0;
-			virtual void warn(const std::string& msg) = 0;
-			virtual void fatal(const std::string& msg) = 0;
+			virtual void debug(const std::string& msg) const = 0;
+			virtual void info(const std::string& msg) const = 0;
+			virtual void warn(const std::string& msg) const = 0;
+			virtual void fatal(const std::string& msg) const = 0;
 	};
 }; /* namespace logger */
 

@@ -8,10 +8,10 @@
 namespace server {
 	class Server : public IServer {
 		private:
-			logger::Logger _log;
+			const logger::Logger &_log;
 			Options	_opts;
 		public:
-			Server(logger::Logger log);
+			Server(const logger::Logger &log);
 			~Server();
 
 			void serve_http();

@@ -50,9 +50,9 @@ namespace config {
 			// progress of the program
 			logger::Options _log_opts;
 
-			logger::Logger _log;
+			const logger::Logger &_log;
 		public:
-			Config(logger::Logger log);
+			Config(const logger::Logger &log);
 			~Config();
 
 			// parse take name of configuration file and read it
