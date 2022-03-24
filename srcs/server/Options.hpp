@@ -3,8 +3,8 @@
 
 namespace server {
 	struct Options {
-		Options();
-		~Options();
+		int buffer_size;
+		int milliseconds_timeout;
 	};
 }; /* namespace server */
 
