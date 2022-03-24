@@ -22,18 +22,23 @@ CONFIG_DIR = $(OBJSDIR)/config
 
 SERVER_DIR = $(OBJSDIR)/server
 
+UTILS_DIR = $(OBJSDIR)/utils
+
 LOGGER =    Logger Options
 
 CONFIG =	Config
 
-SERVER	=	Server Options
+SERVER	=	Server Options ClientEvent EventManager
+
+UTILS	=
 
 MAIN 	=	main
 
 SRCS = $(addprefix $(SRCDIR)/, $(addsuffix .cpp, $(MAIN))) \
 	   $(addprefix $(SRCDIR)/logger/, $(addsuffix .cpp, $(LOGGER))) \
 	   $(addprefix $(SRCDIR)/config/, $(addsuffix .cpp, $(CONFIG))) \
-	   $(addprefix $(SRCDIR)/server/, $(addsuffix .cpp, $(SERVER)))
+	   $(addprefix $(SRCDIR)/server/, $(addsuffix .cpp, $(SERVER))) \
+	   $(addprefix $(SRCDIR)/utils/, $(addsuffix .cpp, $(UTILS)))
 
 
 OBJS_BUILD	=	$(patsubst $(SRCDIR)/%,$(OBJSDIR)/%,$(SRCS:.cpp=.o))

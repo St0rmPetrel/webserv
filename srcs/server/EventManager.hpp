@@ -12,16 +12,15 @@
 namespace server {
 	class EventManager {
 		private:
-			const std::vector<int>& _listeners;
+			std::vector<int>        _listeners;
 			const logger::ILogger&  _log;
 			const Options&          _opts;
 		public:
-			EventManager(const std::vector<int>& listeners,
-					const logger::ILogger& log, const Options& opts);
+			EventManager(const logger::ILogger& log, const Options& opts);
 			~EventManager();
 		public:
-			ClientEvent& accept_event();
-			void finish_event(ClientEvent& event);
+			ClientEvent* accept_event();
+			void finish_event(ClientEvent* event);
 		private:
 			std::vector<struct pollfd> _fds;
 			std::map<int, ClientEvent> _events;
