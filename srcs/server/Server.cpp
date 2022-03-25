@@ -24,7 +24,7 @@ Server::~Server() { }
 void Server::serve_http() {
 	EventManager event_manager(_log, _opts);
 
-	_log.info("start serve http on port bla bla");
+	_log.info("start serve http");
 	while (quit_flag == false) {
 		ClientEvent* event = event_manager.accept_event();
 		if (event == NULL) {

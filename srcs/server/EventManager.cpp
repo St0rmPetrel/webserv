@@ -16,7 +16,6 @@ EventManager::EventManager(const logger::ILogger& log, const Options& opts)
 	struct pollfd      fd;
 	int                listener;
 
-	_log.debug("initialize event manager, fill _fds for poll by listeners sockets");
 	for (std::vector<InetAddr>::const_iterator it = _opts.addrs.begin();
 			it != _opts.addrs.end(); it++) {
 		listener = socket(AF_INET, SOCK_STREAM, 0);
@@ -35,14 +34,16 @@ EventManager::EventManager(const logger::ILogger& log, const Options& opts)
 		fd.fd = listener;
 		fd.events = POLLIN;
 		this->_fds.push_back(fd);
+		_log.info(SSTR("open listener on " << it->addr << ":" << it->port));
 	}
+	_log.debug("construct event manager: fill poll_fds by listeners sockets");
 }
 
 EventManager::~EventManager() {
-	_log.debug("delete event manager, close all open sockets");
 	for (std::vector<struct pollfd>::iterator it = _fds.begin(); it != _fds.end(); it++) {
 		close(it->fd);
 	}
+	_log.debug("destruct event manager: close all sockets in poll_fds");
 }
 
 ClientEvent* EventManager::accept_event() {
@@ -53,7 +54,7 @@ ClientEvent* EventManager::accept_event() {
 }
 
 void EventManager::finish_event(ClientEvent* event) {
-	_log.debug(SSTR("delete client with sock=" << event->sock ));
+	_log.debug(SSTR("finish client event: sock=" << event->sock ));
 	this->_erase_from_fds(event->sock);
 	this->_events.erase(event->sock);
 }
