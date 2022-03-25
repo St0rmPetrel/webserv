@@ -2,6 +2,7 @@
 # define EVENT_MANGER_HPP
 
 #include <map>
+#include <set>
 #include <vector>
 #include <poll.h>
 
@@ -12,7 +13,7 @@
 namespace server {
 	class EventManager {
 		private:
-			std::vector<int>        _listeners;
+			std::set<int>           _listeners;
 			const logger::ILogger&  _log;
 			const Options&          _opts;
 		public:
