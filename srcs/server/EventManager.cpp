@@ -54,6 +54,15 @@ ClientEvent* EventManager::accept_event() {
 
 void EventManager::finish_event(ClientEvent* event) {
 	_log.debug(SSTR("delete client with sock=" << event->sock ));
-	// TODO delete sock from _fds (no need to close)
+	this->_erase_from_fds(event->sock);
 	this->_events.erase(event->sock);
+}
+
+void EventManager::_erase_from_fds(int sock) {
+	for (std::vector<struct pollfd>::iterator it = _fds.begin(); it != _fds.end(); it++) {
+		if (it->fd == sock) {
+			_fds.erase(it);
+			break;
+		}
+	}
 }

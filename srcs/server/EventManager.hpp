@@ -25,6 +25,8 @@ namespace server {
 		private:
 			std::vector<struct pollfd> _fds;
 			std::map<int, ClientEvent> _events;
+		private:
+			void _erase_from_fds(int sock);
 	};
 };
 
