@@ -34,12 +34,79 @@ const std::vector<std::string> Config::_lexing(const std::string& filename) cons
 	return std::vector<std::string>();
 }
 
-const Config::Module Config::_parsing(const std::vector<std::string>& tokens) const {
-	(void)tokens;
+Config::Module Config::_parsing(const std::vector<std::string>& tokens) const {
+	Config::Module mod;
+	std::vector<std::string> tmp;
+	std::vector<std::string>::const_iterator it;
+
+
 	_log.debug("start parsing tokens into global module structure");
+	mod.name = "global";
+	for (it = tokens.begin(); it != tokens.end(); ++it)
+	{
+		if (*it == ";")
+		{
+			mod.directives.push_back(_collect_directive(tmp));
+			_log.debug("filled directive " + tmp[0]);
+			tmp.clear();
+		}
+		else if (*it == "{")
+		{
+			mod.modules.push_back(_collect_mdoule(tmp, tokens, it));
+			_log.debug("filled module " + tmp[0]);
+			tmp.clear();
+		}
+		else
+			tmp.push_back(*it);
+	}
 	_log.debug("splitting directives and modules");
-	return Config::Module();
+	return mod;
 }
+
+Config::Directive				Config::_collect_directive(const std::vector<std::string>& tokens) const
+{
+	Config::Directive dir;
+
+	if (tokens.empty())
+		throw Config::ParsingErrorException();
+
+	dir.name = tokens[0];
+	dir.args.assign(tokens.begin() + 1, tokens.end());
+	return dir;
+}
+
+Config::Module					Config::_collect_mdoule(const std::vector<std::string>& name, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it) const
+{
+	Config::Module mod;
+
+	if (name.empty())
+		throw Config::ParsingErrorException();
+
+	mod.name = name[0];
+	mod.args.assign(name.begin() + 1, name.end());
+	std::vector<std::string> tmp;
+	for ( ; it != tokens.end() && *it != "}"; ++it)
+	{
+		if (*it == ";")
+		{
+			mod.directives.push_back(_collect_directive(tmp));
+			_log.debug("filled directive " + tmp[0]);
+			tmp.clear();
+		}
+		else if (*it == "{")
+		{
+			mod.modules.push_back(_collect_mdoule(tmp, tokens, it));
+			_log.debug("filled module " + tmp[0]);
+			tmp.clear();
+		}
+		else
+			tmp.push_back(*it);
+	}
+	if (it == tokens.end())
+		throw Config::ParsingErrorException();
+	return mod;
+}
+
 
 void Config::_fill_options(const Config::Module& global_module) {
 	(void)global_module;

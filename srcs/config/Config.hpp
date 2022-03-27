@@ -39,7 +39,8 @@ namespace config {
 			struct Module {
 				std::string            name;
 				std::vector<Module>    modules;
-				std::vector<Directive> derctives;
+				std::vector<Directive> directives;
+				std::vector<std::string> args;
 			};
 		private:
 			// _serv_opts options of a Server, Server is a class of the program
@@ -101,7 +102,12 @@ namespace config {
 			// May throw exception in case of bad syntax
 			//   example of bad syntax: {"daemon", "off", ";", "events", "{"}
 			//   (don't close curly bracket)
-			const Module                   _parsing(const std::vector<std::string>& tokens) const;
+	public:
+			Module                   _parsing(const std::vector<std::string>& tokens) const;
+
+	private:
+			Directive				_collect_directive(const std::vector<std::string>& tokens) const;
+			Module					_collect_mdoule(const std::vector<std::string>& name, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it) const;
 			// _fill_options sort data from Module structure to options of other classes
 			// will be expend during the progress of creation program
 			// May throw exception in case of bad directive or module name,
