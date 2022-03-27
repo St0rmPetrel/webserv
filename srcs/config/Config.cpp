@@ -48,6 +48,7 @@ void Config::_fill_options(const Config::Module& global_module) {
 
 	addr.port = 8081;
 	addr.addr = "127.0.0.1";
+	addr.listener_backlog = 64;
 	this->_serv_opts.addrs.push_back(addr);
 	_log.debug("start filling configuration staf in to logger and server options");
 }

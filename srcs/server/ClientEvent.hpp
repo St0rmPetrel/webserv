@@ -17,6 +17,7 @@ namespace server {
 			const Options&         _opts;
 		public:
 			ClientEvent(const int sock, const logger::ILogger& log, const Options& opts);
+			ClientEvent(const ClientEvent& src);
 			~ClientEvent();
 		public:
 			ProcessStatus process();

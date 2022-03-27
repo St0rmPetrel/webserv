@@ -6,9 +6,6 @@
 #include "../logger/ILogger.hpp"
 
 namespace server {
-	extern bool quit_flag;
-	void quitSignalHandler(int);
-
 	class Server : public IServer {
 		private:
 			const logger::ILogger& _log;

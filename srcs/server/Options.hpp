@@ -8,6 +8,7 @@ namespace server {
 	struct InetAddr {
 		unsigned short int port;    // Номер порта
 		std::string        addr;    // IP-адрес
+		int                listener_backlog; // Размер очереди запросов
 	};
 
 	struct Options {

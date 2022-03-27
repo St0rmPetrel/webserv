@@ -1,6 +1,7 @@
 #include "logger/Logger.hpp"
 #include "config/Config.hpp"
 #include "server/Server.hpp"
+#include "utils/utils.hpp"
 
 int main(int argc, char *argv[]) {
 	logger::Logger log;
@@ -33,8 +34,8 @@ int main(int argc, char *argv[]) {
 		serv.serve_http();
 	}
 	// Walk into this catch block only in case of internal server fatal error
-	catch (...) { // TODO specific exeption set
-		log.fatal("internal server error");  //TODO better message
+	catch (const std::exception& ex) { // TODO specific exeption set
+		log.fatal(SSTR("internal server error: " << ex.what()));  //TODO better message
 		return (3); // TODO error codes put in define or constant
 	}
 	return (0); // TODO error codes put in define or constant enum

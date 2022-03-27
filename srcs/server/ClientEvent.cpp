@@ -1,3 +1,5 @@
+#include <sys/socket.h>
+
 #include "ClientEvent.hpp"
 #include "../utils/utils.hpp"
 
@@ -9,6 +11,11 @@ ClientEvent::ClientEvent(const int sock, const logger::ILogger& log, const Optio
 	_log.debug(SSTR("create a new client with sock=" << sock));
 }
 
+ClientEvent::ClientEvent(const ClientEvent& src)
+	: sock(src.sock), _log(src._log), _opts(src._opts) {
+	this->_buf = new char[_opts.buffer_size];
+}
+
 ClientEvent::~ClientEvent() {
 	delete[] this->_buf;
 	_log.debug(SSTR("delete client with sock=" << sock));
@@ -17,5 +24,6 @@ ClientEvent::~ClientEvent() {
 
 ClientEvent::ProcessStatus ClientEvent::process() {
 	_log.info(SSTR("start to process client with sock=" << sock));
-	return ok;
+	send(this->sock, (void *)"Hello from server!", 18, 0);
+	return finish_event;
 }
