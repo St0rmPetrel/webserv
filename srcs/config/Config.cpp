@@ -52,7 +52,7 @@ Config::Module Config::_parsing(const std::vector<std::string>& tokens) const {
 		}
 		else if (*it == "{")
 		{
-			mod.modules.push_back(_collect_mdoule(tmp, tokens, it));
+			mod.modules.push_back(_collect_mdoule(tmp, tokens, ++it));
 			_log.debug("filled module " + tmp[0]);
 			tmp.clear();
 		}
