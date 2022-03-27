@@ -3,15 +3,15 @@
 
 #include "IServer.hpp"
 #include "Options.hpp"
-#include "../logger/ILogger.hpp"
+#include "../logger/Logger.hpp"
 
 namespace server {
 	class Server : public IServer {
 		private:
-			const logger::ILogger& _log;
-			Options                _opts;
+			const logger::Logger &_log;
+			Options	_opts;
 		public:
-			Server(const logger::ILogger& log);
+			Server(const logger::Logger &log);
 			~Server();
 
 			void serve_http();

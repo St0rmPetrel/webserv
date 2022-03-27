@@ -1,0 +1,25 @@
+name: Webserv CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: logger_test
+      run: cd $DIRECTORY ; ./test.sh
+      env:
+        DIRECTORY: ./srcs/logger/
+    - name: config_test
+      run: cd $DIRECTORY ; ./test.sh
+      env:
+        DIRECTORY: ./srcs/config/
+    - name: server_test
+      run: cd $DIRECTORY ; ./test.sh
+      env:
+        DIRECTORY: ./srcs/server/
+    - name: webserv
+      run: make
