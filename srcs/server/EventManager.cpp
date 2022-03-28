@@ -16,11 +16,10 @@ using namespace server;
 
 // TODO make custom exception
 EventManager::EventManager(const logger::ILogger& log, const Options& opts)
-	: _log(log), _opts(opts), _listeners_num(0) {
+	: _log(log), _opts(opts) {
 	sigset_t           sigset;
 
 	struct sockaddr_in addr;
-	struct pollfd      fd;
 	int                listener, signal_fd;
 
 	// Create signal_fd for tracking graceful close server event in poll
@@ -33,9 +32,8 @@ EventManager::EventManager(const logger::ILogger& log, const Options& opts)
 		throw std::runtime_error("can't create signal file descriptor");
 	}
 	fcntl(signal_fd, F_SETFL, O_NONBLOCK);
-	fd.fd = signal_fd;
-	fd.events = POLLIN;
-	this->_fds.push_back(fd);
+
+	this->_fds = new PollFds(signal_fd);
 
 	// Create and bind listeners socket and put them in fds vector for poll
 	for (std::vector<InetAddr>::const_iterator it = _opts.addrs.begin();
@@ -55,88 +53,66 @@ EventManager::EventManager(const logger::ILogger& log, const Options& opts)
 		if (listen(listener, it->listener_backlog) < 0) {
 			throw std::runtime_error("can't listen listener socket");
 		}
-		fd.fd = listener;
-		fd.events = POLLIN;
-		this->_fds.push_back(fd);
-		++_listeners_num;
+		this->_fds->add_listener(listener);
 		_log.info(SSTR("open listener on " << it->addr << ":" << it->port));
 	}
 	_log.debug("construct event manager: fill poll_fds by listeners sockets");
 }
 
 EventManager::~EventManager() {
-	for (std::vector<struct pollfd>::iterator it = _fds.begin(); it != _fds.end(); it++) {
-		close(it->fd);
+	delete this->_fds;
+	for (std::map<int, ClientEvent*>::const_iterator it = _events.begin(); it != _events.end();
+			++it) {
+		delete it->second;
 	}
 	_log.debug("destruct event manager: close all sockets in poll_fds");
 }
 
-ClientEvent* EventManager::accept_event() {
+const std::set<ClientEvent*>& EventManager::accept_events() {
 	int           sock;
 
-	_log.debug(SSTR("start waiting for a event, main polling logic fds.size()=" << _fds.size()));
-	for (;;) {
-		_log.debug("start new poll loop");
-		// wait some action in poll
-		if (poll(&(_fds[0]), _fds.size(), -1) < 0) {
-			throw std::runtime_error("error in poll");
-		}
-		// check exit signal
-		if (_fds[0].revents & POLLIN) {
-			_fds[0].revents = 0;
-			_log.debug("receive a terminate signal, gracefully close server");
-			return NULL;
-		}
-		// check open clients
-		for (std::vector<struct pollfd>::iterator it = _fds.begin() + 1 + _listeners_num;
-				it != _fds.end(); it++) {
-			if (it->revents & POLLIN) {
-				_log.debug("receive client action");
-				it->revents = 0;
-				return _events[it->fd];
-			}
-		}
-		// check listeners
-		for (std::vector<struct pollfd>::iterator it = _fds.begin() + 1;
-				it != _fds.begin() + 1 + _listeners_num; it++) {
-			if (it->revents & POLLIN) {
-				_log.debug("receive listener action");
-				it->revents = 0;
-				if ((sock = accept(it->fd, NULL, NULL)) < 0) {
-					throw std::runtime_error("can't accept new request");
-				}
-				fcntl(sock, F_SETFL, O_NONBLOCK);
-				ClientEvent* event = new ClientEvent(sock, _log, _opts);
-				_events[sock] = event;
-				_add_to_client_fds(sock);
-				// TODO make better add_to_client_fds
-				break;
-			}
-		}
+	_log.debug("start waiting for an event");
+	this->_active_events.clear();
+	// wait some action in poll
+	if (poll(_fds->get_array(), _fds->get_array_size(), -1) < 0) {
+		throw std::runtime_error("error in poll");
 	}
+	// check exit signal
+	if (_fds->check_term_signal()) {
+		_log.debug("receive a terminate signal, gracefully close server");
+		this->_active_events.insert(NULL);
+		return (this->_active_events);
+	}
+	// check clients
+	const std::set<int>& active_clients = _fds->check_clients();
+	for (std::set<int>::const_iterator it = active_clients.begin();
+			it != active_clients.end(); ++it) {
+		_log.debug("receive client action");
+		this->_active_events.insert(this->_events[*it]);
+	}
+	// check listeners
+	const std::set<int>& active_listeners = _fds->check_listeners();
+	for (std::set<int>::const_iterator it = active_listeners.begin();
+		it != active_listeners.end(); ++it) {
+
+		_log.debug("receive listener action");
+		if ((sock = accept(*it, NULL, NULL)) < 0) {
+			throw std::runtime_error("can't accept new request");
+		}
+		if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
+			throw std::runtime_error("fcntl error");
+		}
+		ClientEvent* event = new ClientEvent(sock, _log, _opts);
+		this->_events[sock] = event;
+		this->_fds->add_client(sock);
+	}
+	return (this->_active_events);
 }
 
 void EventManager::finish_event(ClientEvent* event) {
 	_log.debug(SSTR("finish client event: sock=" << event->sock ));
-	this->_erase_from_client_fds(event->sock);
+	this->_fds->erase_client(event->sock);
 	close(event->sock);
 	this->_events.erase(event->sock);
-}
-
-void EventManager::_erase_from_client_fds(int sock) {
-	for (std::vector<struct pollfd>::iterator it = _fds.begin() + 1 + _listeners_num;
-			it != _fds.end(); it++) {
-		if (it->fd == sock) {
-			_fds.erase(it);
-			break;
-		}
-	}
-}
-
-void EventManager::_add_to_client_fds(int sock) {
-	struct pollfd fd;
-
-	fd.fd = sock;
-	fd.events = POLLIN;
-	this->_fds.push_back(fd);
+	delete event;
 }

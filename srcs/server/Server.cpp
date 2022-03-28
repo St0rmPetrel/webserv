@@ -14,17 +14,22 @@ Server::~Server() { }
 
 void Server::serve_http() {
 	EventManager event_manager(_log, _opts);
+	bool loop = true;
 
 	_log.info("serve_http: start");
-	for (;;) {
-		// waiting for a event
-		ClientEvent* event = event_manager.accept_event();
-		if (event == NULL) {
-			break;
-		}
-		_log.info("serve_http: received a client event");
-		if (event->process() == ClientEvent::finish_event) {
-			event_manager.finish_event(event);
+	while (loop) {
+		// waiting for events
+		const std::set<ClientEvent*>& events = event_manager.accept_events();
+		for (std::set<ClientEvent*>::const_iterator it = events.begin(); it != events.end();
+				++it) {
+			if (*it == NULL) {
+				loop = false;
+				break;
+			}
+			_log.info("serve_http: received a client event");
+			if ((*it)->process() == ClientEvent::finish_event) {
+				event_manager.finish_event(*it);
+			}
 		}
 	}
 	_log.info("serve_http: close server");

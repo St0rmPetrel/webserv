@@ -28,7 +28,7 @@ LOGGER =    Logger Options
 
 CONFIG =	Config
 
-SERVER	=	Server Options ClientEvent EventManager
+SERVER	=	Server Options ClientEvent EventManager PollFds
 
 UTILS	=
 

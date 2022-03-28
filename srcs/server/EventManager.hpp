@@ -2,10 +2,10 @@
 # define EVENT_MANGER_HPP
 
 #include <map>
-#include <vector>
 #include <poll.h>
 
 #include "ClientEvent.hpp"
+#include "PollFds.hpp"
 #include "Options.hpp"
 #include "../logger/ILogger.hpp"
 
@@ -14,19 +14,17 @@ namespace server {
 		private:
 			const logger::ILogger&  _log;
 			const Options&          _opts;
-			int                     _listeners_num;
 		public:
 			EventManager(const logger::ILogger& log, const Options& opts);
 			~EventManager();
 		public:
-			ClientEvent* accept_event();
-			void finish_event(ClientEvent* event);
+			const std::set<ClientEvent*>& accept_events();
+			void                          finish_event(ClientEvent* event);
 		private:
-			std::vector<struct pollfd> _fds;
 			std::map<int, ClientEvent*> _events;
-		private:
-			void _erase_from_client_fds(int sock);
-			void _add_to_client_fds(int sock);
+			PollFds*                    _fds;
+
+			std::set<ClientEvent*> _active_events;
 	};
 };
 
