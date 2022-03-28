@@ -102,7 +102,6 @@ namespace config {
 			// May throw exception in case of bad syntax
 			//   example of bad syntax: {"daemon", "off", ";", "events", "{"}
 			//   (don't close curly bracket)
-	public:
 			Module                   _parsing(const std::vector<std::string>& tokens) const;
 
 	private:
