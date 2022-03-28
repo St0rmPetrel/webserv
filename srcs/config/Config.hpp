@@ -106,8 +106,10 @@ namespace config {
 			Module                   _parsing(const std::vector<std::string>& tokens) const;
 
 	private:
+		// todo: find better name for this method
+			void 					_choice(Config::Module& mod, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it, std::vector<std::string>& tmp) const;
 			Directive				_collect_directive(const std::vector<std::string>& tokens) const;
-			Module					_collect_mdoule(const std::vector<std::string>& name, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it) const;
+			Module					_collect_module(const std::vector<std::string>& name, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it) const;
 			// _fill_options sort data from Module structure to options of other classes
 			// will be expend during the progress of creation program
 			// May throw exception in case of bad directive or module name,
