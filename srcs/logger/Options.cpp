@@ -1,7 +1,20 @@
 #include "Options.hpp"
 
-using namespace logger;
+logger::Options::Options() : enabled_level(DEBUG), file_name("")
+{
+}
 
-Options::Options() { }
+logger::Options::Options(const logger::Options &ref) {
+	*this = ref;
+}
 
-Options::~Options() { }
+logger::Options::~Options() {
+}
+
+logger::Options &logger::Options::operator=(const logger::Options &rh) {
+	if (this == &rh)
+		return (*this);
+	enabled_level = rh.enabled_level;
+	file_name = rh.file_name;
+	return (*this);
+}

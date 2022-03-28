@@ -46,7 +46,8 @@ then
 fi
 
 ./$EXEC_FILE_NAME 2> $GOT_FILE_NAME
-echo -e "$WANT" > $WANT_FILE_NAME
+# doesn't work properly on mac with flag -e
+echo "$WANT" > $WANT_FILE_NAME
 
 if ! diff -c $GOT_FILE_NAME $WANT_FILE_NAME
 then
