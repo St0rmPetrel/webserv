@@ -18,8 +18,8 @@ int main(int argc, char *argv[]) {
 	try {
 		conf.parse(argv[1]);
 	}
-	catch (...) { // TODO catch specific exeption set
-		log.fatal("configuration parsing error");  //TODO better message
+	catch (std::exception &e) { // TODO catch specific exeption set
+		log.fatal(e.what());  //TODO better message
 		return (2); // TODO error codes put in define or constant
 	}
 

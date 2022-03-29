@@ -10,6 +10,7 @@
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
+#include "Lexer.hpp"
 
 namespace config {
 	// Config class responsible for parsing of a configuration file and returning options
@@ -58,7 +59,7 @@ namespace config {
 			// parse take name of configuration file and read it
 			// fill _serv_opts and _log_opts according content of the file
 			// if syntax of the file is bad, throw exception
-			void parse(const std::string& filename);
+			void parse(const char *filename);
 
 			// get_logger get Logger options
 			const logger::Options& get_logger() const;
@@ -69,6 +70,14 @@ namespace config {
 			struct LexingErrorException : public std::exception {
 				const char* what () const throw ();
 			};
+
+			struct FileNotFoundException : public std::exception {
+            	const char* what () const throw ();
+            };
+
+            struct ReadingConfigFileException: public std::exception {
+                const char* what () const throw ();
+            };
 			// TODO make it better (more verbose)
 			struct ParsingErrorException : public std::exception {
 				const char* what () const throw ();
@@ -86,7 +95,7 @@ namespace config {
 			// May throw exception in case of bad syntax of configuration file
 			//   example of bad syntax: "daemon off;;", "events {{ }", "events {; }"
 			//   (wrong token sequence)
-			const std::vector<std::string> _lexing(const std::string& filename);
+			const std::vector<std::string> _lexing(const char *filename);
 			// _parsing sort tokens into Module structure
 			//   example:
 			//     {"daemon", "off", ";", "events", "{", "}"}

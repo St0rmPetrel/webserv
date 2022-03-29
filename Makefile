@@ -24,7 +24,7 @@ SERVER_DIR = $(OBJSDIR)/server
 
 LOGGER =    Logger Options
 
-CONFIG =	Config
+CONFIG =	Config Lexer
 
 SERVER	=	Server Options
 
