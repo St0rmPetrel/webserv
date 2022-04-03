@@ -15,11 +15,8 @@ class Lexer {
     public:
     Lexer();
 
-    Lexer(Lexer const &obj);
-    Lexer	&operator=(Lexer const &obj);
-
-    virtual ~Lexer();
-    std::vector<std::string>        tokenizer(std::string &line);
+    ~Lexer();
+    std::vector<std::string>        tokenizer(const std::string &line);
     std::vector<std::string>	    readFile(const char *filename);
 };
 

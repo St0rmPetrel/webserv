@@ -2,20 +2,9 @@
 
 Lexer::Lexer() {}
 
-Lexer::Lexer(Lexer const &obj) {
-    if (this != &obj)
-    *this = obj;
-}
-
 Lexer::~Lexer() {}
 
-Lexer	&Lexer::operator=(Lexer const &obj) {
-    if (this != &obj)
-    *this = obj;
-    return *this;
-}
-
-std::vector<std::string>	Lexer::tokenizer(std::string &line)
+std::vector<std::string>	Lexer::tokenizer(const std::string &line)
 {
     std::vector<std::string>	tokens;
     std::string to_line;
@@ -52,18 +41,13 @@ std::vector<std::string>	Lexer::tokenizer(std::string &line)
         }
         i++;
     }
-    for(i = 0; i < tokens.size(); i++)
-    to_line += tokens[i];
-    if (to_line.find("{{") != std::string::npos || to_line.find("{}") != std::string::npos
-        || to_line.find("{;") != std::string::npos || to_line.find(";;") != std::string::npos)
-        throw config::Config::LexingErrorException();
     return (tokens);
 }
 
 std::vector<std::string>	    Lexer::readFile(const char *filename) {
     int							size = BUFFER_SIZE;
     char					    buf[size + 1];
-    std::string					line = "";
+    std::string					line;
     int							fd;
     std::vector<std::string>	tokens;
     int                         i;
@@ -72,8 +56,7 @@ std::vector<std::string>	    Lexer::readFile(const char *filename) {
 
     if ((fd = open(filename, O_RDONLY)) <= 0)
         throw config::Config::FileNotFoundException();
-    for (int i = 0; i < BUFFER_SIZE + 1;  i++)
-    buf[i] = '\0';
+    std::memset(buf, '\0', size + 1);
     for (i = BUFFER_SIZE; i > 0; i = read(fd, buf, BUFFER_SIZE )) {
         buf[i] = '\0';
         line += buf;

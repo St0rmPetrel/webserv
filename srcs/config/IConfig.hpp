@@ -13,7 +13,7 @@ namespace config {
 
 			// parse file on path in argument and fill config data
 			// throw exeption in case of bad config file
-			virtual void parse(const char *filename) = 0;
+			virtual void parse(const std::string& filename) = 0;
 
 			// return logger configuration options
 			virtual const logger::Options& get_logger() const = 0;
