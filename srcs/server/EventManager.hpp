@@ -33,6 +33,37 @@ namespace server {
 			// set of events with socket where some action happened
 			// it is clear in start of every accept_events method
 			std::set<ClientEvent*> _active_events;
+		public:
+			struct OpenSocketException : public std::exception {
+				virtual const char* what() const throw() {
+					return "fail to open IP/TCP socket";
+				}
+			};
+			struct FcntlSocketException : public std::exception {
+				virtual const char* what() const throw() {
+					return "fail to set socket in non blocking mode";
+				}
+			};
+			struct BindSocketException : public std::exception {
+				virtual const char* what() const throw() {
+					return "fail to bind socket to address";
+				}
+			};
+			struct ListenSocketException : public std::exception {
+				virtual const char* what() const throw() {
+					return "fail to set socket in listen mode";
+				}
+			};
+			struct ListenerAcceptException : public std::exception {
+				virtual const char* what() const throw() {
+					return "fail to accept socket from listener";
+				}
+			};
+			struct PollException : public std::exception {
+				virtual const char* what() const throw() {
+					return "poll error";
+				}
+			};
 	};
 };
 

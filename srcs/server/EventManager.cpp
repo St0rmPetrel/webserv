@@ -12,7 +12,6 @@
 
 using namespace server;
 
-// TODO make custom exception
 // EventManager constructor of EventManager open all listeners socket and
 // allocate event tree and class of file descriptor warden - PollFds
 EventManager::EventManager(const logger::ILogger& log, const Options& opts)
@@ -31,19 +30,21 @@ EventManager::EventManager(const logger::ILogger& log, const Options& opts)
 		// create IP/TCP socket
 		listener = socket(AF_INET, SOCK_STREAM, 0);
 		if (listener < 0) {
-			throw std::runtime_error("can't create a listener socket");
+			throw EventManager::OpenSocketException();
 		}
 		// make socket non blocking for poll
-		fcntl(listener, F_SETFL, O_NONBLOCK);
+		if (fcntl(listener, F_SETFL, O_NONBLOCK) < 0) {
+			throw EventManager::FcntlSocketException();
+		}
 		// bind and then start to listen the socket
 		addr.sin_family = AF_INET;
 		addr.sin_port = htons(it->port);
 		addr.sin_addr.s_addr = inet_addr((const char *)&(it->addr[0]));
 		if (bind(listener, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-			throw std::runtime_error("can't bind listener socket");
+			throw EventManager::BindSocketException();
 		}
 		if (listen(listener, it->listener_backlog) < 0) {
-			throw std::runtime_error("can't listen listener socket");
+			throw EventManager::ListenSocketException();
 		}
 		// add new listener in to PollFds
 		this->_fds->add_listener(listener);
@@ -74,7 +75,7 @@ const std::set<ClientEvent*>& EventManager::accept_events() {
 	this->_active_events.clear();
 	// wait some action in poll
 	if (poll(_fds->get_array(), _fds->get_array_size(), -1) < 0) {
-		throw std::runtime_error("error in poll");
+		throw EventManager::PollException();
 	}
 	// check termination file descriptor actions
 	if (_fds->check_term()) {
@@ -96,10 +97,10 @@ const std::set<ClientEvent*>& EventManager::accept_events() {
 
 		_log.debug("receive listener action");
 		if ((sock = accept(*it, NULL, NULL)) < 0) {
-			throw std::runtime_error("can't accept new request");
+			throw EventManager::ListenerAcceptException();
 		}
 		if (fcntl(sock, F_SETFL, O_NONBLOCK) < 0) {
-			throw std::runtime_error("fcntl error");
+			throw EventManager::FcntlSocketException();
 		}
 		ClientEvent* event = new ClientEvent(sock, _log, _opts);
 		this->_events[sock] = event;
