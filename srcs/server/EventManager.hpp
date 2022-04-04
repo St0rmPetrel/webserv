@@ -18,12 +18,20 @@ namespace server {
 			EventManager(const logger::ILogger& log, const Options& opts);
 			~EventManager();
 		public:
+			// return reference to set of active events
+			// (blocking)
 			const std::set<ClientEvent*>& accept_events();
+			// finish_event delete event and close socket according to it
+			// also delete socket from _fds
 			void                          finish_event(ClientEvent* event);
 		private:
+			// all clients open connections
 			std::map<int, ClientEvent*> _events;
+			// Warden for all file descriptors where some action is expected
 			PollFds*                    _fds;
 
+			// set of events with socket where some action happened
+			// it is clear in start of every accept_events method
 			std::set<ClientEvent*> _active_events;
 	};
 };

@@ -14,7 +14,10 @@ namespace server {
 			Server(const logger::Logger &log);
 			~Server();
 
+			// serve_http central method of a Server class which is listen and serve
+			// http connection
 			void serve_http();
+			// set_up set options of a Server class and serve_http behavior
 			void set_up(const Options& opts);
 	};
 };

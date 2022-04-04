@@ -22,8 +22,9 @@ ClientEvent::~ClientEvent() {
 }
 
 
+// receive http request, process it and response
 ClientEvent::ProcessStatus ClientEvent::process() {
 	_log.info(SSTR("start to process client with sock=" << sock));
-	send(this->sock, (void *)"Hello from server!", 18, 0);
+	send(this->sock, (void *)"Hello from server!\n", 19, 0);
 	return finish_event;
 }
