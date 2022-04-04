@@ -15,7 +15,7 @@ Logger::Logger() : _opt() {
 Logger::Logger(const Logger& src) : _opt(src._opt)
 {
 	_bfile_output = src._bfile_output;
-	_base_stream.open(src._opt.file_name, std::fstream::out | std::fstream::app);
+	_base_stream.open(&(src._opt.file_name[0]), std::fstream::out | std::fstream::app);
 	if (!_base_stream.is_open())
 	{
 		_bfile_output = false;
