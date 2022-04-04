@@ -1,8 +1,6 @@
 #include <stdexcept>
 #include <sys/types.h>
-#include <signal.h>
 #include <sys/socket.h>
-#include <sys/signalfd.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -17,23 +15,12 @@ using namespace server;
 // TODO make custom exception
 EventManager::EventManager(const logger::ILogger& log, const Options& opts)
 	: _log(log), _opts(opts) {
-	sigset_t           sigset;
-
 	struct sockaddr_in addr;
-	int                listener, signal_fd;
+	int                listener;
 
-	// Create signal_fd for tracking graceful close server event in poll
-	sigemptyset(&sigset);
-	sigaddset(&sigset, SIGTERM);
-	sigprocmask(SIG_SETMASK, &sigset, NULL);
-
-	// Create a new signal file descriptor without flags
-	if ((signal_fd = signalfd(-1, &sigset, 0)) < 0) {
-		throw std::runtime_error("can't create signal file descriptor");
-	}
-	fcntl(signal_fd, F_SETFL, O_NONBLOCK);
-
-	this->_fds = new PollFds(signal_fd);
+	// Create PollFds with standard input action termination
+	// For example to terminate program press enter
+	this->_fds = new PollFds(0);
 
 	// Create and bind listeners socket and put them in fds vector for poll
 	for (std::vector<InetAddr>::const_iterator it = _opts.addrs.begin();
