@@ -15,9 +15,9 @@ Config::~Config() { }
 
 void Config::parse(const std::string& filename) {
 	const std::vector<std::string> tokens = this->_lexing(filename);
-	const Module                   global_module = this->_parsing(tokens);
+	this->_parsing(tokens);
 
-	this->_fill_options(global_module);
+	this->_fill_options(_global_module);
 }
 
 const logger::Options& Config::get_logger() const {
@@ -35,36 +35,14 @@ const std::vector<std::string> Config::_lexing(const std::string& filename) {
 	return std::vector<std::string>();
 }
 
-void	Config::_choice(Config::Module& mod, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it, std::vector<std::string>& tmp) const
-{
-	if (*it == ";")
-	{
-		mod.directives.push_back(_collect_directive(tmp));
-		_log.debug("filled directive " + tmp[0]);
-		tmp.clear();
-	}
-	else if (*it == "{")
-	{
-		mod.modules.push_back(_collect_module(tmp, tokens, ++it));
-		_log.debug("filled module " + tmp[0]);
-		tmp.clear();
-	}
-	else
-		tmp.push_back(*it);
-}
-
-Config::Module	Config::_parsing(const std::vector<std::string>& tokens) const {
-	Config::Module mod;
-	std::vector<std::string> tmp;
-	std::vector<std::string>::const_iterator it;
-
+void	Config::_parsing(const std::vector<std::string>& tokens) {
+	std::vector<std::string>::const_iterator it = tokens.begin();
 
 	_log.debug("start parsing tokens into global module structure");
-	mod.name = "global";
-	for (it = tokens.begin(); it != tokens.end(); ++it)
-		_choice(mod, tokens, it, tmp);
+	std::vector<std::string> name;
+	name.push_back("global");
+	_global_module = _collect_module(name, tokens, it, true);
 	_log.debug("splitting directives and modules");
-	return mod;
 }
 
 Config::Directive	Config::_collect_directive(const std::vector<std::string>& tokens) const
@@ -79,21 +57,36 @@ Config::Directive	Config::_collect_directive(const std::vector<std::string>& tok
 	return dir;
 }
 
-Config::Module	Config::_collect_module(const std::vector<std::string>& name, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it) const
+Config::Module	Config::_collect_module(const std::vector<std::string>& name, const std::vector<std::string>& tokens, std::vector<std::string>::const_iterator& it, bool is_global) const
 {
-	Config::Module mod;
+	Config::Module local_module;
 
 	if (name.empty())
 		throw Config::ParsingErrorException();
 
-	mod.name = name[0];
-	mod.args.assign(name.begin() + 1, name.end());
-	std::vector<std::string> tmp;
-	for ( ; it != tokens.end() && *it != "}"; ++it)
-		_choice(mod, tokens, it, tmp);
-	if (it == tokens.end())
+	local_module.name = name[0];
+	local_module.args.assign(name.begin() + 1, name.end());
+	std::vector<std::string> tokens_accumulator;
+	for ( ; it != tokens.end() && (*it != "}" || is_global); ++it)
+	{
+		if (*it == ";")
+		{
+			local_module.directives.push_back(_collect_directive(tokens_accumulator));
+			_log.debug("filled directive " + tokens_accumulator[0]);
+			tokens_accumulator.clear();
+		}
+		else if (*it == "{")
+		{
+			local_module.modules.push_back(_collect_module(tokens_accumulator, tokens, ++it, false));
+			_log.debug("filled module " + tokens_accumulator[0]);
+			tokens_accumulator.clear();
+		}
+		else
+			tokens_accumulator.push_back(*it);
+	}
+	if (it == tokens.end() && !is_global)
 		throw Config::ParsingErrorException();
-	return mod;
+	return local_module;
 }
 
 void Config::_fill_options(const Config::Module& global_module) {
