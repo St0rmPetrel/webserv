@@ -4,13 +4,15 @@
 #include <string>
 #include <vector>
 #include <exception>
+#include <iostream>
+#include <fstream>
 
 #include "IConfig.hpp"
 #include "../logger/Logger.hpp"
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
-#include "Lexer.hpp"
+#include "Config.hpp"
 
 namespace config {
 	// Config class responsible for parsing of a configuration file and returning options
@@ -52,6 +54,8 @@ namespace config {
 			logger::Options _log_opts;
 
 			const logger::Logger &_log;
+
+			std::vector<std::string> tokens;
 		public:
 			Config(const logger::Logger &log);
 			~Config();
@@ -93,6 +97,10 @@ namespace config {
 			//   example of bad syntax: "daemon off;;", "events {{ }", "events {; }"
 			//   (wrong token sequence)
 			const std::vector<std::string> _lexing(const std::string& filename);
+
+			const std::string	    readFile(const char *filename);
+
+			void	                tokenizer(const std::string &line);
 			// _parsing sort tokens into Module structure
 			//   example:
 			//     {"daemon", "off", ";", "events", "{", "}"}
