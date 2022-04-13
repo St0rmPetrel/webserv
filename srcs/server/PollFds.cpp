@@ -55,12 +55,13 @@ void PollFds::add_client(int sock) {
 }
 
 // check_term check actions on term_fd
-bool PollFds::check_term() {
+// return set for forward compatibility (if term socket will more than one)
+const std::set<int>& PollFds::check_term() {
 	if (_base[0].revents & POLLIN) {
 		_base[0].revents = 0;
-		return true;
+		this->_term_event_socks.insert(_base[0].fd);
 	}
-	return false;
+	return (this->_term_event_socks);
 }
 
 // check_listeners check actions on listeners sockets
@@ -91,10 +92,9 @@ const std::set<int>& PollFds::check_clients() {
 	return (this->_client_event_socks);
 }
 
-// erase_client delete client socket from base and close this socket
-void PollFds::erase_client(int sock) {
-	for (std::vector<struct pollfd>::iterator it = _base.begin() + 1 + _listeners_num;
-			it != _base.end(); it++) {
+// erase_sock delete socket from base and close this socket
+void PollFds::erase_sock(int sock) {
+	for (std::vector<struct pollfd>::iterator it = _base.begin(); it != _base.end(); it++) {
 		if (it->fd == sock) {
 			close(it->fd);
 			_base.erase(it);

@@ -17,6 +17,8 @@ namespace server {
 			std::set<int> _listener_event_socks;
 			// set of active client events
 			std::set<int> _client_event_socks;
+			// set of active termination events
+			std::set<int> _term_event_socks;
 		public:
 			// push term_fd to base
 			PollFds(int term_fd);
@@ -32,11 +34,11 @@ namespace server {
 			void           add_listener(int listener);
 			// add new client in class
 			void           add_client(int sock);
-			// erase client from class
-			void           erase_client(int sock);
+			// erase sock from class and close it
+			void           erase_sock(int sock);
 
 			// check actions on termination socket after poll call
-			bool                 check_term();
+			const std::set<int>& check_term();
 			// check actions on listeners sockets after poll call
 			const std::set<int>& check_listeners();
 			// check actions on clients sockets after poll call

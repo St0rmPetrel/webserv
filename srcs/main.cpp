@@ -6,7 +6,6 @@
 int main(int argc, char *argv[]) {
 	logger::Logger log;
 	config::Config conf(log);
-	server::Server serv(log);
 
 	// Check that number of command line arguments is strictly one - name
 	//  of configuration file of a web server
@@ -26,12 +25,12 @@ int main(int argc, char *argv[]) {
 
 	// Set up logger and server according to configuration file
 //	log.set_up(conf.get_logger());
-	serv.set_up(conf.get_server());
+	server::Server serv(log, conf.get_server());
 
 	// Serve HTTP connections
 	try {
 		// graceful closing in case of interapt signal
-		serv.serve_http();
+		serv.listen_and_serve();
 	}
 	// Walk into this catch block only in case of internal server fatal error
 	catch (const std::exception& ex) { // TODO specific exeption set
