@@ -12,8 +12,7 @@ namespace server {
 	};
 
 	struct Options {
-		int buffer_size;
-		int milliseconds_timeout;
+		int recv_buffer_size;
 		std::vector<InetAddr> addrs;
 	};
 }; /* namespace server */
