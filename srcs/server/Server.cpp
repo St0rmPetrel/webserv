@@ -1,4 +1,5 @@
-#include <csignal>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #include "Server.hpp"
 #include "Options.hpp"
@@ -36,11 +37,20 @@ void Server::listen_and_serve() {
 				case Event::listener : {
 					int client = _event_manager.accept_client((*it)->sock);
 					(void)client;
-					_event_manager.finish_event((*it));
 					break;
 				}
 				case Event::client :
 					_log.info("event from client !!!");
+					std::string msg = "Hello from server\n";
+					send((*it)->sock, (&(msg[0])), msg.size(), 0);
+
+					char buf[1024];
+					int bytes_read = recv((*it)->sock, buf, 1024, 0);
+					msg = "Echo: ";
+					send((*it)->sock, (&(msg[0])), msg.size(), 0);
+					send((*it)->sock, buf, bytes_read, 0);
+					send((*it)->sock, "\n", 1, 0);
+					_event_manager.finish_event((*it));
 					break;
 			}
 		}

@@ -15,9 +15,11 @@ PollFds::PollFds(int term_fd) : _listeners_num(0) {
 }
 
 // ~PollFds close all socket in _base
+// at first close clients than listeners
 PollFds::~PollFds() {
-	for (std::vector<struct pollfd>::iterator it = _base.begin(); it != _base.end(); it++) {
-		close(it->fd);
+	for (std::vector<struct pollfd>::reverse_iterator rit = _base.rbegin();
+			rit != _base.rend(); ++rit) {
+		close(rit->fd);
 	}
 }
 
@@ -57,6 +59,8 @@ void PollFds::add_client(int sock) {
 // check_term check actions on term_fd
 // return set for forward compatibility (if term socket will more than one)
 const std::set<int>& PollFds::check_term() {
+	this->_term_event_socks.clear();
+
 	if (_base[0].revents & POLLIN) {
 		_base[0].revents = 0;
 		this->_term_event_socks.insert(_base[0].fd);
