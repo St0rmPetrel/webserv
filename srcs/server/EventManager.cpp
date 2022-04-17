@@ -4,7 +4,6 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <poll.h>
 #include <fcntl.h>
 
 #include "EventManager.hpp"
@@ -13,11 +12,11 @@
 using namespace server;
 
 // EventManager constructor of EventManager
-// create event tree and descriptor warden class - PollFds initialize by STDIN file
+// create event tree and descriptor warden class - PollFds initialized by STDIN file
 // descriptor for termination event
 EventManager::EventManager(const logger::ILogger& log) : _log(log), _fds(STDIN) { }
 
-// ~EventManager destructor of EventManager, close all open socket in _fds,
+// ~EventManager destructor of EventManager, close all open socket in _fds (_fds destructor),
 // and delete all client events in _events
 EventManager::~EventManager() {
 	for (std::map<int, Event*>::const_iterator it = _events.begin(); it != _events.end();
@@ -26,6 +25,8 @@ EventManager::~EventManager() {
 	}
 }
 
+// new_listener creates and binds listener socket
+// and add it in _fds listeners
 int EventManager::new_listener(const InetAddr& iaddr) {
 	int                listener;
 	struct sockaddr_in addr;
@@ -55,6 +56,7 @@ int EventManager::new_listener(const InetAddr& iaddr) {
 	return listener;
 }
 
+// accept_client accept client from listener and add in _fds clients
 int EventManager::accept_client(int listener) {
 	int client;
 
@@ -69,7 +71,8 @@ int EventManager::accept_client(int listener) {
 }
 
 
-Event* EventManager::get_event(int sock, Event::Type type) {
+// _get_event create new event or return exist in _events map
+Event* EventManager::_get_event(int sock, Event::Type type) {
 	Event* event;
 
 	if (_events.find(sock) != _events.end()) {
@@ -82,25 +85,20 @@ Event* EventManager::get_event(int sock, Event::Type type) {
 	return event;
 }
 
-// accept_events main method of class EventManager - defines active sockets
-// 1) if this socket of some listener - create new client event and accept new socket for it
-// 2) if this is client socket, add event according this socket to return active events set
-// 3) if this is termination socket add NULL to return active events set
+// accept_events main method of class EventManager - defines active sockets and type this sockets
 const std::set<Event*>& EventManager::accept_events() {
 	Event* event;
 
 	_log.debug("start waiting for an event");
 	this->_active_events.clear();
 	// wait some action in poll
-	if (poll(_fds.get_array(), _fds.get_array_size(), -1) < 0) {
-		throw EventManager::PollException();
-	}
+	_fds.do_poll();
 	// check termination file descriptor actions
 	const std::set<int>& active_term = _fds.check_term();
 	for (std::set<int>::const_iterator it = active_term.begin();
 			it != active_term.end(); ++it) {
 		_log.debug("receive a termination action");
-		event = this->get_event(*it, Event::terminate);
+		event = this->_get_event(*it, Event::terminate);
 		this->_active_events.insert(event);
 		return (this->_active_events);
 	}
@@ -109,7 +107,7 @@ const std::set<Event*>& EventManager::accept_events() {
 	for (std::set<int>::const_iterator it = active_clients.begin();
 			it != active_clients.end(); ++it) {
 		_log.debug("receive client action");
-		event = this->get_event(*it, Event::client);
+		event = this->_get_event(*it, Event::client);
 		this->_active_events.insert(event);
 	}
 	// check listeners actions
@@ -117,7 +115,7 @@ const std::set<Event*>& EventManager::accept_events() {
 	for (std::set<int>::const_iterator it = active_listeners.begin();
 			it != active_listeners.end(); ++it) {
 		_log.debug("receive listener action");
-		event = this->get_event(*it, Event::listener);
+		event = this->_get_event(*it, Event::listener);
 		this->_active_events.insert(event);
 	}
 	return (this->_active_events);
@@ -132,4 +130,24 @@ void EventManager::finish_event(Event* event) {
 	// delete event from events tree and from heap (all events is allocated on a heap)
 	this->_events.erase(event->sock);
 	delete event;
+}
+
+const char* EventManager::OpenSocketException::what() const throw() {
+	return "fail to open IP/TCP socket";
+}
+
+const char* EventManager::FcntlSocketException::what() const throw() {
+	return "fail to set socket in non blocking mode";
+}
+
+const char* EventManager::BindSocketException::what() const throw() {
+	return "fail to bind socket to address";
+}
+
+const char* EventManager::ListenSocketException::what() const throw() {
+	return "fail to set socket in listen mode";
+}
+
+const char* EventManager::ListenerAcceptException::what() const throw() {
+	return "fail to accept socket from listener";
 }

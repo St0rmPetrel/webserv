@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <poll.h>
 
 #include "PollFds.hpp"
 
@@ -23,14 +24,11 @@ PollFds::~PollFds() {
 	}
 }
 
-// get_array give data for poll syscall (second argument in poll)
-struct pollfd* PollFds::get_array() {
-	return &(_base[0]);
-}
-
-// get_array_size give data for poll syscall (second argument in poll)
-int PollFds::get_array_size() {
-	return _base.size();
+// do_poll poll syscall method wrapper (blocking)
+void PollFds::do_poll() {
+	if (poll(&(_base[0]), _base.size(), -1) < 0) {
+		throw PollFds::PollException();
+	}
 }
 
 // add_listener add listener socket in class
@@ -105,4 +103,8 @@ void PollFds::erase_sock(int sock) {
 			break;
 		}
 	}
+}
+
+const char* PollFds::PollException::what() const throw() {
+	return "poll error";
 }
