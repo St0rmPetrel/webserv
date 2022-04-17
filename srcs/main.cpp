@@ -25,10 +25,10 @@ int main(int argc, char *argv[]) {
 
 	// Set up logger and server according to configuration file
 //	log.set_up(conf.get_logger());
-	server::Server serv(log, conf.get_server());
 
 	// Serve HTTP connections
 	try {
+		server::Server serv(log, conf.get_server());
 		// graceful closing in case of interapt signal
 		serv.listen_and_serve();
 	}
