@@ -1,10 +1,20 @@
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+RED		=	\u001b[31m
+YELLOW	=	\u001b[33m
+GREEN	=	\u001b[32m
+NC		=	\u001b[0m
+
+PRINT   =	echo -e
+else
 RED		=	\033[0;31m
-
 YELLOW	=	\033[0;33m
-
 GREEN	=	\033[0;32m
-
 NC		=	\033[0m
+
+PRINT   =	echo
+endif
 
 CC		=	clang++
 
@@ -52,14 +62,14 @@ RM		=	rm -f
 all:	$(NAME)
 
 $(NAME): $(OBJS_BUILD)
-		@echo "$(YELLOW)MAKING webserv from objs$(NC)"
+		@$(PRINT) "$(YELLOW)MAKING webserv from objs$(NC)"
 		@$(CC) $(CFLAGS) $(OBJS_BUILD) -o $(NAME)
-		@echo "$(GREEN)DONE$(NC)"
+		@$(PRINT) "$(GREEN)DONE$(NC)"
 
 $(OBJS_BUILD):	|$(DIRS)
 
 $(OBJSDIR):
-		@echo "$(YELLOW)START making objs$(NC)"
+		@$(PRINT) "$(YELLOW)START making objs$(NC)"
 		mkdir $(OBJSDIR)
 
 $(LOGGER_DIR): |$(OBJSDIR)
@@ -77,11 +87,11 @@ $(OBJSDIR)/%.o:	$(SRCDIR)/%.cpp
 
 clean:
 		@$(RM) -r $(OBJSDIR)
-		@echo "$(RED)Delete objs dir$(NC)"
+		@$(PRINT) "$(RED)Delete objs dir$(NC)"
 
 fclean:	clean
 		@$(RM) $(NAME)
-		@echo "$(RED)Delete exec file$(NC)"
+		@$(PRINT) "$(RED)Delete exec file$(NC)"
 
 re:		fclean all
 
