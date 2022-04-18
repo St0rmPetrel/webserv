@@ -7,6 +7,7 @@
 
 #include "http/VirtualServer.hpp"
 #include "http/Response.hpp"
+#include "http/Request.hpp"
 
 namespace server {
 	class Server {
@@ -18,6 +19,10 @@ namespace server {
 
 			// TODO debug
 			http::VirtualServer   _debug_virtual_server;
+
+			std::map<int, int>                               _clients_listener;
+			std::map<int, http::Request>                     _clients_request;
+			std::map<int, std::vector<http::VirtualServer> > _listeners_virtual_servers;
 		public:
 			Server(const logger::Logger &log, const Options& opts);
 			~Server();
@@ -26,9 +31,9 @@ namespace server {
 			// http connection
 			void listen_and_serve();
 		private:
-			int _finish_request(int client_sock, http::Response res);
+			int _finish_request(int client_sock, http::Response& res);
 			const http::VirtualServer& _get_client_virtual_server(int client_sock,
-					http::Request req);
+					http::Request& req);
 	};
 };
 

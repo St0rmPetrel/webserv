@@ -38,15 +38,17 @@ void Server::listen_and_serve() {
 				case Event::terminate :
 					loop = false;
 					break;
-				case Event::listener :
-					//client = _event_manager.accept_client((*it)->sock);
-					_event_manager.accept_client((*it)->sock);
+				case Event::listener : {
+					int client = _event_manager.accept_client((*it)->sock);
+					_clients_listener[client] = (*it)->sock;
+					_clients_request[client] = http::Request();
 					break;
-				case Event::client :
+				}
+				case Event::client : {
 					char                         recv_buf[_opts.recv_buffer_size];
 					int                          bytes_read;
 					// TODO bind it to client
-					http::Request                req;
+					http::Request&               req = _clients_request[(*it)->sock];
 					http::Response               res;
 					http::RequestParser          parser;
 					http::RequestParser::Result  parsing_result;
@@ -77,24 +79,28 @@ void Server::listen_and_serve() {
 						continue;
 					}
 					if (req.close) {
+						_clients_listener.erase((*it)->sock);
+						_clients_request.erase((*it)->sock);
 						_event_manager.finish_event(*it);
+					} else {
+						_clients_request[(*it)->sock] = http::Request();
 					}
 					break;
+				}
 			}
 		}
 	}
 	_log.warn("server: listener and serve: end");
 }
 
-const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
-		http::Request req) {
+const http::VirtualServer& Server::_get_client_virtual_server(int client_sock, http::Request& req) {
 	// find right virtual server
 	(void)client_sock;
 	(void)req;
 	return _debug_virtual_server;
 }
 
-int Server::_finish_request(int client_sock, http::Response res) {
+int Server::_finish_request(int client_sock, http::Response& res) {
 	const std::string& raw_res = res.serialize();
 	std::size_t bytes_write_total = 0;
 
