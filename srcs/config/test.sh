@@ -31,7 +31,7 @@ compile () {
 	clang++ -std="c++98" \
 		-Wall -Wextra -Werror \
 		-o $EXEC_FILE_NAME \
-		-x c++ - *.cpp ../server/*.cpp ../logger/*.cpp
+		-x c++ - Config.cpp ../server/*.cpp ../logger/*.cpp
 }
 
 test_fail () {

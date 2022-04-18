@@ -1,3 +1,4 @@
 a.out
-nginx.conf
 .idea/
+nginx.conf
+cmake-build-debug/
