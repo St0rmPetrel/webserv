@@ -1,9 +1,12 @@
 #ifndef REQUEST_HPP
 # define REQUEST_HPP
 
+#include <string>
+
 namespace http {
 	struct Request {
-		bool close;
+		bool        close;
+		std::string host;
 	};
 };
 

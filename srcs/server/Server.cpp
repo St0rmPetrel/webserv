@@ -18,8 +18,11 @@ Server::Server(const logger::Logger &log, const Options& opts)
 	: _log(log), _opts(opts), _event_manager(log) {
 	for (std::vector<InetAddr>::const_iterator it = _opts.addrs.begin();
 			it != _opts.addrs.end(); it++) {
-		this->_event_manager.new_listener(*it);
+		int listener = this->_event_manager.new_listener(*it);
+		// TODO add listener in _listeners_virtual_servers
+		(void)listener;
 	}
+	// TODO fill virtual servers
 }
 
 Server::~Server() { }
@@ -47,7 +50,6 @@ void Server::listen_and_serve() {
 				case Event::client : {
 					char                         recv_buf[_opts.recv_buffer_size];
 					int                          bytes_read;
-					// TODO bind it to client
 					http::Request&               req = _clients_request[(*it)->sock];
 					http::Response               res;
 					http::RequestParser          parser;
