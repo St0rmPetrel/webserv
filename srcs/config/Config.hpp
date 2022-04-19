@@ -28,7 +28,7 @@ namespace config {
 			};
 			// Module data structure for "module", "block" or "context" in configuration file
 			// example:
-			//   Module{ 
+			//   Module{
 			//     name: "main",
 			//     directive: {},
 			//     modules{
@@ -56,7 +56,7 @@ namespace config {
 
 			const logger::Logger &_log;
 
-			std::vector<std::string> tokens;
+			std::vector<std::string> _tokens;
 		public:
 			Config(const logger::Logger &log);
 			~Config();
@@ -99,9 +99,9 @@ namespace config {
 			//   (wrong token sequence)
 			const std::vector<std::string> _lexing(const std::string& filename);
 
-			const std::string	    readFile(const char *filename);
+			const std::string	    _readFile(const char *filename);
 
-			void	                tokenizer(const std::string &line);
+			void	                _tokenizer(const std::string &line);
 			// _parsing sort tokens into Module structure
 			//   example:
 			//     {"daemon", "off", ";", "events", "{", "}"}
@@ -126,7 +126,7 @@ namespace config {
 			// will be expend during the progress of creation program
 			// May throw exception in case of bad directive or module name,
 			// bad module nesting or bad arguments in directive
-			void                           _fill_options(const Module& global_module);
+			void                    _fill_options(const Module& global_module);
 
 	private:
 		Module _global_module;

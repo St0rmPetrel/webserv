@@ -10,11 +10,10 @@ include_directories(./srcs/config)
 include_directories(./srcs/logger)
 include_directories(./srcs/server)
 
-add_executable(parser
+add_executable(webserv
         srcs/config/Config.cpp
         srcs/config/IConfig.hpp
         srcs/config/Config.hpp
-        srcs/config/test.cpp
         srcs/logger/ILogger.hpp
         srcs/logger/Logger.cpp
         srcs/logger/Logger.hpp
@@ -25,4 +24,5 @@ add_executable(parser
         srcs/server/Options.cpp
         srcs/server/Server.cpp
         srcs/server/Server.hpp
+        srcs/main.cpp
         )
