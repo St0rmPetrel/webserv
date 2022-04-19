@@ -100,8 +100,20 @@ void Server::listen_and_serve() {
 
 const http::VirtualServer& Server::_get_client_virtual_server(int client_sock, http::Request& req) {
 	int client_listener = _clients_listener[client_sock];
-	(void)req;
-	return _listeners_virtual_servers[client_listener][0];
+	const std::vector<http::VirtualServer>& servers = _listeners_virtual_servers[client_listener];
+	const http::VirtualServer& default_server = servers[0];
+	if (req.host == "") {
+		return default_server;
+	} else {
+		for (std::vector<http::VirtualServer>::const_iterator it = servers.begin();
+				it != servers.end(); ++it) {
+			const std::set<std::string>& server_names = it->opts.names;
+			if (server_names.find(req.host) != server_names.end()) {
+				return (*it);
+			}
+		}
+	}
+	return default_server;
 }
 
 int Server::_finish_request(int client_sock, http::Response& res) {
