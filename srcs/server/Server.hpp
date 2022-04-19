@@ -8,6 +8,7 @@
 #include "http/VirtualServer.hpp"
 #include "http/Response.hpp"
 #include "http/Request.hpp"
+#include "http/RequestParser.hpp"
 
 namespace server {
 	class Server {
@@ -16,6 +17,7 @@ namespace server {
 			Options	              _opts;
 
 			EventManager          _event_manager;
+			http::RequestParser   _request_parser;
 
 			std::map<int, int>                               _clients_listener;
 			std::map<int, http::Request>                     _clients_request;
@@ -28,9 +30,9 @@ namespace server {
 			// http connection
 			void listen_and_serve();
 		private:
-			int _finish_request(int client_sock, http::Response& res);
+			int _finish_request(int client_sock, const http::Response& res);
 			const http::VirtualServer& _get_client_virtual_server(int client_sock,
-					http::Request& req);
+					const http::Request& req);
 			int _find_listener(const std::string& addr, unsigned short int port);
 	};
 };

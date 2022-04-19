@@ -10,7 +10,10 @@
 namespace http {
 	class ServerMux : public IHandler {
 		public:
-			void serve_http(Response& res, Request& req) const;
+			void serve_http(Response& res, const Request& req) const;
+			void bad_request(Response& res, const Request& req) const;
+			void not_found(Response& res, const Request& req) const;
+
 			void handle(const std::string& pattern, const IHandler& handler);
 	};
 };

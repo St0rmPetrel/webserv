@@ -10,7 +10,6 @@
 
 #include "http/Request.hpp"
 #include "http/Response.hpp"
-#include "http/RequestParser.hpp"
 
 using namespace server;
 
@@ -51,20 +50,18 @@ void Server::listen_and_serve() {
 					break;
 				}
 				case Event::client : {
-					char                         recv_buf[_opts.recv_buffer_size];
-					int                          bytes_read;
-					http::Request&               req = _clients_request[(*it)->sock];
-					http::Response               res;
-					http::RequestParser          parser;
-					http::RequestParser::Result  parsing_result;
+					char                        recv_buf[_opts.recv_buffer_size];
+					http::Request&              req = _clients_request[(*it)->sock];
+					http::Response              res;
 
-					bytes_read = recv((*it)->sock, recv_buf, _opts.recv_buffer_size, 0);
+					int bytes_read = recv((*it)->sock, recv_buf, _opts.recv_buffer_size, 0);
 					if (bytes_read < 0) {
 						_log.fatal(SSTR("recv socket error client_sock = " << (*it)->sock));
 						_event_manager.finish_event(*it);
 						continue;
 					}
-					parsing_result = parser.parse(req, recv_buf, recv_buf + bytes_read);
+					http::RequestParser::Result parsing_result = _request_parser.parse(req,
+							recv_buf, recv_buf + bytes_read);
 
 					const http::VirtualServer& virtual_server = _get_client_virtual_server(
 							(*it)->sock, req);
@@ -75,7 +72,7 @@ void Server::listen_and_serve() {
 						case http::RequestParser::ParsingIncompleted :
 							continue;
 						case http::RequestParser::ParsingError :
-							//virtual_server.bad_request_handler.serve_http(res, req);
+							virtual_server.mux.bad_request(res, req);
 							break;
 					}
 					if (_finish_request((*it)->sock, res) < 0) {
@@ -98,7 +95,8 @@ void Server::listen_and_serve() {
 	_log.warn("server: listener and serve: end");
 }
 
-const http::VirtualServer& Server::_get_client_virtual_server(int client_sock, http::Request& req) {
+const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
+		const http::Request& req) {
 	int client_listener = _clients_listener[client_sock];
 	const std::vector<http::VirtualServer>& servers = _listeners_virtual_servers[client_listener];
 	const http::VirtualServer& default_server = servers[0];
@@ -116,7 +114,7 @@ const http::VirtualServer& Server::_get_client_virtual_server(int client_sock, h
 	return default_server;
 }
 
-int Server::_finish_request(int client_sock, http::Response& res) {
+int Server::_finish_request(int client_sock, const http::Response& res) {
 	const std::string& raw_res = res.serialize();
 	std::size_t bytes_write_total = 0;
 

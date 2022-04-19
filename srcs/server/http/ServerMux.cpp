@@ -7,7 +7,17 @@
 
 using namespace http;
 
-void ServerMux::serve_http(Response& res, Request& req) const {
+void ServerMux::serve_http(Response& res, const Request& req) const {
+	(void)res;
+	(void)req;
+}
+
+void ServerMux::bad_request(Response& res, const Request& req) const {
+	(void)res;
+	(void)req;
+}
+
+void ServerMux::not_found(Response& res, const Request& req) const {
 	(void)res;
 	(void)req;
 }
