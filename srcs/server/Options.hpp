@@ -1,19 +1,15 @@
 #ifndef SERVER_OPTIONS_HPP
 # define SERVER_OPTIONS_HPP
 
-#include <string>
 #include <vector>
 
+#include "http/VirtualServer.hpp"
+
 namespace server {
-	struct InetAddr {
-		unsigned short int port;    // Номер порта
-		std::string        addr;    // IP-адрес
-		int                listener_backlog; // Размер очереди запросов
-	};
 
 	struct Options {
 		int recv_buffer_size;
-		std::vector<InetAddr> addrs;
+		std::vector<http::VirtualServer::Options> servers;
 	};
 }; /* namespace server */
 

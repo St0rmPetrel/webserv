@@ -1,14 +1,25 @@
 #ifndef VIRTUAL_SERVER_HPP
 # define VIRTUAL_SERVER_HPP
 
+#include <string>
+#include <set>
+
 #include "ServerMux.hpp"
 
 namespace http {
-	struct VirtualServer {
-		ServerMux             mux;
-		std::string           addr;
-		std::set<std::string> names;
-//		IHandler              bad_request_handler;
+	class VirtualServer {
+		public:
+			struct Options {
+				unsigned short int    port; // Номер порта
+				std::string           addr; // IP-адрес
+				int                   listener_backlog; // Размер очереди запросов
+				std::set<std::string> names; // Имена виртуального сервера
+			};
+		public:
+			VirtualServer(const Options& opts);
+			VirtualServer();
+			ServerMux mux;
+			Options   opts;
 	};
 };
 

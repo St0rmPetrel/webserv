@@ -17,9 +17,6 @@ namespace server {
 
 			EventManager          _event_manager;
 
-			// TODO debug
-			http::VirtualServer   _debug_virtual_server;
-
 			std::map<int, int>                               _clients_listener;
 			std::map<int, http::Request>                     _clients_request;
 			std::map<int, std::vector<http::VirtualServer> > _listeners_virtual_servers;
@@ -34,6 +31,7 @@ namespace server {
 			int _finish_request(int client_sock, http::Response& res);
 			const http::VirtualServer& _get_client_virtual_server(int client_sock,
 					http::Request& req);
+			int _find_listener(const std::string& addr, unsigned short int port);
 	};
 };
 

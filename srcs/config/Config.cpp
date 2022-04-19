@@ -46,12 +46,12 @@ const Config::Module Config::_parsing(const std::vector<std::string>& tokens) {
 void Config::_fill_options(const Config::Module& global_module) {
 	(void)global_module;
 	this->_serv_opts.recv_buffer_size = 1024;
-	server::InetAddr addr;
+	http::VirtualServer::Options server;
 
-	addr.port = 8081;
-	addr.addr = "127.0.0.1";
-	addr.listener_backlog = 64;
-	this->_serv_opts.addrs.push_back(addr);
+	server.port = 8081;
+	server.addr = "127.0.0.1";
+	server.listener_backlog = 64;
+	this->_serv_opts.servers.push_back(server);
 	_log.debug("start filling configuration staf in to logger and server options");
 }
 

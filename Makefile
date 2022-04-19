@@ -42,7 +42,7 @@ CONFIG =	Config
 
 SERVER	=	Server Options EventManager PollFds
 
-HTTP	=	Response RequestParser ServerMux
+HTTP	=	Response RequestParser ServerMux VirtualServer
 
 UTILS	=
 

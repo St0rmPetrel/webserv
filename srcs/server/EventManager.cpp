@@ -27,9 +27,9 @@ EventManager::~EventManager() {
 
 // new_listener creates and binds listener socket
 // and add it in _fds listeners
-int EventManager::new_listener(const InetAddr& iaddr) {
+int EventManager::new_listener(const std::string& addr, unsigned short int port, int backlog) {
 	int                listener;
-	struct sockaddr_in addr;
+	struct sockaddr_in sock_addr;
 
 	listener = socket(AF_INET, SOCK_STREAM, 0);
 	if (listener < 0) {
@@ -40,19 +40,19 @@ int EventManager::new_listener(const InetAddr& iaddr) {
 		throw EventManager::FcntlSocketException();
 	}
 	// bind and then start to listen the socket
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(iaddr.port);
-	addr.sin_addr.s_addr = inet_addr((const char *)&(iaddr.addr[0]));
-	if (bind(listener, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+	sock_addr.sin_family = AF_INET;
+	sock_addr.sin_port = htons(port);
+	sock_addr.sin_addr.s_addr = inet_addr((const char *)&(addr[0]));
+	if (bind(listener, (struct sockaddr *)&sock_addr, sizeof(sock_addr)) < 0) {
 		throw EventManager::BindSocketException();
 	}
-	if (listen(listener, iaddr.listener_backlog) < 0) {
+	if (listen(listener, backlog) < 0) {
 		throw EventManager::ListenSocketException();
 	}
 	// add new listener in to PollFds
 	this->_fds.add_listener(listener);
-	_log.info(SSTR("event_manager: open listener on " << iaddr.addr << ":" <<
-				iaddr.port << " with sock=" << listener));
+	_log.info(SSTR("event_manager: open listener on " << addr << ":" << port <<
+				" with sock=" << listener));
 	return listener;
 }
 

@@ -16,13 +16,16 @@ using namespace server;
 
 Server::Server(const logger::Logger &log, const Options& opts)
 	: _log(log), _opts(opts), _event_manager(log) {
-	for (std::vector<InetAddr>::const_iterator it = _opts.addrs.begin();
-			it != _opts.addrs.end(); it++) {
-		int listener = this->_event_manager.new_listener(*it);
-		// TODO add listener in _listeners_virtual_servers
-		(void)listener;
+	for (std::vector<http::VirtualServer::Options>::const_iterator it = _opts.servers.begin();
+			it != _opts.servers.end(); ++it) {
+		int listener = 0;
+
+		if ((listener = _find_listener(it->addr, it->port)) < 0) {
+			listener = _event_manager.new_listener(it->addr, it->port, it->listener_backlog);
+			_listeners_virtual_servers[listener] = std::vector<http::VirtualServer>();
+		}
+		_listeners_virtual_servers[listener].push_back(http::VirtualServer(*it));
 	}
-	// TODO fill virtual servers
 }
 
 Server::~Server() { }
@@ -96,10 +99,9 @@ void Server::listen_and_serve() {
 }
 
 const http::VirtualServer& Server::_get_client_virtual_server(int client_sock, http::Request& req) {
-	// find right virtual server
-	(void)client_sock;
+	int client_listener = _clients_listener[client_sock];
 	(void)req;
-	return _debug_virtual_server;
+	return _listeners_virtual_servers[client_listener][0];
 }
 
 int Server::_finish_request(int client_sock, http::Response& res) {
@@ -115,4 +117,14 @@ int Server::_finish_request(int client_sock, http::Response& res) {
 		}
 	}
 	return (0);
+}
+
+int Server::_find_listener(const std::string& addr, unsigned short int port) {
+	for (std::map<int, std::vector<http::VirtualServer> >::const_iterator it =
+			_listeners_virtual_servers.begin(); it != _listeners_virtual_servers.end(); ++it) {
+		if (it->second[0].opts.addr == addr && it->second[0].opts.port == port) {
+			return (it->first);
+		}
+	}
+	return (-1);
 }
