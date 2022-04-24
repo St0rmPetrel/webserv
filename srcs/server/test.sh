@@ -14,7 +14,7 @@ SRC_TEST_CODE='
 int main() {
 	logger::Logger log;
 	config::Config conf(log);
-	server::Server serv(log);
+	server::Server serv(log, conf.get_server());
 
 	std::cerr << std::endl;
 }
