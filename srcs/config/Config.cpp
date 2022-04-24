@@ -167,3 +167,60 @@ const char *Config::ParsingModuleException::what() const throw() {
 const char *Config::ParsingBraceException::what() const throw() {
 	return "Couldn't match \"{\"";
 }
+
+std::string Config::Print(void) {
+    std::ostringstream _str;
+    int indent = 0;
+
+    std::vector<Directive>::const_iterator it_dir = _global_module.directives.begin();
+    for ( ; it_dir != _global_module.directives.end(); ++it_dir) {
+        _str << _print_dir(*it_dir, indent);
+    }
+    std::vector<Module>::const_iterator it_mod = _global_module.modules.begin();
+    for ( ; it_mod != _global_module.modules.end(); ++it_mod) {
+        _str << _print_module(*it_mod, indent);
+    }
+
+    return (_str.str());
+}
+
+std::string Config::_print_dir(const Directive& dir, int indent) {
+    std::ostringstream _str;
+    std::string strIndent;
+    for (int i = 0; i < indent; ++i) {
+        strIndent += "    ";
+    }
+
+    _str << strIndent << dir.name << " ";
+    std::vector<std::string>::const_iterator it_dir_arg = dir.args.begin();
+    for ( ; it_dir_arg != dir.args.end(); ++it_dir_arg) {
+        _str << *it_dir_arg << " ";
+    }
+    _str << std::endl;
+    return (_str.str());
+}
+
+std::string Config::_print_module(const Module& mod, int indent) {
+    std::ostringstream _str;
+    std::string strIndent;
+    for (int i = 0; i < indent; ++i) {
+        strIndent += "    ";
+    }
+
+    _str << strIndent << mod.name << " ";
+    std::vector<std::string>::const_iterator it_mod_arg = mod.args.begin();
+    for ( ; it_mod_arg != mod.args.end(); ++it_mod_arg) {
+        _str << *it_mod_arg << " ";
+    }
+    _str << "{" << std::endl;
+    std::vector<Directive>::const_iterator it_dir = mod.directives.begin();
+    for ( ; it_dir != mod.directives.end(); ++it_dir) {
+        _str << _print_dir(*it_dir, indent + 1);
+    }
+    std::vector<Module>::const_iterator it_mod = mod.modules.begin();
+    for ( ; it_mod != mod.modules.end(); ++it_mod) {
+        _str << _print_module(*it_mod, indent + 1);
+    }
+    _str << strIndent << "}" << std::endl;
+    return (_str.str());
+}

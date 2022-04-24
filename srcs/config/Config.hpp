@@ -6,6 +6,7 @@
 #include <exception>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "IConfig.hpp"
 #include "../logger/Logger.hpp"
@@ -74,8 +75,6 @@ namespace config {
 		const server::Options &get_server() const;
 
 	public:
-		// TODO make it better (more verbose)
-
 		struct FileNotFoundException : public std::exception {
 			const char *what() const throw();
 		};
@@ -83,11 +82,6 @@ namespace config {
 		struct ReadingConfigFileException : public std::exception {
 			const char *what() const throw();
 		};
-
-		// TODO make it better (more verbose)
-//		struct ParsingErrorException : public std::exception {
-//			const char *what() const throw();
-//		};
 
 		struct ParsingDirException : public std::exception {
 			const char *what() const throw();
@@ -136,8 +130,6 @@ namespace config {
 		//   (don't close curly bracket)
 		void _parsing(const std::vector<std::string> &tokens);
 
-	private:
-		// todo: find better name for this method
 		Directive _collect_directive(const std::vector<std::string> &tokens) const;
 
 		Module _collect_module(const std::vector<std::string> &name, const std::vector<std::string> &tokens,
@@ -151,6 +143,12 @@ namespace config {
 
 	private:
 		Module _global_module;
+
+    public:
+        std::string Print(void);
+    private:
+        std::string _print_dir(const Directive& dir, int indent);
+        std::string _print_module(const Module& mod, int indent);
 	};
 };
 

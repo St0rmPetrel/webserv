@@ -2,13 +2,13 @@
 #include "../Config.hpp"
 
 // todo: change path vars
-const std::string valid = "/Users/nastya/Desktop/webserv/configs/basic.conf";
-const std::string valid_with_comments = "/Users/nastya/Desktop/webserv/configs/basic_with_comments.conf";
-const std::string empty = "/Users/nastya/Desktop/webserv/configs/empty.conf";
-const std::string invalid = "/Users/nastya/Desktop/webserv/configs/invalid.conf";
-const std::string invalid2 = "/Users/nastya/Desktop/webserv/configs/invalid2.conf";
-const std::string invalid3 = "/Users/nastya/Desktop/webserv/configs/invalid3.conf";
-const std::string invalid4 = "/Users/nastya/Desktop/webserv/configs/no_rights.conf";
+const std::string valid = "/Users/dwillett/Desktop/webserv/configs/basic.conf";
+const std::string valid_with_comments = "/Users/dwillett/Desktop/webserv/configs/basic_with_comments.conf";
+const std::string empty = "/Users/dwillett/Desktop/webserv/configs/empty.conf";
+const std::string invalid = "/Users/dwillett/Desktop/webserv/configs/invalid.conf";
+const std::string invalid2 = "/Users/dwillett/Desktop/webserv/configs/invalid2.conf";
+const std::string invalid3 = "/Users/dwillett/Desktop/webserv/configs/invalid3.conf";
+const std::string invalid4 = "/Users/dwillett/Desktop/webserv/configs/no_rights.conf";
 
 int main(void) {
 	logger::Options opt;
@@ -23,6 +23,9 @@ int main(void) {
 		try {
 			config::Config config(log);
 			config.parse(valid);
+
+            // create output file
+            std::ofstream out
 		}
 		catch (std::exception &e) {
 			log.fatal(e.what());
