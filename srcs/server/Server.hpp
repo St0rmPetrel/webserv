@@ -19,8 +19,11 @@ namespace server {
 			EventManager          _event_manager;
 			http::RequestParser   _request_parser;
 
+			// map for bind client socket with its listeners
 			std::map<int, int>                               _clients_listener;
+			// map for bind client socket with its http request
 			std::map<int, http::Request>                     _clients_request;
+			// map for bind listener socket with its virtual servers
 			std::map<int, std::vector<http::VirtualServer> > _listeners_virtual_servers;
 		public:
 			Server(const logger::Logger &log, const Options& opts);
