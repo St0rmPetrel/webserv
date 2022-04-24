@@ -38,7 +38,7 @@ LOGGER =    Logger Options
 
 CONFIG =	Config
 
-SERVER	=	Server Options EventManager PollFds
+SERVER	=	Server EventManager PollFds
 
 UTILS	=
 
