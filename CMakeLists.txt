@@ -26,3 +26,20 @@ add_executable(webserv
         srcs/server/Server.hpp
         srcs/main.cpp
         )
+
+add_executable(parser_test
+        srcs/config/Config.cpp
+        srcs/config/Config.hpp
+        srcs/config/IConfig.hpp
+        srcs/config/tests/parser_test.cpp
+        srcs/logger/Logger.cpp
+        srcs/logger/ILogger.hpp
+        srcs/logger/Logger.hpp
+        srcs/logger/Options.hpp
+        srcs/logger/Options.cpp
+        srcs/server/IServer.hpp
+        srcs/server/Options.cpp
+        srcs/server/Options.hpp
+        srcs/server/Server.cpp
+        srcs/server/Server.hpp
+        )

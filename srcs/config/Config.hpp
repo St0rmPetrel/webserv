@@ -85,7 +85,19 @@ namespace config {
 		};
 
 		// TODO make it better (more verbose)
-		struct ParsingErrorException : public std::exception {
+//		struct ParsingErrorException : public std::exception {
+//			const char *what() const throw();
+//		};
+
+		struct ParsingDirException : public std::exception {
+			const char *what() const throw();
+		};
+
+		struct ParsingModuleException : public std::exception {
+			const char *what() const throw();
+		};
+
+		struct ParsingBraceException : public std::exception {
 			const char *what() const throw();
 		};
 

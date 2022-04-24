@@ -89,27 +89,27 @@ const std::string Config::_readFile(const char *filename) {
 }
 
 const std::vector<std::string> Config::_lexing(const std::string &filename) {
-	_log.debug("start processing a file: " + filename);
-	_log.debug("lexing: read all file, delete comments  and splitting words into tokens");
+	_log.info("start processing a file: " + filename);
 	_tokenizer(_readFile(filename.c_str()));
+	_log.debug("lexing: read all file, deleted comments and splitted words into tokens");
 	return _tokens;
 }
 
 void Config::_parsing(const std::vector<std::string> &tokens) {
 	std::vector<std::string>::const_iterator it = tokens.begin();
 
-	_log.debug("start parsing tokens into global module structure");
+	_log.debug("parsing: start parsing tokens into global module structure");
 	std::vector<std::string> name;
 	name.push_back("global");
 	_global_module = _collect_module(name, tokens, it, true);
-	_log.debug("splitting directives and modules");
+	_log.debug("parsing: all directives and modules are filled");
 }
 
 Config::Directive Config::_collect_directive(const std::vector<std::string> &tokens) const {
 	Config::Directive dir;
 
 	if (tokens.empty())
-		throw Config::ParsingErrorException();
+		throw Config::ParsingDirException();
 
 	dir.name = tokens[0];
 	dir.args.assign(tokens.begin() + 1, tokens.end());
@@ -121,7 +121,7 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 	Config::Module local_module;
 
 	if (name.empty())
-		throw Config::ParsingErrorException();
+		throw Config::ParsingModuleException();
 
 	local_module.name = name[0];
 	local_module.args.assign(name.begin() + 1, name.end());
@@ -129,17 +129,17 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 	for (; it != tokens.end() && (*it != "}" || is_global); ++it) {
 		if (*it == ";") {
 			local_module.directives.push_back(_collect_directive(tokens_accumulator));
-			_log.debug("filled directive " + tokens_accumulator[0]);
+			_log.debug("parsing: filled directive " + tokens_accumulator[0]);
 			tokens_accumulator.clear();
 		} else if (*it == "{") {
 			local_module.modules.push_back(_collect_module(tokens_accumulator, tokens, ++it, false));
-			_log.debug("filled module " + tokens_accumulator[0]);
+			_log.debug("parsing: filled module " + tokens_accumulator[0]);
 			tokens_accumulator.clear();
 		} else
 			tokens_accumulator.push_back(*it);
 	}
 	if (it == tokens.end() && !is_global)
-		throw Config::ParsingErrorException();
+		throw Config::ParsingBraceException();
 	return local_module;
 }
 
@@ -156,6 +156,14 @@ const char *Config::ReadingConfigFileException::what() const throw() {
 	return "Error while reading config file";
 }
 
-const char *Config::ParsingErrorException::what() const throw() {
-	return "parsing error";
+const char *Config::ParsingDirException::what() const throw() {
+	return "Unexpected \";\"";
+}
+
+const char *Config::ParsingModuleException::what() const throw() {
+	return "Unexpected \"{\"";
+}
+
+const char *Config::ParsingBraceException::what() const throw() {
+	return "Couldn't match \"{\"";
 }
