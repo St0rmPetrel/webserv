@@ -26,7 +26,7 @@ PollFds::~PollFds() {
 
 // do_poll poll syscall method wrapper (blocking)
 void PollFds::do_poll() {
-	if (poll(&(_base[0]), _base.size(), -1) < 0) {
+	if (poll(&(_base.at(0)), _base.size(), -1) < 0) {
 		throw PollFds::PollException();
 	}
 }
@@ -59,7 +59,7 @@ void PollFds::add_client(int sock) {
 const std::set<int>& PollFds::check_term() {
 	this->_term_event_socks.clear();
 
-	if (_base[0].revents & POLLIN) {
+	if (_base.at(0).revents & POLLIN) {
 		_base[0].revents = 0;
 		this->_term_event_socks.insert(_base[0].fd);
 	}
@@ -71,7 +71,7 @@ const std::set<int>& PollFds::check_listeners() {
 	this->_listener_event_socks.clear();
 
 	for (std::vector<struct pollfd>::iterator it = _base.begin() + 1;
-			it != _base.begin() + 1 + _listeners_num; it++) {
+			it != _base.begin() + 1 + _listeners_num; ++it) {
 		if (it->revents & POLLIN) {
 			it->revents = 0;
 			this->_listener_event_socks.insert(it->fd);
