@@ -6,6 +6,7 @@
 namespace http {
 	class Response {
 		public:
+			// serialize return raw response
 			const std::string serialize() const;
 	};
 };

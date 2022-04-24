@@ -14,6 +14,7 @@ namespace http {
 				ParsingError
 			};
 		public:
+			// fill http request based on given raw data
 			Result parse(Request& req, const char* begin, const char* end);
 	};
 };
