@@ -2,95 +2,116 @@
 #include "../Config.hpp"
 
 // todo: change path vars
-const std::string valid = "/Users/dwillett/Desktop/webserv/configs/basic.conf";
-const std::string valid_with_comments = "/Users/dwillett/Desktop/webserv/configs/basic_with_comments.conf";
-const std::string empty = "/Users/dwillett/Desktop/webserv/configs/empty.conf";
-const std::string invalid = "/Users/dwillett/Desktop/webserv/configs/invalid.conf";
-const std::string invalid2 = "/Users/dwillett/Desktop/webserv/configs/invalid2.conf";
-const std::string invalid3 = "/Users/dwillett/Desktop/webserv/configs/invalid3.conf";
-const std::string invalid4 = "/Users/dwillett/Desktop/webserv/configs/no_rights.conf";
+const std::string valid = "../../configs/basic.conf";
+const std::string valid_with_comments = "../../configs/basic_with_comments.conf";
+const std::string empty = "../../configs/empty.conf";
+const std::string invalid = "../../configs/invalid.conf";
+const std::string invalid2 = "../../configs/invalid2.conf";
+const std::string invalid3 = "../../configs/invalid3.conf";
+const std::string invalid4 = "../../configs/no_rights.conf";
 
-int main(void) {
-	logger::Options opt;
-//	opt.enabled_level = logger::INFO;
-	opt.enabled_level = logger::DEBUG;
-	logger::Logger log;
-	log.set_up(opt);
 
-	// todo: check parsing results
-	{
-		/// completely valid testcase
-		try {
-			config::Config config(log);
-			config.parse(valid);
 
-            // create output file
-            std::ofstream out
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
-	{
-		/// completely valid testcase + comments in conf file
-		try {
-			config::Config config(log);
-			config.parse(valid_with_comments);
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
-	{
-		/// ?
-		try {
-			config::Config config(log);
-			config.parse(empty);
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
-	{
-		/// expected exception - empty module
-		try {
-			config::Config config(log);
-			config.parse(invalid);
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
-	{
-		/// expected exception - double ;
-		try {
-			config::Config config(log);
-			config.parse(invalid2);
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
-	{
-		/// expected exception - ; following {
-		try {
-			config::Config config(log);
-			config.parse(invalid3);
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
-	{
-		/// unable to open conf file
-		try {
-			config::Config config(log);
-			config.parse(invalid4);
-		}
-		catch (std::exception &e) {
-			log.fatal(e.what());
-		}
-	}
+int main(void)
+{
+    logger::Options opt;
+    //	opt.enabled_level = logger::INFO;
+    opt.enabled_level = logger::DEBUG;
+    logger::Logger log;
+    log.set_up(opt);
 
-	return (0);
+    {
+        /// completely valid testcase
+        try {
+            config::Config config(log);
+            config.parse(valid);
+
+            std::ofstream out;
+            out.open("../../configs/basic_result.txt", std::ofstream::out | std::ofstream::trunc);
+            if (out.is_open()) {
+                out << config.Print();
+            }
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+    {
+        /// completely valid testcase + comments in conf file
+        try {
+            config::Config config(log);
+            config.parse(valid_with_comments);
+
+            std::ofstream out;
+            out.open("../../configs/basic_with_comments_result.txt", std::ofstream::out | std::ofstream::trunc);
+            if (out.is_open()) {
+                out << config.Print();
+            }
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+    {
+        /// ?
+        try {
+            config::Config config(log);
+            config.parse(empty);
+
+            std::ofstream out;
+            out.open("../../configs/empty_result.txt", std::ofstream::out | std::ofstream::trunc);
+            if (out.is_open()) {
+                out << config.Print();
+            }
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+    {
+        /// expected exception - {
+        try {
+            config::Config config(log);
+            config.parse(invalid);
+            return (1);
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+    {
+        /// expected exception - double ;
+        try {
+            config::Config config(log);
+            config.parse(invalid2);
+            return (1);
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+    {
+        /// expected exception - ; following {
+        try {
+            config::Config config(log);
+            config.parse(invalid3);
+            return (1);
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+    {
+        /// unable to open conf file
+        try {
+            config::Config config(log);
+            config.parse(invalid4);
+            return (1);
+        }
+        catch(std::exception& e) {
+            log.fatal(e.what());
+        }
+    }
+
+    return (0);
 }

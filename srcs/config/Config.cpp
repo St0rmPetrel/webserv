@@ -191,10 +191,10 @@ std::string Config::_print_dir(const Directive& dir, int indent) {
         strIndent += "    ";
     }
 
-    _str << strIndent << dir.name << " ";
+    _str << strIndent << dir.name;
     std::vector<std::string>::const_iterator it_dir_arg = dir.args.begin();
     for ( ; it_dir_arg != dir.args.end(); ++it_dir_arg) {
-        _str << *it_dir_arg << " ";
+        _str << " " << *it_dir_arg;
     }
     _str << std::endl;
     return (_str.str());
@@ -207,12 +207,12 @@ std::string Config::_print_module(const Module& mod, int indent) {
         strIndent += "    ";
     }
 
-    _str << strIndent << mod.name << " ";
+    _str << strIndent << mod.name;
     std::vector<std::string>::const_iterator it_mod_arg = mod.args.begin();
     for ( ; it_mod_arg != mod.args.end(); ++it_mod_arg) {
-        _str << *it_mod_arg << " ";
+        _str << " " << *it_mod_arg;
     }
-    _str << "{" << std::endl;
+    _str << " {" << std::endl;
     std::vector<Directive>::const_iterator it_dir = mod.directives.begin();
     for ( ; it_dir != mod.directives.end(); ++it_dir) {
         _str << _print_dir(*it_dir, indent + 1);
