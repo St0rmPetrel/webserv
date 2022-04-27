@@ -9,7 +9,8 @@ namespace http {
 		public:
 			virtual ~IHandler() { }
 
-			virtual void serve_http(Response& res, const Request& req) const = 0;
+			virtual void      serve_http(Response& res, const Request& req) const = 0;
+			virtual IHandler* clone() const = 0;
 	};
 };
 
