@@ -28,15 +28,10 @@ ServerMux::ServerMux(const ServerMux& mux)
 	if (mux._method_not_allowed_handler != NULL) {
 		this->_method_not_allowed_handler = mux._method_not_allowed_handler->clone();
 	}
-	// copy all routes
-	for (std::map<std::string, ServerMux::Route*>::const_iterator it = mux._routes.begin();
+	// copy routes
+	for (std::vector<const Route*>::const_iterator it = mux._routes.begin();
 			it != mux._routes.end(); ++it) {
-		this->_routes[it->first] = dynamic_cast<Route*>(it->second->clone());
-	}
-	// copy all middlewares
-	for (std::vector<IHandler*>::const_iterator it = mux._middlewares.begin();
-			it != mux._middlewares.end(); ++it) {
-		this->_middlewares.push_back((*it)->clone());
+		this->_routes.push_back(dynamic_cast<const Route*>((*it)->clone()));
 	}
 }
 
@@ -46,20 +41,21 @@ ServerMux::~ServerMux() {
 	delete _not_found_handler;
 	delete _method_not_allowed_handler;
 	// delete all routes
-	for (std::map<std::string, ServerMux::Route*>::const_iterator it = _routes.begin();
+	for (std::vector<const Route*>::const_iterator it = _routes.begin();
 			it != _routes.end(); ++it) {
-		delete it->second;
-	}
-	// delete all middlewares
-	for (std::vector<IHandler*>::const_iterator it = _middlewares.begin();
-			it != _middlewares.end(); ++it) {
 		delete *it;
 	}
 }
 
 void ServerMux::serve_http(Response& res, const Request& req) const {
-	(void)res;
-	(void)req;
+	for (std::vector<const Route*>::const_iterator it = _routes.begin();
+			it != _routes.end(); ++it) {
+		if ((*it)->match(req)) {
+			(*it)->serve_http(res, req);
+			return;
+		}
+	}
+	this->not_found(res, req);
 }
 
 IHandler* ServerMux::clone() const {
@@ -121,8 +117,18 @@ ServerMux::Route* ServerMux::new_route() {
 	return (new ServerMux::Route(*this));
 }
 
-void ServerMux::add_middleware(const IHandler& handler) {
-	this->_middlewares.push_back(handler.clone());
+void ServerMux::_add_route(const std::string& path, const Route* route) {
+	for (std::vector<const Route*>::iterator it = _routes.begin();
+			it != _routes.end(); ++it) {
+		if ((*it)->_path == path) {
+			throw "path already bind to another route";
+		}
+		if ((*it)->_path.size() <= path.size()) {
+			_routes.insert(it, route);
+			return;
+		}
+	}
+	_routes.push_back(route);
 }
 
 ServerMux::Route::Route(ServerMux& mux) : _mux(mux) { }
@@ -158,15 +164,14 @@ void ServerMux::Route::handle(const std::string& path, const IHandler& handler) 
 		throw "handler already bind to route";
 	}
 	this->_handler = handler.clone();
-	if (_mux._routes.find(path) != _mux._routes.end()) {
-		throw "path already bind to another route";
-	}
-	this->_mux._routes[path] = this;
+	_mux._add_route(path, this);
 }
 
 void ServerMux::Route::serve_http(Response& res, const Request& req) const {
-	(void)res;
-	(void)req;
+	if (this->_handler == NULL) {
+		throw "handler not bind to route";
+	}
+	this->_handler->serve_http(res, req);
 }
 
 IHandler* ServerMux::Route::clone() const {

@@ -17,13 +17,6 @@ namespace http {
 			class Route : public IHandler {
 				friend class ServerMux;
 				private:
-					ServerMux& _mux;
-					IHandler*  _handler;
-
-					std::set<std::string>                          _allow_methods;
-					std::set<std::string>                          _allow_hosts;
-					std::set<std::pair<std::string, std::string> > _mandatory_headers;
-				private:
 					Route(ServerMux& mux);
 					Route(const Route& r);
 				public:
@@ -41,6 +34,14 @@ namespace http {
 
 					void      serve_http(Response& res, const Request& req) const;
 					IHandler* clone() const;
+				private:
+					ServerMux&  _mux;
+					IHandler*   _handler;
+					std::string _path;
+
+					std::set<std::string>                          _allow_methods;
+					std::set<std::string>                          _allow_hosts;
+					std::set<std::pair<std::string, std::string> > _mandatory_headers;
 			};
 		public:
 			ServerMux();
@@ -56,19 +57,20 @@ namespace http {
 
 			Route* new_route();
 
-			void add_middleware(const IHandler& handler);
 			void set_bad_request(const IHandler& bad_request_handler);
 			void set_not_found(const IHandler& not_found_handler);
 			void set_method_not_allowed(const IHandler& method_not_allowed_handler);
 		private:
-			// vector of middlewares to be called after a match is found
-			std::vector<IHandler*> _middlewares;
+			void _add_route(const std::string& path, const Route* route);
+		private:
+			// routes in order of priority search
+			// the longest routes path are at the beginning of vector
+			// and searching starts from the longest path to the shortest one
+			std::vector<const Route*> _routes;
 
-			std::map<std::string, Route*> _routes;
-
-			IHandler* _bad_request_handler;
-			IHandler* _not_found_handler;
-			IHandler* _method_not_allowed_handler;
+			const IHandler* _bad_request_handler;
+			const IHandler* _not_found_handler;
+			const IHandler* _method_not_allowed_handler;
 	};
 };
 
