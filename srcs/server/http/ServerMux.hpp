@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include <map>
 #include <utility> // pair
 #include <vector>
 
@@ -21,7 +22,7 @@ namespace http {
 
 					std::set<std::string>                          _allow_methods;
 					std::set<std::string>                          _allow_hosts;
-					std::set<std::pair<std::string, std::string> > _mandatory_headrs;
+					std::set<std::pair<std::string, std::string> > _mandatory_headers;
 				private:
 					Route(ServerMux& mux);
 					Route(const Route& r);
@@ -53,10 +54,21 @@ namespace http {
 			void not_found(Response& res, const Request& req) const;
 			void method_not_allowed(Response& res, const Request& req) const;
 
-			Route new_route();
+			Route* new_route();
+
+			void add_middleware(const IHandler& handler);
+			void set_bad_request(const IHandler& bad_request_handler);
+			void set_not_found(const IHandler& not_found_handler);
+			void set_method_not_allowed(const IHandler& method_not_allowed_handler);
 		private:
 			// vector of middlewares to be called after a match is found
-			std::vector<IHandler*> middlewares;
+			std::vector<IHandler*> _middlewares;
+
+			std::map<std::string, Route*> _routes;
+
+			IHandler* _bad_request_handler;
+			IHandler* _not_found_handler;
+			IHandler* _method_not_allowed_handler;
 	};
 };
 
