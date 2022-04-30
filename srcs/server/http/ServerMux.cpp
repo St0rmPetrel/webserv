@@ -153,7 +153,28 @@ ServerMux::Route& ServerMux::Route::header(const std::pair<std::string, std::str
 }
 
 bool ServerMux::Route::match(const Request& req) const {
-	(void)req;
+	// check path
+	if (_path != req.path) {
+		return false;
+	}
+	// check host
+	if (!_allow_hosts.empty() && _allow_hosts.find(req.host) == _allow_hosts.end()) {
+		return false;
+	}
+	// check method
+	if (!_allow_methods.empty() && _allow_methods.find(req.host) == _allow_methods.end()) {
+		return false;
+	}
+	// check headers
+	if (!_mandatory_headers.empty()) {
+		for (std::map<std::string, std::string>::const_iterator it = req.header.begin();
+				it != req.header.end(); ++it) {
+			if (_mandatory_headers.find(*it) != _mandatory_headers.end()) {
+				return true;
+			}
+		}
+		return false;
+	}
 	return true;
 }
 
