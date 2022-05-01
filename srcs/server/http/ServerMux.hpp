@@ -6,6 +6,7 @@
 #include <map>
 #include <utility> // pair
 #include <vector>
+#include <exception>
 
 #include "IHandler.hpp"
 #include "Request.hpp"
@@ -14,8 +15,21 @@
 namespace http {
 	class ServerMux : public IHandler {
 		public:
+			struct BusyPathException : public std::exception {
+				virtual const char* what() const throw();
+			};
+			struct HandlerExistException : public std::exception {
+				virtual const char* what() const throw();
+			};
 			class Route : public IHandler {
 				friend class ServerMux;
+				public:
+					struct EmptyHandlerException : public std::exception {
+						virtual const char* what() const throw();
+					};
+					struct ExistHandlerException : public std::exception {
+						virtual const char* what() const throw();
+					};
 				private:
 					Route(ServerMux& mux);
 					Route(const Route& r);
