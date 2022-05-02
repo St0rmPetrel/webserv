@@ -26,19 +26,21 @@ public:
   const std::string serialize() const;
 
 private:
-	std::strign _create_status_line() const;
-	std::string _create_header() const;
-	std::string _create_body() const;
-	std::string _convert_status_code_to_string() const;
+	void _create_status_line();
+	void _create_header();
+	void _create_body();
+	std::string _convert_status_code_to_string();
 
 private:
+	mutable std::ostringstream _str; //todo: проверить стандарт ключевого слова mutable
+
 	/// status line
 	int _protocol_version;
 	int _status_code;
 
 	/// general headers
 	http::ConnectionStatus _connection;
-	std::tm*	_date;
+	std::tm*	_date; // explicitly initialized in constructor or when serialize method called
 
 	/// response headers
 
