@@ -42,8 +42,8 @@ int EventManager::new_listener(const std::string& addr, unsigned short int port,
 	// bind and then start to listen the socket
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(port);
-	sock_addr.sin_addr.s_addr = inet_addr((const char *)&(addr[0]));
-	if (bind(listener, (struct sockaddr *)&sock_addr, sizeof(sock_addr)) < 0) {
+	sock_addr.sin_addr.s_addr = inet_addr(addr.c_str());
+	if (bind(listener, reinterpret_cast<struct sockaddr *>(&sock_addr), sizeof(sock_addr)) < 0) {
 		throw EventManager::BindSocketException();
 	}
 	if (listen(listener, backlog) < 0) {
