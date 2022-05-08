@@ -27,7 +27,8 @@ namespace http {
 			};
 		public:
 			VirtualServer(const Options& opts);
-			VirtualServer();
+			VirtualServer(const VirtualServer& vs);
+			~VirtualServer();
 			ServerMux mux;
 			Options   opts;
 	};

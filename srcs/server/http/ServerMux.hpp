@@ -69,7 +69,7 @@ namespace http {
 			void not_found(Response& res, const Request& req) const;
 			void method_not_allowed(Response& res, const Request& req) const;
 
-			Route* new_route();
+			Route& new_route();
 
 			void set_bad_request(const IHandler& bad_request_handler);
 			void set_not_found(const IHandler& not_found_handler);

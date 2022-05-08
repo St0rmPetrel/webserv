@@ -143,8 +143,8 @@ void ServerMux::method_not_allowed(Response& res, const Request& req) const {
 }
 
 // new_route create new route for set it and than handle (bind to ServerMux)
-ServerMux::Route* ServerMux::new_route() {
-	return (new ServerMux::Route(*this));
+ServerMux::Route& ServerMux::new_route() {
+	return *(new ServerMux::Route(*this));
 }
 
 // _add_route add configured route in to ServerMux (bind route to ServerMux)
@@ -174,7 +174,7 @@ ServerMux::Route::Route(ServerMux& mux) : _mux(mux), _handler(NULL) { }
 
 ServerMux::Route::Route(const ServerMux::Route& r)
 	: _mux(r._mux)
-	  , _handler(r._handler)
+	  , _handler(r._handler->clone())
 	  , _path(r._path)
 	  , _allow_methods(r._allow_methods)
 	  , _allow_hosts(r._allow_hosts)
