@@ -5,7 +5,6 @@
 
 #include "Event.hpp"
 #include "PollFds.hpp"
-#include "Options.hpp"
 #include "../logger/ILogger.hpp"
 
 namespace server {
@@ -42,14 +41,15 @@ namespace server {
 			// Return reference to set of active events
 			// (blocking)
 			const std::set<Event*>& accept_events();
+
 			// finish_event delete event and close socket according to it
 			// also delete socket from _fds
-			void                    finish_event(Event* event);
+			void finish_event(Event* event);
 			// new_listener create, binds and set in listener position socket on
 			// iaddr
-			int                     new_listener(const InetAddr& iaddr);
+			int  new_listener(const std::string& addr, unsigned short int port, int backlog);
 			// accept_client accept client form listener
-			int                     accept_client(int listener);
+			int  accept_client(int listener);
 		private:
 			// return event from _events map if exist or create new and save it in _events
 			Event* _get_event(int sock, Event::Type type);

@@ -32,6 +32,8 @@ CONFIG_DIR = $(OBJSDIR)/config
 
 SERVER_DIR = $(OBJSDIR)/server
 
+HTTP_DIR = $(OBJSDIR)/server/http
+
 UTILS_DIR = $(OBJSDIR)/utils
 
 LOGGER =    Logger Options
@@ -39,6 +41,8 @@ LOGGER =    Logger Options
 CONFIG =	Config
 
 SERVER	=	Server EventManager PollFds
+
+HTTP	=	Response RequestParser ServerMux VirtualServer
 
 UTILS	=
 
@@ -48,14 +52,15 @@ SRCS = $(addprefix $(SRCDIR)/, $(addsuffix .cpp, $(MAIN))) \
 	   $(addprefix $(SRCDIR)/logger/, $(addsuffix .cpp, $(LOGGER))) \
 	   $(addprefix $(SRCDIR)/config/, $(addsuffix .cpp, $(CONFIG))) \
 	   $(addprefix $(SRCDIR)/server/, $(addsuffix .cpp, $(SERVER))) \
+	   $(addprefix $(SRCDIR)/server/http/, $(addsuffix .cpp, $(HTTP))) \
 	   $(addprefix $(SRCDIR)/utils/, $(addsuffix .cpp, $(UTILS)))
 
 
 OBJS_BUILD	=	$(patsubst $(SRCDIR)/%,$(OBJSDIR)/%,$(SRCS:.cpp=.o))
 
-HDRS = -I $(SRCDIR)/config -I $(SRCDIR)/logger -I $(SRCDIR)/server
+HDRS = -I $(SRCDIR)/config -I $(SRCDIR)/logger -I $(SRCDIR)/server -I $(SRCDIR)/server/http
 
-DIRS	=	$(OBJSDIR) $(LOGGER_DIR) $(CONFIG_DIR) $(SERVER_DIR)
+DIRS	=	$(OBJSDIR) $(LOGGER_DIR) $(CONFIG_DIR) $(SERVER_DIR) $(HTTP_DIR)
 
 RM		=	rm -f
 
@@ -81,9 +86,11 @@ $(CONFIG_DIR): |$(OBJSDIR)
 $(SERVER_DIR): |$(OBJSDIR)
 		mkdir $(SERVER_DIR)
 
+$(HTTP_DIR): |$(OBJSDIR)
+		mkdir $(HTTP_DIR)
+
 $(OBJSDIR)/%.o:	$(SRCDIR)/%.cpp
 	$(CC) $(CFLAGS) $(HDRS) -c $^ -o $@
-
 
 clean:
 		@$(RM) -r $(OBJSDIR)
