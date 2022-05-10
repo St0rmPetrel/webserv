@@ -45,10 +45,10 @@ compile () {
 	clang++ -std="c++98" \
 		-Wall -Wextra -Werror \
 		-o $EXEC_FILE_NAME \
-		-x c++ - Config.cpp ../server/*.cpp ../logger/*.cpp ; \
+		-x c++ - Config.cpp ../server/*.cpp ../server/http/*.cpp ../logger/*.cpp ; \
 		clang++ -std="c++98"  \
 		  -Wall -Wextra -Werror \
-      Config.cpp ../server/*.cpp ../logger/*.cpp tests/parser_test.cpp \
+      Config.cpp ../server/*.cpp ../server/http/*.cpp ../logger/*.cpp tests/parser_test.cpp \
       -o $EXEC_FILE_NAME_2 ; \
       chmod -r $PWD/../../configs/no_rights.conf
 }
