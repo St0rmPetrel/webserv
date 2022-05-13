@@ -3,6 +3,11 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <iomanip>
+#include <map>
+
+#define ENDL "\r\n"
 
 namespace http {
 	enum ConnectionStatus {
@@ -10,6 +15,7 @@ namespace http {
 		close
 	};
 
+	// Есть ли необходимость в этом поле???
 	enum ContentType {
 		text,
 		image,
@@ -18,40 +24,47 @@ namespace http {
 		// other types
 	};
 
-#define CONTENT_TYPE_TO_TEXT(type) #type;
+	class Response {
+	public:
 
-class Response {
-public:
-  // serialize return raw response
-  const std::string serialize() const;
+		Response() : _protocol_version(11), _status_code(200), _connection(close), _length(17) {
+		}
 
-private:
-	void _create_status_line();
-	void _create_header();
-	void _create_body();
-	std::string _convert_status_code_to_string() const;
+		// serialize return raw response
+		const std::string serialize() const;
 
-private:
-	mutable std::ostringstream _str; //todo: проверить стандарт ключевого слова mutable
+	private:
+		void _create_status_line() const;
 
-	/// status line
-	int _protocol_version;
-	int _status_code;
+		void _create_header() const;
 
-	/// general headers
-	http::ConnectionStatus _connection;
-	std::tm*	_date; // explicitly initialized in constructor or when serialize method called
+		void _create_body() const;
 
-	/// response headers
+		std::string _convert_status_code_to_string() const;
 
-	/// entity headers
-	size_t _length;
-	// content type
-	int _type; // ?
-	int _subtype; // ?
+		std::string _convert_connection_to_string() const;
 
-	/// message body
-};
+	private:
+		mutable std::ostringstream _str; //todo: проверить стандарт ключевого слова mutable: К СОЖАЛЕНИЮ НЕ 98
+
+		/// status line
+		int _protocol_version;
+		int _status_code;
+
+		/// general headers
+		http::ConnectionStatus _connection;
+		mutable std::tm *_date; // explicitly initialized in constructor or when serialize method called
+
+		/// response headers
+
+		/// entity headers
+		size_t _length;
+		// content type
+//	int _type; // ?
+//	int _subtype; // ?
+
+		/// message body
+	};
 
 } // namespace http
 
