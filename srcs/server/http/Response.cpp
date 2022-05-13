@@ -4,10 +4,11 @@ using namespace http;
 
 const std::string Response::serialize() const
 {
-	_create_status_line();
-	_create_header();
-	_create_body();
-//	std::cerr << _str.str();
+	std::ostringstream _str;
+	_create_status_line(_str);
+	_create_header(_str);
+	_create_body(_str);
+	std::cerr << _str.str();
 //	return "HTTP/1.1 200 OK\r\n"
 //		"Content-Length: 12\r\n"
 //		"Connection: close\r\n"
@@ -17,19 +18,15 @@ const std::string Response::serialize() const
 	 return _str.str();
 }
 
-void Response::_create_status_line() const
+void Response::_create_status_line(std::ostringstream& _str) const
 {
 	_str << "HTTP/" << _protocol_version / 10 << "." << _protocol_version % 10 << " ";
 	_str << _status_code << " " << _convert_status_code_to_string() << ENDL;
 }
 
-void Response::_create_header() const
+void Response::_create_header(std::ostringstream& _str) const
 {
 	// general header
-
-	std::time_t current_time;
-	current_time = time(NULL);
-	_date = std::localtime(&current_time);
 	// date
 	_str << "Date: ";
 	_str << (_date->tm_year + 1900) << "/";
@@ -43,15 +40,16 @@ void Response::_create_header() const
 
 	_str << "Content-Length: " << _length << ENDL;
 
+	// useless!! пока что
 	_str << "Content-Type: text/html" << ENDL;
 
 	_str << "Connection: " << _convert_connection_to_string() << ENDL;
 
 }
 
-void Response::_create_body() const
+void Response::_create_body(std::ostringstream& _str) const
 {
-	_str << ENDL << "Hello from Nastya" << ENDL;
+	_str << ENDL << "Hello from Nastya!!!" << ENDL;
 }
 
 
