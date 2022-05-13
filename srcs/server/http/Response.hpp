@@ -29,7 +29,7 @@ private:
 	void _create_status_line();
 	void _create_header();
 	void _create_body();
-	std::string _convert_status_code_to_string();
+	std::string _convert_status_code_to_string() const;
 
 private:
 	mutable std::ostringstream _str; //todo: проверить стандарт ключевого слова mutable

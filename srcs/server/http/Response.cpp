@@ -15,7 +15,7 @@ const std::string Response::serialize() const
 void Response::_create_status_line()
 {
 	_str << "HTTP/" << _protocol_version / 10 << "." << _protocol_version % 10 << " ";
-	_str << _status_code << " " << _convert_status_code_to_string << std::endl;
+	_str << _status_code << " " << _convert_status_code_to_string() << std::endl;
 }
 
 void _create_header()
