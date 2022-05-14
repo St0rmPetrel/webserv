@@ -119,7 +119,7 @@ const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
 	int client_listener = _clients_listener[client_sock];
 	const std::vector<http::VirtualServer>& servers = _listeners_virtual_servers[client_listener];
 	const http::VirtualServer& default_server = servers[0];
-	if (req.host == "") {
+	if (req.host.empty()) {
 		return default_server;
 	} else {
 		for (std::vector<http::VirtualServer>::const_iterator it = servers.begin();

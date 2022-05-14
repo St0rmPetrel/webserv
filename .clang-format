@@ -1,0 +1,100 @@
+BasedOnStyle: WebKit
+Language: Cpp
+AlignAfterOpenBracket: Align
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterCaseLabel: false
+    AfterClass: true
+    AfterControlStatement: false
+    AfterEnum: true
+    AfterFunction: true
+    AfterNamespace: false
+    AfterStruct: true
+    AfterUnion: true
+    BeforeCatch: true
+    BeforeElse: false
+    IndentBraces: false
+BreakConstructorInitializersBeforeComma: false
+ColumnLimit: 140
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ExperimentalAutoDetectBinPacking: true
+UseTab: Never
+TabWidth: 4
+IndentWidth: 4
+PointerAlignment: Left
+MaxEmptyLinesToKeep: 2
+KeepEmptyLinesAtTheStartOfBlocks: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+AlwaysBreakTemplateDeclarations: true
+IndentCaseLabels: true
+SpaceAfterTemplateKeyword: true
+SortIncludes: true
+IndentPPDirectives: AfterHash
+IncludeCategories:
+  - Regex: '^<[a-z_]+>'
+    Priority: 1
+  - Regex: '^<[a-z_]+.h>'
+    Priority: 2
+  - Regex: '^"</'
+    Priority: 90
+  - Regex: '^"</'
+    Priority: 100
+  - Regex: '^"</'
+    Priority: 50
+  - Regex: '^"'
+    Priority: 110
+  - Regex: '/'
+    Priority: 30
+  - Regex: '.*'
+    Priority: 40
+ReflowComments: false
+AlignEscapedNewlinesLeft: false
+AlignEscapedNewlines: DontAlign
+StatementMacros :
+    - BOOST_SCOPE_EXIT
+    - BOOST_SCOPE_EXIT_END
+MacroBlockBegin: "^BOOST_SCOPE_EXIT$"
+MacroBlockEnd: "^BOOST_SCOPE_EXIT_END$"
+BinPackArguments: true
+AllowShortIfStatementsOnASingleLine: false
+# Not changed:
+AccessModifierOffset: -4
+AlignConsecutiveAssignments: false
+AlignOperands: false
+AlignTrailingComments: false
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+BinPackParameters: false
+BreakBeforeBinaryOperators: All
+BreakBeforeTernaryOperators: true
+CommentPragmas: '^ IWYU pragma:'
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: true
+DerivePointerAlignment: false
+DisableFormat: false
+IndentWrappedFunctionNames: false
+NamespaceIndentation: None
+ObjCBlockIndentWidth: 4
+ObjCSpaceAfterProperty: true
+ObjCSpaceBeforeProtocolList: true
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 60
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: Never
+SpaceInEmptyParentheses: false
+SpaceBeforeCpp11BracedList: false
+SpacesBeforeTrailingComments: 1
+SpacesInContainerLiterals: true
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
