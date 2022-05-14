@@ -5,10 +5,10 @@ using namespace http;
 const std::string Response::serialize() const
 {
 	std::ostringstream _str;
+
 	_create_status_line(_str);
 	_create_header(_str);
 	_create_body(_str);
-	std::cerr << _str.str();
 //	return "HTTP/1.1 200 OK\r\n"
 //		"Content-Length: 12\r\n"
 //		"Connection: close\r\n"
@@ -38,12 +38,15 @@ void Response::_create_header(std::ostringstream& _str) const
 	_str << std::setfill('0') << std::setw(2) << _date->tm_sec;
 	_str << ENDL;
 
-	_str << "Content-Length: " << _length << ENDL;
+	_str << "Connection: " << _convert_connection_to_string() << ENDL;
+
+	// entity header
+//	_str << "Content-Length: " << _length << ENDL;
+	_str << "Content-Length: " << "20" << ENDL;
 
 	// useless!! пока что
 	_str << "Content-Type: text/html" << ENDL;
 
-	_str << "Connection: " << _convert_connection_to_string() << ENDL;
 
 }
 
@@ -74,4 +77,30 @@ std::string Response::_convert_connection_to_string() const {
 		default:
 			return "close";
 	}
+}
+
+void Response::setProtocolVersion(int protocolVersion)
+{
+	_protocol_version = protocolVersion;
+}
+
+void Response::setStatusCode(int statusCode)
+{
+	_status_code = statusCode;
+}
+
+void Response::setConnection(ConnectionStatus connection)
+{
+	_connection = connection;
+}
+
+void Response::setMessage(const std::string &message)
+{
+	_message = message;
+	_length = _message.size();
+}
+
+void Response::setLength(size_t length)
+{
+	_length = length;
 }

@@ -27,7 +27,7 @@ namespace http {
 	class Response {
 	public:
 
-		Response() : _protocol_version(11), _status_code(200), _connection(close), _length(20) {
+		Response() : _protocol_version(11), _status_code(200), _connection(close), _length(0) {
 			std::time_t current_time;
 			current_time = time(NULL);
 			_date = std::localtime(&current_time);
@@ -35,6 +35,13 @@ namespace http {
 
 		// serialize return raw response
 		const std::string serialize() const;
+
+		// Setters for private members
+		void setProtocolVersion(int protocolVersion);
+		void setStatusCode(int statusCode);
+		void setConnection(ConnectionStatus connection);
+		void setMessage(const std::string &message);
+		void setLength(size_t length);
 
 	private:
 		void _create_status_line(std::ostringstream& _str) const;
@@ -54,7 +61,7 @@ namespace http {
 
 		/// general headers
 		http::ConnectionStatus _connection;
-		std::tm *_date; // explicitly initialized in constructor or when serialize method called
+		std::tm *_date;
 
 		/// response headers
 
@@ -65,6 +72,7 @@ namespace http {
 			//	int _subtype; // ?
 
 		/// message body
+		std::string _message;
 	};
 
 } // namespace http
