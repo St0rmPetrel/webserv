@@ -10,4 +10,6 @@
 #define STDOUT 1
 #define STDERR 2
 
+#define ENDL "\r\n"
+
 #endif

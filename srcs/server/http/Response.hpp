@@ -1,13 +1,12 @@
 #ifndef RESPONSE_HPP
 #define RESPONSE_HPP
 
+#include "../../utils/utils.hpp"
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <iomanip>
 #include <map>
-
-#define ENDL "\r\n"
 
 namespace http {
 	enum ConnectionStatus {
