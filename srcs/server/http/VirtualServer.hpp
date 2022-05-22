@@ -16,7 +16,7 @@ namespace http {
 				struct Location {
 					std::string location_match;
 					std::string root;
-					std::map<Response::StatusCode, std::string> error_page;
+					std::map<http::StatusCode, std::string> error_page;
 				};
 
 				unsigned short int    port; // Номер порта

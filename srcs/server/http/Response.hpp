@@ -2,6 +2,7 @@
 # define RESPONSE_HPP
 
 #include "../../utils/utils.hpp"
+#include "ResponseUtilities.hpp"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -9,24 +10,11 @@
 #include <map>
 
 namespace http {
-	enum ConnectionStatus {
-		keepAlive,
-		close
-	};
-
-	// Есть ли необходимость в этом поле???
-	enum ContentType {
-		text,
-		image,
-		audio,
-		video,
-		// other types
-	};
 
 	class Response {
 	public:
 
-		Response() : _protocol_version(11), _status_code(200), _connection(close), _length(0) {
+		Response() : _protocol_version(11), _status_code(http::Ok), _connection(close), _length(0) {
 			std::time_t current_time;
 			current_time = time(NULL);
 			_date = std::localtime(&current_time);
@@ -37,7 +25,7 @@ namespace http {
 
 		// Setters for private members
 		void setProtocolVersion(int protocolVersion);
-		void setStatusCode(int statusCode);
+		void setStatusCode(http::StatusCode statusCode);
 		void setConnection(ConnectionStatus connection);
 		void setMessage(const std::string &message);
 		void setLength(size_t length);
@@ -56,7 +44,7 @@ namespace http {
 	private:
 		/// status line
 		int _protocol_version;
-		int _status_code;
+		http::StatusCode _status_code;
 
 		/// general headers
 		http::ConnectionStatus _connection;
@@ -67,24 +55,16 @@ namespace http {
 		/// entity headers
 		size_t _length;
 		// content type
-			//	int _type; // ?
-			//	int _subtype; // ?
+//		http::ContentType _type;
+//		http::ContentSubtype _subtype;
 
 		/// message body
 		std::string _message;
 /*		public:
-			enum StatusCode {
-				BadRequest=400,
-				NotFound=404,
-				MethodNotAllowed=405,
-			};
 			class Header {
 				public:
 					void set(const std::string& key, const std::string& value);
 			};
-		public:
-			// serialize return raw response
-			const std::string serialize() const;
 
 			void write_header(StatusCode code);
 			void write(const char* begin, const char* end);

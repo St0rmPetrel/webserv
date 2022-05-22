@@ -9,13 +9,7 @@ const std::string Response::serialize() const
 	_create_status_line(_str);
 	_create_header(_str);
 	_create_body(_str);
-//	return "HTTP/1.1 200 OK\r\n"
-//		"Content-Length: 12\r\n"
-//		"Connection: close\r\n"
-//		"Content-Type: text/html\r\n"
-//		"\r\n"
-//		"Hello world!";
-	 return _str.str();
+	return _str.str();
 }
 
 void Response::_create_status_line(std::ostringstream& _str) const
@@ -41,8 +35,7 @@ void Response::_create_header(std::ostringstream& _str) const
 	_str << "Connection: " << _convert_connection_to_string() << ENDL;
 
 	// entity header
-//	_str << "Content-Length: " << _length << ENDL;
-	_str << "Content-Length: " << "20" << ENDL;
+	_str << "Content-Length: " << _length << ENDL;
 
 	// useless!! пока что
 	_str << "Content-Type: text/html" << ENDL;
@@ -52,18 +45,91 @@ void Response::_create_header(std::ostringstream& _str) const
 
 void Response::_create_body(std::ostringstream& _str) const
 {
-	_str << ENDL << "Hello from Nastya!!!" << ENDL;
+	_str << ENDL << _message << ENDL;
 }
 
 
 std::string Response::_convert_status_code_to_string() const {
-	// todo: compare code for http 1.1 and other versions
-	// todo: add other codes
 	switch (_status_code)
 	{
-		case 200:
+		case Continue:
+			return "Continue";
+		case SwitchingProtocols:
+			return "Switching Protocols";
+		case Ok:
 			return "OK";
-		case 404:
+		case Created:
+			return "Created";
+		case Accepted:
+			return "Accepted";
+		case NonAuthoritativeInformation:
+			return "Non-Authoritative Information";
+		case NoContent:
+			return "No Content";
+		case ResetContent:
+			return "Reset Content";
+		case PartialContent:
+			return "Partial Content";
+		case MultipleChoices:
+			return "Multiple Choices";
+		case MovedPermanently:
+			return "Moved Permanently";
+		case Found:
+			return "Found";
+		case SeeOther:
+			return "Not Modified";
+		case NotModified:
+			return "See Other";
+		case UseProxy:
+			return "Use Proxy";
+		case TemporaryRedirect:
+			return "Temporary Redirect";
+		case BadRequest:
+			return "Bad Request";
+		case Unauthorized:
+			return "Unauthorized";
+		case PaymentRequired:
+			return "Payment Required";
+		case Forbidden:
+			return "Forbidden";
+		case NotFound:
+			return "Not Found";
+		case MethodNotAllowed:
+			return "Method Not Allowed";
+		case ProxyAuthenticationRequired:
+			return "Proxy Authentication Required";
+		case RequestTimeOut:
+			return "Request Tim-out";
+		case Conflict:
+			return "Conflict";
+		case Gone:
+			return "Gone";
+		case LengthRequired:
+			return "Length Required";
+		case PreconditionFailed:
+			return "Precondition Failed";
+		case RequestEntityTooLarge:
+			return "Request Entity Too Large";
+		case RequestURITooLarge:
+			return "Request URI Too Large";
+		case UnsupportedMediaType:
+			return "Unsupported Media Type";
+		case RequestedRangeNotSatisfiable:
+			return "Requested Range Not Satisfiable";
+		case ExpectationFailed:
+			return "Expectation Failed";
+		case InternalServerError:
+			return "Internal Server Error";
+		case NotImplemented:
+			return "Not Implemented";
+		case BadGateway:
+			return "Bad Gateway";
+		case ServiceUnavailable:
+			return "Service Unavailable";
+		case GatewayTimeOut:
+			return "Gateway Tim-out";
+		case HTTPVersionNotSupported:
+			return "HTTP Version Not Supported";
 		default:
 			return "Not Found";
 	}
@@ -84,7 +150,7 @@ void Response::setProtocolVersion(int protocolVersion)
 	_protocol_version = protocolVersion;
 }
 
-void Response::setStatusCode(int statusCode)
+void Response::setStatusCode(http::StatusCode statusCode)
 {
 	_status_code = statusCode;
 }
@@ -103,18 +169,4 @@ void Response::setMessage(const std::string &message)
 void Response::setLength(size_t length)
 {
 	_length = length;
-}
-
-void Response::write_header(Response::StatusCode code) {
-	(void)code;
-}
-
-void Response::write(const char* begin, const char* end) {
-	(void)begin;
-	(void)end;
-}
-
-void Response::Header::set(const std::string& key, const std::string& value) {
-	(void)key;
-	(void)value;
 }

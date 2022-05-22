@@ -59,6 +59,9 @@ void Server::listen_and_serve() {
 					http::Request&              req = _clients_request[(*it)->sock];
 					http::Response              res;
 
+					// todo: NASTYA
+					res.setMessage("Hello from Nastya!!!");
+
 					// read raw data from socket
 					int bytes_read = recv((*it)->sock, recv_buf, _opts.recv_buffer_size, 0);
 					if (bytes_read < 0) {

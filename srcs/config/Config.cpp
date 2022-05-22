@@ -151,7 +151,7 @@ void Config::_fill_options(const Config::Module& global_module) {
 
 	location.location_match = "/hello";
 	location.root = "/www";
-	location.error_page[http::Response::NotFound] = "/whoops.html";
+	location.error_page[http::NotFound] = "/whoops.html";
 
 	server.port = 8081;
 	server.addr = "127.0.0.1";
