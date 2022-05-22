@@ -144,6 +144,20 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 }
 
 void Config::_fill_options(const Config::Module& module) {
+	if (module.name == "global") {
+		_log.debug("start fillin main module derective " + it->name);
+		// _fill_global_directives
+		for (std::vector<Module>::const_iterator it = module.modules.begin();
+				it != module.modules.end(); ++it) {
+			_log.debug("start filling module " + it->name);
+			this->_fill_options(*it);
+		}
+	} else if (module.name == "http") {
+		// _fill_http_directives
+		// _fill_http_modules
+		_log.debug("start fillin http module derective " + it->name);
+	} else {
+	}
 	for (std::vector<Directive>::const_iterator it = module.directives.begin();
 			it != module.directives.end(); ++it) {
 		if (module.name == "global") {
@@ -152,15 +166,12 @@ void Config::_fill_options(const Config::Module& module) {
 			_log.debug("start fillin http module derective " + it->name);
 		} else if (module.name == "server") {
 			_log.debug("start fillin server module derective " + it->name);
+		} else if (module.name == "location") {
+			_log.debug("start fillin server module derective " + it->name);
 		} else {
 			_log.fatal("unknown name " + module.name);
 			// throw error
 		}
-	}
-	for (std::vector<Module>::const_iterator it = module.modules.begin();
-			it != module.modules.end(); ++it) {
-		_log.debug("start filling module " + it->name);
-		this->_fill_options(*it);
 	}
 	return;
 //	this->_serv_opts.recv_buffer_size = 1024;
