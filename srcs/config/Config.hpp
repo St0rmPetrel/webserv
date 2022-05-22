@@ -30,7 +30,7 @@ namespace config {
 		// Module data structure for "module", "block" or "context" in configuration file
 		// example:
 		//   Module{
-		//     name: "main",
+		//     name: "global",
 		//     directive: {},
 		//     modules{
 		//       Module{
@@ -139,7 +139,7 @@ namespace config {
 		// will be expend during the progress of creation program
 		// May throw exception in case of bad directive or module name,
 		// bad module nesting or bad arguments in directive
-		void _fill_options(const Module &global_module);
+		void _fill_options(const Module &module);
 
 	private:
 		Module _global_module;
