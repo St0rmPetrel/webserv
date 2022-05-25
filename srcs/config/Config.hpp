@@ -120,7 +120,7 @@ namespace config {
 		//     {"daemon", "off", ";", "events", "{", "}"}
 		//   ->
 		//     Module{
-		//       name: "main",
+		//       name: "global",
 		//       directives: { Directive{name:"", args:{"off"}} },
 		//       modules: {
 		//         Module {name: "events", directives: {}, modules: {}}
@@ -143,8 +143,9 @@ namespace config {
 		void _fill_options();
 
 		void _fill_http_options(const Module& http_module);
-		void _fill_virtual_server_options(http::VirtualServer::Options& virtual_server_opts,
-			const Module& server_module);
+		void _fill_virtual_server_options(
+				http::VirtualServer::Options& virtual_server_opts,
+				const Module& server_module);
 
 	private:
 		Module _global_module;

@@ -167,17 +167,7 @@ void Config::_fill_options() {
 				// throw exp
 			}
 			_log_opts.file_name = it->args[0];
-			if (it->args[1] == "debug") {
-				_log_opts.enabled_level = logger::DEBUG;
-			} else if (it->args[1] == "info") {
-				_log_opts.enabled_level = logger::INFO;
-			} else if (it->args[1] == "warn") {
-				_log_opts.enabled_level = logger::WARN;
-			} else if (it->args[1] == "fatal") {
-				_log_opts.enabled_level = logger::FATAL;
-			} else {
-				throw "bad logger level: " + it->args[1];
-			}
+			_log_opts.enabled_level = logger::string_to_level(it->args[1]);
 		} else {
 			// throw error
 		}

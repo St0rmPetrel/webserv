@@ -83,3 +83,30 @@ void Logger::_print_message(const std::string & level, const std::string &msg, c
 	if (!_bfile_output)
 		*_file_stream << BLANK;
 }
+
+Level logger::string_to_level(const std::string& level) {
+	if (level == "debug") {
+		return DEBUG;
+	} else if (level == "info") {
+		return INFO;
+	} else if (level == "warn") {
+		return WARN;
+	} else if (level == "fatal") {
+		return FATAL;
+	}
+	//throw "bad logger level: " + it->args[1];
+	return FATAL;
+}
+
+std::string logger::level_to_string(const Level& level) {
+	switch (level) {
+		case DEBUG:
+			return "debug";
+		case INFO:
+			return "info";
+		case WARN:
+			return "warn";
+		case FATAL:
+			return "fatal";
+	}
+}
