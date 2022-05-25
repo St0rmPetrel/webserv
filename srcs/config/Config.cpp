@@ -16,8 +16,7 @@ Config::~Config() {}
 void Config::parse(const std::string &filename) {
 	const std::vector<std::string> tokens = this->_lexing(filename);
 	this->_parsing(tokens);
-
-	this->_fill_options(_global_module);
+	this->_fill_options();
 }
 
 const logger::Options &Config::get_logger() const {
@@ -143,52 +142,69 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 	return local_module;
 }
 
-void Config::_fill_options(const Config::Module& module) {
-	if (module.name == "global") {
-		_log.debug("start fillin main module derective " + it->name);
-		// _fill_global_directives
-		for (std::vector<Module>::const_iterator it = module.modules.begin();
-				it != module.modules.end(); ++it) {
-			_log.debug("start filling module " + it->name);
-			this->_fill_options(*it);
-		}
-	} else if (module.name == "http") {
-		// _fill_http_directives
-		// _fill_http_modules
-		_log.debug("start fillin http module derective " + it->name);
-	} else {
+//this->_serv_opts.recv_buffer_size = 1024;
+//http::VirtualServer::Options server;
+//http::VirtualServer::Options::Location location;
+//
+//location.location_match = "/hello";
+//location.root = "/www";
+//location.error_page[http::Response::NotFound] = "/whoops.html";
+//
+//server.port = 8081;
+//server.addr = "127.0.0.1";
+//server.listener_backlog = 64;
+//server.locations.push_back(location);
+//
+//this->_serv_opts.servers.push_back(server);
+//_log.debug("start filling configuration staf in to logger and server options");
+void Config::_fill_options() {
+	for (std::vector<Directive>::const_iterator it = _global_module.directives.begin();
+			it != _global_module.directives.end(); ++it) {
+		// fill global directives
 	}
-	for (std::vector<Directive>::const_iterator it = module.directives.begin();
-			it != module.directives.end(); ++it) {
-		if (module.name == "global") {
-			_log.debug("start fillin main module derective " + it->name);
-		} else if (module.name == "http") {
-			_log.debug("start fillin http module derective " + it->name);
-		} else if (module.name == "server") {
-			_log.debug("start fillin server module derective " + it->name);
-		} else if (module.name == "location") {
-			_log.debug("start fillin server module derective " + it->name);
+
+	for (std::vector<Module>::const_iterator it = _global_module.modules.begin();
+			it != _global_module.modules.end(); ++it) {
+		if (it->name == "http") {
+			_fill_http_options(*it);
 		} else {
-			_log.fatal("unknown name " + module.name);
 			// throw error
 		}
 	}
-	return;
-//	this->_serv_opts.recv_buffer_size = 1024;
-//	http::VirtualServer::Options server;
-//	http::VirtualServer::Options::Location location;
-//
-//	location.location_match = "/hello";
-//	location.root = "/www";
-//	location.error_page[http::Response::NotFound] = "/whoops.html";
-//
-//	server.port = 8081;
-//	server.addr = "127.0.0.1";
-//	server.listener_backlog = 64;
-//	server.locations.push_back(location);
-//
-//	this->_serv_opts.servers.push_back(server);
-//	_log.debug("start filling configuration staf in to logger and server options");
+}
+
+void Config::_fill_http_options(const Module& http_module) {
+	http::VirtualServer::Options default_virtual_server_opts;
+
+	_fill_virtual_server_options(default_virtual_server_opts, http_module);
+
+	for (std::vector<Config::Module>::const_iterator it = http_module.modules.begin();
+			it != http_module.modules.end(); ++it) {
+		if (it->name == "server") {
+			http::VirtualServer::Options virtual_server_opts(default_virtual_server_opts);
+
+			_fill_virtual_server_options(virtual_server_opts, *it);
+			_serv_opts.servers.push_back(virtual_server_opts);
+		}
+	}
+}
+
+void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_server_opts,
+		const Module& server_module) {
+	(void)virtual_server_opts;
+	for (std::vector<Directive>::const_iterator it = server_module.directives.begin();
+			it != server_module.directives.end(); ++it) {
+		// fill http directives
+		// fill default_virtual_server_opts
+	}
+	for (std::vector<Module>::const_iterator it = server_module.modules.begin();
+			it != server_module.modules.end(); ++it) {
+		if (it->name == "server" && server_module.name == "http") {
+			continue;
+		} else {
+			//throw error
+		}
+	}
 }
 
 const char *Config::FileNotFoundException::what() const throw() {

@@ -13,6 +13,7 @@
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
+#include "../server/http/VirtualServer.hpp"
 #include "Config.hpp"
 
 namespace config {
@@ -139,7 +140,11 @@ namespace config {
 		// will be expend during the progress of creation program
 		// May throw exception in case of bad directive or module name,
 		// bad module nesting or bad arguments in directive
-		void _fill_options(const Module &module);
+		void _fill_options();
+
+		void _fill_http_options(const Module& http_module);
+		void _fill_virtual_server_options(http::VirtualServer::Options& virtual_server_opts,
+			const Module& server_module);
 
 	private:
 		Module _global_module;
