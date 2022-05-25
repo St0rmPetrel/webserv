@@ -7,6 +7,8 @@
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
 
+#include <exception>
+
 using namespace config;
 
 Config::Config(const logger::Logger &log) : _log(log) {}
@@ -160,7 +162,25 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 void Config::_fill_options() {
 	for (std::vector<Directive>::const_iterator it = _global_module.directives.begin();
 			it != _global_module.directives.end(); ++it) {
-		// fill global directives
+		if (it->name == "error_log") {
+			if (it->args.size() != 2) {
+				// throw exp
+			}
+			_log_opts.file_name = it->args[0];
+			if (it->args[1] == "debug") {
+				_log_opts.enabled_level = logger::DEBUG;
+			} else if (it->args[1] == "info") {
+				_log_opts.enabled_level = logger::INFO;
+			} else if (it->args[1] == "warn") {
+				_log_opts.enabled_level = logger::WARN;
+			} else if (it->args[1] == "fatal") {
+				_log_opts.enabled_level = logger::FATAL;
+			} else {
+				throw "bad logger level: " + it->args[1];
+			}
+		} else {
+			// throw error
+		}
 	}
 
 	for (std::vector<Module>::const_iterator it = _global_module.modules.begin();

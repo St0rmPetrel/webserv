@@ -1,6 +1,6 @@
 #include "Options.hpp"
 
-logger::Options::Options() : enabled_level(DEBUG), file_name("")
+logger::Options::Options() : enabled_level(DEBUG), file_name("/dev/stderr")
 {
 }
 
