@@ -14,3 +14,5 @@ VirtualServer::VirtualServer(const VirtualServer::Options& opts) : opts(opts) {
 VirtualServer::VirtualServer(const VirtualServer& vs) : mux(vs.mux), opts(vs.opts) { }
 
 VirtualServer::~VirtualServer() { }
+
+VirtualServer::Options::Options() : port(8081), listener_backlog(1024) { }

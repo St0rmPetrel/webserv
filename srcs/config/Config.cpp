@@ -1,11 +1,13 @@
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include "Config.hpp"
 #include "../logger/ILogger.hpp"
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
+#include "../utils/utils.hpp"
 
 #include <exception>
 
@@ -177,10 +179,12 @@ void Config::_fill_options() {
 			it != _global_module.modules.end(); ++it) {
 		if (it->name == "http") {
 			_fill_http_options(*it);
+			_log.debug("filling: filled http module");
 		} else {
 			// throw error
 		}
 	}
+	_log.debug("filling: filled global module");
 }
 
 void Config::_fill_http_options(const Module& http_module) {
@@ -195,6 +199,7 @@ void Config::_fill_http_options(const Module& http_module) {
 
 			_fill_virtual_server_options(virtual_server_opts, *it);
 			_serv_opts.servers.push_back(virtual_server_opts);
+			_log.debug("filling: filled server module");
 		}
 	}
 }
@@ -204,6 +209,22 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 	(void)virtual_server_opts;
 	for (std::vector<Directive>::const_iterator it = server_module.directives.begin();
 			it != server_module.directives.end(); ++it) {
+		if (it->name == "listen") {
+			if (it->args.size() != 1) {
+				// throw error
+			}
+			const std::string& addr = it->args.at(0);
+			std::size_t colon = addr.find(":");
+			if (colon == std::string::npos) {
+				std::istringstream(addr) >> virtual_server_opts.port;
+			} else {
+				virtual_server_opts.addr = addr.substr(0, colon);
+				std::istringstream(addr.substr(colon+1)) >> virtual_server_opts.port;
+			}
+			_log.debug(SSTR("filling: fill listener vs: " << virtual_server_opts.addr <<
+						":" << virtual_server_opts.port));
+		} else {
+		}
 		// fill http directives
 		// fill default_virtual_server_opts
 	}
