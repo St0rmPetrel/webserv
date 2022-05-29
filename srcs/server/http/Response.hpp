@@ -24,6 +24,8 @@ namespace http {
 		public:
 			Header header;
 	};
+
+	extern Response::StatusCode int_to_status_code(int status_code);
 };
 
 #endif

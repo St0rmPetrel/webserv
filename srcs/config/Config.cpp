@@ -267,15 +267,30 @@ void Config::_fill_virtual_server_location_options(
 void Config::_fill_server_name_directive(
 		http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& server_name_dir) {
-	(void)virtual_server_opts;
-	(void)server_name_dir;
+	if (server_name_dir.args.empty()) {
+		// throw error
+	}
+	// fill server_names
+	for (std::vector<std::string>::const_iterator it = server_name_dir.args.begin();
+			it != server_name_dir.args.end(); ++it) {
+		virtual_server_opts.names.insert(*it);
+		_log.debug(SSTR("filling: add server_name: name=" << *it));
+	}
 }
 
 void Config::_fill_error_page_directive(
 		http::VirtualServer::Options::Location& location_opts,
 		const Config::Directive& error_page_dir) {
-	(void)location_opts;
-	(void)error_page_dir;
+	if (error_page_dir.args.size() != 2) {
+		// throw error
+	}
+
+	int status_code = 0;
+	std::istringstream(error_page_dir.args.at(0)) >> status_code;
+	location_opts.error_page[http::int_to_status_code(status_code)] =
+		error_page_dir.args.at(1);
+	_log.debug(SSTR("filling: fill error_page: status code=" << status_code <<
+				" error_file_path=" << error_page_dir.args.at(1)));
 }
 
 void Config::_fill_root_directive(
@@ -285,6 +300,7 @@ void Config::_fill_root_directive(
 		// throw exception
 	}
 	location_opts.root = root_dir.args.at(0);
+	_log.debug(SSTR("filling: fill location root: root=" << location_opts.root));
 }
 
 void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
