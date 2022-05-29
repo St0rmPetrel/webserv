@@ -210,6 +210,7 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 		if (it->name == "listen") {
 			_fill_listen_directive(virtual_server_opts, *it);
 		} else if (it->name == "server-name") {
+			_fill_server_name_directive(virtual_server_opts, *it);
 		} else {
 			_fill_virtual_server_location_options(default_virtual_server_location_opts,
 					server_module);
@@ -232,11 +233,58 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 		}
 	}
 }
+
 void Config::_fill_virtual_server_location_options(
 		http::VirtualServer::Options::Location& virtual_server_location_opts,
 		const Config::Module& location_module) {
-	(void)virtual_server_location_opts;
-	(void)location_module;
+	if (location_module.args.empty() && location_module.name != "server") {
+		//throw error
+		_log.debug("FUCKK");
+	}
+	// fill location match
+	{
+		if (location_module.name == "location") {
+			virtual_server_location_opts.location_match = location_module.args.at(0);
+		} else {
+			virtual_server_location_opts.location_match = "/";
+		}
+	}
+	_log.debug(SSTR("filling: fill location match: " <<
+				virtual_server_location_opts.location_match));
+
+	for (std::vector<Directive>::const_iterator it = location_module.directives.begin();
+			it != location_module.directives.end(); ++it) {
+		if (it->name == "root") {
+			_fill_root_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "error_page") {
+			_fill_error_page_directive(virtual_server_location_opts, *it);
+		} else {
+			// throw error
+		}
+	}
+}
+
+void Config::_fill_server_name_directive(
+		http::VirtualServer::Options& virtual_server_opts,
+		const Config::Directive& server_name_dir) {
+	(void)virtual_server_opts;
+	(void)server_name_dir;
+}
+
+void Config::_fill_error_page_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& error_page_dir) {
+	(void)location_opts;
+	(void)error_page_dir;
+}
+
+void Config::_fill_root_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& root_dir) {
+	if (root_dir.args.empty()) {
+		// throw exception
+	}
+	location_opts.root = root_dir.args.at(0);
 }
 
 void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,

@@ -153,7 +153,16 @@ namespace config {
 		void _fill_listen_directive(
 				http::VirtualServer::Options& virtual_server_opts,
 				const Directive& listen_dir);
+		void _fill_server_name_directive(
+				http::VirtualServer::Options& virtual_server_opts,
+				const Directive& server_name_dir);
 		void _fill_error_log_directive(const Directive& logger_dir);
+		void _fill_error_page_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& error_page_dir);
+		void _fill_root_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& root_dir);
 
 	private:
 		Module _global_module;
