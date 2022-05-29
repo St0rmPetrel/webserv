@@ -161,15 +161,12 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 //
 //this->_serv_opts.servers.push_back(server);
 //_log.debug("start filling configuration staf in to logger and server options");
+
 void Config::_fill_options() {
 	for (std::vector<Directive>::const_iterator it = _global_module.directives.begin();
 			it != _global_module.directives.end(); ++it) {
 		if (it->name == "error_log") {
-			if (it->args.size() != 2) {
-				// throw exp
-			}
-			_log_opts.file_name = it->args[0];
-			_log_opts.enabled_level = logger::string_to_level(it->args[1]);
+			_fill_error_log_directive(*it);
 		} else {
 			// throw error
 		}
@@ -205,25 +202,17 @@ void Config::_fill_http_options(const Module& http_module) {
 }
 
 void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_server_opts,
-		const Module& server_module) {
-	(void)virtual_server_opts;
+		const Config::Module& server_module) {
+	http::VirtualServer::Options::Location default_virtual_server_location_opts;
+
 	for (std::vector<Directive>::const_iterator it = server_module.directives.begin();
 			it != server_module.directives.end(); ++it) {
 		if (it->name == "listen") {
-			if (it->args.size() != 1) {
-				// throw error
-			}
-			const std::string& addr = it->args.at(0);
-			std::size_t colon = addr.find(":");
-			if (colon == std::string::npos) {
-				std::istringstream(addr) >> virtual_server_opts.port;
-			} else {
-				virtual_server_opts.addr = addr.substr(0, colon);
-				std::istringstream(addr.substr(colon+1)) >> virtual_server_opts.port;
-			}
-			_log.debug(SSTR("filling: fill listener vs: " << virtual_server_opts.addr <<
-						":" << virtual_server_opts.port));
+			_fill_listen_directive(virtual_server_opts, *it);
+		} else if (it->name == "server-name") {
 		} else {
+			_fill_virtual_server_location_options(default_virtual_server_location_opts,
+					server_module);
 		}
 		// fill http directives
 		// fill default_virtual_server_opts
@@ -232,9 +221,78 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 			it != server_module.modules.end(); ++it) {
 		if (it->name == "server" && server_module.name == "http") {
 			continue;
+		} else if (it->name == "location") {
+			http::VirtualServer::Options::Location virtual_server_location_opts(
+					default_virtual_server_location_opts);
+			_fill_virtual_server_location_options(virtual_server_location_opts, *it);
+			virtual_server_opts.locations.push_back(virtual_server_location_opts);
+			_log.debug("filling: filled location module");
 		} else {
 			//throw error
 		}
+	}
+}
+void Config::_fill_virtual_server_location_options(
+		http::VirtualServer::Options::Location& virtual_server_location_opts,
+		const Config::Module& location_module) {
+	(void)virtual_server_location_opts;
+	(void)location_module;
+}
+
+void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
+		const Config::Directive& listen_dir) {
+	if (listen_dir.args.empty()) {
+		//throw "";
+	}
+	// fill addr and port
+	{
+		const std::string& addr = listen_dir.args.at(0);
+		std::size_t colon = addr.find(":");
+		if (colon == std::string::npos) {
+			std::istringstream(addr) >> virtual_server_opts.port;
+		} else {
+			virtual_server_opts.addr = addr.substr(0, colon);
+			std::istringstream(addr.substr(colon+1)) >> virtual_server_opts.port;
+		}
+		_log.debug(SSTR("filling: fill listener vs: " << virtual_server_opts.addr <<
+					":" << virtual_server_opts.port));
+	}
+	if (listen_dir.args.size() == 1) {
+		return;
+	}
+	// fill listener backlog (if exist)
+	{
+		const std::string& backlog = listen_dir.args.at(1);
+		std::size_t separator = backlog.find_last_of("backlog=");
+		if (separator == std::string::npos) {
+			//throw "";
+		} else {
+			std::istringstream(backlog.substr(separator+1)) >>
+				virtual_server_opts.listener_backlog;
+		}
+		_log.debug(SSTR("filling: fill listener backlog: " <<
+					virtual_server_opts.listener_backlog));
+	}
+}
+
+void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
+	if (logger_dir.args.empty()) {
+		//throw error
+	}
+	// fill log output filename
+	{
+		_log_opts.file_name = logger_dir.args.at(0);
+		_log.debug(SSTR("filling: logger output file: " <<
+					_log_opts.file_name));
+	}
+	if (logger_dir.args.size() == 1) {
+		return;
+	}
+	// fill log message level
+	{
+		_log_opts.enabled_level = logger::string_to_level(logger_dir.args.at(1));
+		_log.debug(SSTR("filling: logger message level to: " <<
+					logger::level_to_string(_log_opts.enabled_level)));
 	}
 }
 

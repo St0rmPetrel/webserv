@@ -146,6 +146,14 @@ namespace config {
 		void _fill_virtual_server_options(
 				http::VirtualServer::Options& virtual_server_opts,
 				const Module& server_module);
+		void _fill_virtual_server_location_options(
+				http::VirtualServer::Options::Location& virtual_server_location_opts,
+				const Module& location_module);
+
+		void _fill_listen_directive(
+				http::VirtualServer::Options& virtual_server_opts,
+				const Directive& listen_dir);
+		void _fill_error_log_directive(const Directive& logger_dir);
 
 	private:
 		Module _global_module;
