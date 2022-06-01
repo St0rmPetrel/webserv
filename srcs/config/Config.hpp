@@ -96,6 +96,16 @@ namespace config {
 			const char *what() const throw();
 		};
 
+		struct FillingEmptyDirectiveArgsException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingUnknownDirectiveException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingUnknownModuleException : public std::exception {
+			const char *what() const throw();
+		};
+
 	private:
 		// _lexing read configuration file by it name ignoring strings which start
 		// with "#" (comments) and splits received text on tokens

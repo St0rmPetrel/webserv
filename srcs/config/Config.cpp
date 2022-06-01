@@ -146,29 +146,16 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 	return local_module;
 }
 
-//this->_serv_opts.recv_buffer_size = 1024;
-//http::VirtualServer::Options server;
-//http::VirtualServer::Options::Location location;
-//
-//location.location_match = "/hello";
-//location.root = "/www";
-//location.error_page[http::Response::NotFound] = "/whoops.html";
-//
-//server.port = 8081;
-//server.addr = "127.0.0.1";
-//server.listener_backlog = 64;
-//server.locations.push_back(location);
-//
-//this->_serv_opts.servers.push_back(server);
-//_log.debug("start filling configuration staf in to logger and server options");
-
 void Config::_fill_options() {
 	for (std::vector<Directive>::const_iterator it = _global_module.directives.begin();
 			it != _global_module.directives.end(); ++it) {
 		if (it->name == "error_log") {
 			_fill_error_log_directive(*it);
+		} else if (it->name == "daemon") {
+			// fill daemon option
 		} else {
-			// throw error
+			_log.debug(SSTR("filling: unknown directive name: " << it->name));
+			throw FillingUnknownDirectiveException();
 		}
 	}
 
@@ -178,7 +165,7 @@ void Config::_fill_options() {
 			_fill_http_options(*it);
 			_log.debug("filling: filled http module");
 		} else {
-			// throw error
+			throw FillingUnknownModuleException();
 		}
 	}
 	_log.debug("filling: filled global module");
@@ -229,7 +216,8 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 			virtual_server_opts.locations.push_back(virtual_server_location_opts);
 			_log.debug("filling: filled location module");
 		} else {
-			//throw error
+			_log.fatal(SSTR("filling: unknown module name: " << it->name));
+			throw FillingUnknownModuleException();
 		}
 	}
 }
@@ -239,7 +227,6 @@ void Config::_fill_virtual_server_location_options(
 		const Config::Module& location_module) {
 	if (location_module.args.empty() && location_module.name != "server") {
 		//throw error
-		_log.debug("FUCKK");
 	}
 	// fill location match
 	{
@@ -258,8 +245,15 @@ void Config::_fill_virtual_server_location_options(
 			_fill_root_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "error_page") {
 			_fill_error_page_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "index") {
+			// fill index staff
+		} else if (it->name == "return") {
+			// fill return staff
+		} else if ((it->name == "listen") && (location_module.name == "server")) {
+			continue;
 		} else {
-			// throw error
+			_log.fatal(SSTR("filling: unknown directive name: " << it->name));
+			throw FillingUnknownDirectiveException();
 		}
 	}
 }
@@ -268,7 +262,7 @@ void Config::_fill_server_name_directive(
 		http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& server_name_dir) {
 	if (server_name_dir.args.empty()) {
-		// throw error
+		throw FillingEmptyDirectiveArgsException();
 	}
 	// fill server_names
 	for (std::vector<std::string>::const_iterator it = server_name_dir.args.begin();
@@ -282,7 +276,7 @@ void Config::_fill_error_page_directive(
 		http::VirtualServer::Options::Location& location_opts,
 		const Config::Directive& error_page_dir) {
 	if (error_page_dir.args.size() != 2) {
-		// throw error
+		throw FillingEmptyDirectiveArgsException();
 	}
 
 	int status_code = 0;
@@ -297,7 +291,7 @@ void Config::_fill_root_directive(
 		http::VirtualServer::Options::Location& location_opts,
 		const Config::Directive& root_dir) {
 	if (root_dir.args.empty()) {
-		// throw exception
+		throw FillingEmptyDirectiveArgsException();
 	}
 	location_opts.root = root_dir.args.at(0);
 	_log.debug(SSTR("filling: fill location root: root=" << location_opts.root));
@@ -306,7 +300,7 @@ void Config::_fill_root_directive(
 void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& listen_dir) {
 	if (listen_dir.args.empty()) {
-		//throw "";
+		throw FillingEmptyDirectiveArgsException();
 	}
 	// fill addr and port
 	{
@@ -341,7 +335,7 @@ void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server
 
 void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
 	if (logger_dir.args.empty()) {
-		//throw error
+		throw FillingEmptyDirectiveArgsException();
 	}
 	// fill log output filename
 	{
@@ -358,6 +352,18 @@ void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
 		_log.debug(SSTR("filling: logger message level to: " <<
 					logger::level_to_string(_log_opts.enabled_level)));
 	}
+}
+
+const char *Config::FillingEmptyDirectiveArgsException::what() const throw() {
+	return "Expect not empty args in directive";
+}
+
+const char *Config::FillingUnknownDirectiveException::what() const throw() {
+	return "Unknown directive name";
+}
+
+const char *Config::FillingUnknownModuleException::what() const throw() {
+	return "Unknown module name";
 }
 
 const char *Config::FileNotFoundException::what() const throw() {
