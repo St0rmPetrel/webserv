@@ -4,8 +4,6 @@
 #include <string>
 
 #include "Request.hpp"
-#include <iostream>
-#include <string.h>
 
 namespace http {
 	class RequestParser {
@@ -15,6 +13,7 @@ namespace http {
 				ParsingIncompleted,
 				ParsingError
 			};
+		private:
 			enum State {
 			    ParseFirstLine,
 				RequestPath,
@@ -25,18 +24,18 @@ namespace http {
 				RequestHeaderValue,
 				RequestBody,
 				EndOfHeaders,
-				};
+			};
 			enum BodyState {
-			    StartBodyParse,
-			    ParseSizeOfChunk,
-			    ParseChunk,
-			    EndOfChunk,
-			    AddChunkToBody
-			    };
-		unsigned long content_length;
+				StartBodyParse,
+				ParseSizeOfChunk,
+				ParseChunk,
+				EndOfChunk,
+				AddChunkToBody
+			};
 		public:
-			// fill http request based on given raw data
 			Result parse(Request& req, const char* begin, const char* end);
+		private:
+			// fill http request based on given raw data
 			inline bool isControl(int c);
 			inline bool checkVersion(std::string &version);
 			void   findQuery(Request& req);
@@ -44,6 +43,8 @@ namespace http {
 			RequestParser::Result checkHeaders(Request& req, std::string &body, const char *begin_body, const char *end);
 			RequestParser::Result parsingChunkedBody(Request& req, const char *begin_body, const char *end);
 			void    skipSpaces(Request& req);
+		private:
+			unsigned long content_length;
 	};
 };
 

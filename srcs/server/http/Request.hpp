@@ -5,6 +5,11 @@
 #include <map>
 
 namespace http {
+	const std::string method_get = "GET";
+	const std::string method_put = "PUT";
+	const std::string method_delete = "DELETE";
+	const std::string method_post = "POST";
+
 	struct Request {
 		bool                               close;
 		std::string                        host;

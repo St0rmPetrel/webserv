@@ -29,7 +29,8 @@ RequestParser::Result RequestParser::parse(Request& req, const char* begin, cons
 			if (*in == ' ')
 			{
 				req.method = std::string(head, in);
-				if (req.method != "GET" && req.method != "PUT" && req.method != "DELETE" && req.method != "POST")
+				if (req.method != method_get && req.method != method_put &&
+						req.method != method_delete && req.method != method_post)
 					return ParsingError;
 				head = in + 1;
 				state = RequestPath;
@@ -152,7 +153,7 @@ void    RequestParser::findQuery(Request& req)
 
 inline bool RequestParser::checkVersion(std::string &version)
 {
-	return (version == "1.1");
+	return (version == "1.1" || version == "1.0");
 }
 
 void    RequestParser::skipSpaces(Request& req)
@@ -188,8 +189,7 @@ RequestParser::Result RequestParser::checkHeaders(Request& req, std::string &bod
 			else
 				return ParsingError;
 	}
-	else
-		return ParsingCompleted;
+	return ParsingCompleted;
 }
 
 RequestParser::Result RequestParser::parsingBody(Request& req, std::string &body)
