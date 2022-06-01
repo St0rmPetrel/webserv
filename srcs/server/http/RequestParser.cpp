@@ -1,3 +1,9 @@
+#include <stdlib.h>
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <sstream>
+
 #include "RequestParser.hpp"
 #include "Request.hpp"
 
@@ -171,7 +177,8 @@ RequestParser::Result RequestParser::checkHeaders(Request& req, std::string &bod
 		return parsingChunkedBody(req, begin_body, end);
 	}
 	else if (req.headers.find("content-length") != req.headers.end()) {
-		if ((content_length = std::stoi(req.headers.find("content-length")->second)) > 0){
+		std::istringstream(req.headers.find("content-length")->second) >> content_length;
+		if (content_length > 0){
 			if (req.headers.find("transfer-encoding") == req.headers.end() || req.headers.find("transfer-encoding")->second != "chunked") {
 					return parsingBody(req, body);
 				}

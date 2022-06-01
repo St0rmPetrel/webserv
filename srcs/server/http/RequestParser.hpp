@@ -35,6 +35,7 @@ namespace http {
 			    };
 		unsigned long content_length;
 		public:
+			// fill http request based on given raw data
 			Result parse(Request& req, const char* begin, const char* end);
 			inline bool isControl(int c);
 			inline bool checkVersion(std::string &version);
