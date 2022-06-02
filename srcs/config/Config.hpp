@@ -99,6 +99,12 @@ namespace config {
 		struct FillingEmptyDirectiveArgsException : public std::exception {
 			const char *what() const throw();
 		};
+		struct FillingBadDirectiveArgsException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingEmptyModuleArgsException : public std::exception {
+			const char *what() const throw();
+		};
 		struct FillingUnknownDirectiveException : public std::exception {
 			const char *what() const throw();
 		};
