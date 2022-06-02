@@ -221,8 +221,8 @@ bool ServerMux::Route::match(const Request& req) const {
 	}
 	// check headers
 	if (!_mandatory_headers.empty()) {
-		for (std::map<std::string, std::string>::const_iterator it = req.header.begin();
-				it != req.header.end(); ++it) {
+		for (std::map<std::string, std::string>::const_iterator it = req.headers.begin();
+				it != req.headers.end(); ++it) {
 			if (_mandatory_headers.find(*it) != _mandatory_headers.end()) {
 				return true;
 			}
