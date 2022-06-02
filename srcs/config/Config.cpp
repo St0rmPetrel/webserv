@@ -1,11 +1,15 @@
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include "Config.hpp"
 #include "../logger/ILogger.hpp"
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
+#include "../utils/utils.hpp"
+
+#include <exception>
 
 using namespace config;
 
@@ -16,8 +20,7 @@ Config::~Config() {}
 void Config::parse(const std::string &filename) {
 	const std::vector<std::string> tokens = this->_lexing(filename);
 	this->_parsing(tokens);
-
-	this->_fill_options(_global_module);
+	this->_fill_options();
 }
 
 const logger::Options &Config::get_logger() const {
@@ -143,23 +146,257 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 	return local_module;
 }
 
-void Config::_fill_options(const Config::Module& global_module) {
-	(void)global_module;
-	this->_serv_opts.recv_buffer_size = 1024;
-	http::VirtualServer::Options server;
-	http::VirtualServer::Options::Location location;
+void Config::_fill_options() {
+	for (std::vector<Directive>::const_iterator it = _global_module.directives.begin();
+			it != _global_module.directives.end(); ++it) {
+		if (it->name == "error_log") {
+			_fill_error_log_directive(*it);
+		} else if (it->name == "daemon") {
+			// fill daemon option
+		} else {
+			_log.debug(SSTR("filling: unknown directive name: " << it->name));
+			throw FillingUnknownDirectiveException();
+		}
+	}
 
-	location.location_match = "/hello";
-	location.root = "/www";
-	location.error_page[http::Response::NotFound] = "/whoops.html";
+	for (std::vector<Module>::const_iterator it = _global_module.modules.begin();
+			it != _global_module.modules.end(); ++it) {
+		if (it->name == "http") {
+			_fill_http_options(*it);
+			_log.debug("filling: filled http module");
+		} else if (it->name == "events") {
+			// for nginx compatibility
+			continue;
+		} else {
+			_log.fatal(SSTR("filling: unknown module name: " << it->name));
+			throw FillingUnknownModuleException();
+		}
+	}
+	_log.debug("filling: filled global module");
+}
 
-	server.port = 8081;
-	server.addr = "127.0.0.1";
-	server.listener_backlog = 64;
-	server.locations.push_back(location);
+void Config::_fill_http_options(const Module& http_module) {
+	http::VirtualServer::Options default_virtual_server_opts;
 
-	this->_serv_opts.servers.push_back(server);
-	_log.debug("start filling configuration staf in to logger and server options");
+	_fill_virtual_server_options(default_virtual_server_opts, http_module);
+
+	for (std::vector<Config::Module>::const_iterator it = http_module.modules.begin();
+			it != http_module.modules.end(); ++it) {
+		if (it->name == "server") {
+			http::VirtualServer::Options virtual_server_opts(default_virtual_server_opts);
+
+			_fill_virtual_server_options(virtual_server_opts, *it);
+			_serv_opts.servers.push_back(virtual_server_opts);
+			_log.debug("filling: filled server module");
+		}
+	}
+}
+
+void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_server_opts,
+		const Config::Module& server_module) {
+	http::VirtualServer::Options::Location default_virtual_server_location_opts;
+
+	for (std::vector<Directive>::const_iterator it = server_module.directives.begin();
+			it != server_module.directives.end(); ++it) {
+		if (it->name == "listen") {
+			_fill_listen_directive(virtual_server_opts, *it);
+		} else if (it->name == "server-name") {
+			_fill_server_name_directive(virtual_server_opts, *it);
+		} else {
+			_fill_virtual_server_location_options(default_virtual_server_location_opts,
+					server_module);
+		}
+	}
+	for (std::vector<Module>::const_iterator it = server_module.modules.begin();
+			it != server_module.modules.end(); ++it) {
+		if (it->name == "server" && server_module.name == "http") {
+			continue;
+		} else if (it->name == "location") {
+			http::VirtualServer::Options::Location virtual_server_location_opts(
+					default_virtual_server_location_opts);
+			_fill_virtual_server_location_options(virtual_server_location_opts, *it);
+			virtual_server_opts.locations.push_back(virtual_server_location_opts);
+			_log.debug("filling: filled location module");
+		} else {
+			_log.fatal(SSTR("filling: unknown module name: " << it->name));
+			throw FillingUnknownModuleException();
+		}
+	}
+}
+
+void Config::_fill_virtual_server_location_options(
+		http::VirtualServer::Options::Location& virtual_server_location_opts,
+		const Config::Module& location_module) {
+	if (location_module.args.empty() && location_module.name != "server") {
+		throw FillingEmptyModuleArgsException();
+	}
+	// fill location match
+	{
+		if (location_module.name == "location") {
+			virtual_server_location_opts.location_match = location_module.args.at(0);
+		} else {
+			virtual_server_location_opts.location_match = "/";
+		}
+	}
+	_log.debug(SSTR("filling: fill location match: " <<
+				virtual_server_location_opts.location_match));
+
+	for (std::vector<Directive>::const_iterator it = location_module.directives.begin();
+			it != location_module.directives.end(); ++it) {
+		if (it->name == "root") {
+			_fill_root_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "error_page") {
+			_fill_error_page_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "index") {
+			// fill index staff
+		} else if (it->name == "return") {
+			// fill return staff
+		} else if ((it->name == "listen") && (location_module.name == "server")) {
+			continue;
+		} else {
+			_log.fatal(SSTR("filling: unknown directive name: " << it->name));
+			throw FillingUnknownDirectiveException();
+		}
+	}
+}
+
+void Config::_fill_server_name_directive(
+		http::VirtualServer::Options& virtual_server_opts,
+		const Config::Directive& server_name_dir) {
+	if (server_name_dir.args.empty()) {
+		_log.fatal(SSTR("filling: empty directive args: " << server_name_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	// fill server_names
+	for (std::vector<std::string>::const_iterator it = server_name_dir.args.begin();
+			it != server_name_dir.args.end(); ++it) {
+		virtual_server_opts.names.insert(*it);
+		_log.debug(SSTR("filling: add server_name: name=" << *it));
+	}
+}
+
+void Config::_fill_error_page_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& error_page_dir) {
+	if (error_page_dir.args.size() != 2) {
+		_log.fatal(SSTR("filling: empty directive args: " << error_page_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+
+	const std::string& status_code_str = error_page_dir.args.at(0);
+	if (!utils::is_number(status_code_str)) {
+		_log.fatal(SSTR("filling: bad directive args: " << status_code_str));
+		throw FillingBadDirectiveArgsException();
+	}
+	int status_code = 0;
+	std::istringstream(status_code_str) >> status_code;
+
+	location_opts.error_page[http::int_to_status_code(status_code)] =
+		error_page_dir.args.at(1);
+	_log.debug(SSTR("filling: fill error_page: status code=" << status_code <<
+				" error_file_path=" << error_page_dir.args.at(1)));
+}
+
+void Config::_fill_root_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& root_dir) {
+	if (root_dir.args.empty()) {
+		_log.fatal(SSTR("filling: empty directive args: " << root_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	location_opts.root = root_dir.args.at(0);
+	_log.debug(SSTR("filling: fill location root: root=" << location_opts.root));
+}
+
+void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
+		const Config::Directive& listen_dir) {
+	if (listen_dir.args.empty()) {
+		_log.fatal(SSTR("filling: empty directive args: " << listen_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	// fill addr and port
+	{
+		const std::string& addr = listen_dir.args.at(0);
+		std::size_t colon = addr.find(":");
+		if (colon == std::string::npos) {
+			std::istringstream(addr) >> virtual_server_opts.port;
+		} else {
+			virtual_server_opts.addr = addr.substr(0, colon);
+			const std::string port_str = addr.substr(colon+1);
+
+			if (!utils::is_number(port_str) || port_str.empty()) {
+				_log.fatal(SSTR("filling: bad or empty listen port in addr: " << addr));
+				throw FillingBadDirectiveArgsException();
+			}
+			std::istringstream(port_str) >> virtual_server_opts.port;
+		}
+		_log.debug(SSTR("filling: fill listener vs: " << virtual_server_opts.addr <<
+					":" << virtual_server_opts.port));
+	}
+	if (listen_dir.args.size() == 1) {
+		return;
+	}
+	// fill listener backlog (if exist)
+	{
+		const std::string& backlog = listen_dir.args.at(1);
+		std::size_t separator = backlog.find_last_of("backlog=");
+		if (separator == std::string::npos) {
+			_log.fatal(SSTR("filling: bad directive backlog args: " << backlog));
+			throw FillingBadDirectiveArgsException();
+		} else {
+			const std::string backlog_str = backlog.substr(separator+1);
+
+			if (!utils::is_number(backlog_str) || backlog_str.empty()) {
+				_log.fatal(SSTR("filling: bad or empty listen backlog: " << backlog_str));
+				throw FillingBadDirectiveArgsException();
+			}
+
+			std::istringstream(backlog_str) >> virtual_server_opts.listener_backlog;
+		}
+		_log.debug(SSTR("filling: fill listener backlog: " <<
+					virtual_server_opts.listener_backlog));
+	}
+}
+
+void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
+	if (logger_dir.args.empty()) {
+		throw FillingEmptyDirectiveArgsException();
+	}
+	// fill log output filename
+	{
+		_log_opts.file_name = logger_dir.args.at(0);
+		_log.debug(SSTR("filling: logger output file: " <<
+					_log_opts.file_name));
+	}
+	if (logger_dir.args.size() == 1) {
+		return;
+	}
+	// fill log message level
+	{
+		_log_opts.enabled_level = logger::string_to_level(logger_dir.args.at(1));
+		_log.debug(SSTR("filling: logger message level to: " <<
+					logger::level_to_string(_log_opts.enabled_level)));
+	}
+}
+
+const char *Config::FillingEmptyDirectiveArgsException::what() const throw() {
+	return "Expect not empty args in directive";
+}
+
+const char *Config::FillingBadDirectiveArgsException::what() const throw() {
+	return "Expect not empty args in directive";
+}
+
+const char *Config::FillingEmptyModuleArgsException::what() const throw() {
+	return "Expect not empty args in module";
+}
+
+const char *Config::FillingUnknownDirectiveException::what() const throw() {
+	return "Unknown directive name";
+}
+
+const char *Config::FillingUnknownModuleException::what() const throw() {
+	return "Unknown module name";
 }
 
 const char *Config::FileNotFoundException::what() const throw() {

@@ -24,7 +24,7 @@ namespace logger {
 			std::ostream	*_file_stream;
 			std::ofstream	_base_stream;
 			bool			_bfile_output;
-			Options			 _opt;
+			Options			_opt;
 
 		public:
 			Logger();
@@ -42,6 +42,9 @@ namespace logger {
 			void _print_message(const std::string & level, const std::string & msg, const std::string & color) const;
 			std::string _generate_time_code(void) const;
 	};
+
+	extern Level string_to_level(const std::string& level);
+	extern std::string level_to_string(const Level& level);
 }; /* namespace logger */
 
 #endif

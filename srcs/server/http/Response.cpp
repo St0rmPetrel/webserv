@@ -24,3 +24,17 @@ void Response::Header::set(const std::string& key, const std::string& value) {
 	(void)key;
 	(void)value;
 }
+
+Response::StatusCode http::int_to_status_code(int status_code) {
+	switch (status_code) {
+		case 400:
+			return Response::BadRequest;
+		case 404:
+			return Response::NotFound;
+		case 405:
+			return Response::MethodNotAllowed;
+		default:
+			// TODO make exception
+			throw "";
+	}
+}

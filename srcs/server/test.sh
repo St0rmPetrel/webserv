@@ -30,7 +30,7 @@ clean () {
 
 compile () {
 	echo "$SRC_TEST_CODE" |
-	clang++ -std="c++98" -Wall -Wextra -Werror -o $EXEC_FILE_NAME -x c++ - *.cpp ../logger/*.cpp ../config/*.cpp ./http/*.cpp
+	clang++ -std="c++98" -Wall -Wextra -Werror -o $EXEC_FILE_NAME -x c++ - *.cpp ../logger/*.cpp ../config/*.cpp ./http/*.cpp ../utils/*.cpp
 }
 
 test_fail () {
