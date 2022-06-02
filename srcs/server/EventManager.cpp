@@ -42,7 +42,13 @@ int EventManager::new_listener(const std::string& addr, unsigned short int port,
 	// bind and then start to listen the socket
 	sock_addr.sin_family = AF_INET;
 	sock_addr.sin_port = htons(port);
-	sock_addr.sin_addr.s_addr = inet_addr(addr.c_str());
+	if (addr.empty()) {
+		sock_addr.sin_addr.s_addr = INADDR_ANY;
+	} else if (addr == "localhost") {
+		sock_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+	} else {
+		sock_addr.sin_addr.s_addr = inet_addr(addr.c_str());
+	}
 	if (bind(listener, reinterpret_cast<struct sockaddr *>(&sock_addr), sizeof(sock_addr)) < 0) {
 		throw EventManager::BindSocketException();
 	}

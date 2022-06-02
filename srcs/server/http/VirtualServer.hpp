@@ -24,6 +24,8 @@ namespace http {
 				int                   listener_backlog; // Размер очереди запросов
 				std::set<std::string> names; // Имена виртуального сервера
 				std::vector<Location> locations;
+
+				Options();
 			};
 		public:
 			VirtualServer(const Options& opts);

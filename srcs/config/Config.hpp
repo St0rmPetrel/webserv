@@ -13,6 +13,7 @@
 
 #include "../logger/Options.hpp"
 #include "../server/Options.hpp"
+#include "../server/http/VirtualServer.hpp"
 #include "Config.hpp"
 
 namespace config {
@@ -30,7 +31,7 @@ namespace config {
 		// Module data structure for "module", "block" or "context" in configuration file
 		// example:
 		//   Module{
-		//     name: "main",
+		//     name: "global",
 		//     directive: {},
 		//     modules{
 		//       Module{
@@ -95,6 +96,22 @@ namespace config {
 			const char *what() const throw();
 		};
 
+		struct FillingEmptyDirectiveArgsException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingBadDirectiveArgsException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingEmptyModuleArgsException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingUnknownDirectiveException : public std::exception {
+			const char *what() const throw();
+		};
+		struct FillingUnknownModuleException : public std::exception {
+			const char *what() const throw();
+		};
+
 	private:
 		// _lexing read configuration file by it name ignoring strings which start
 		// with "#" (comments) and splits received text on tokens
@@ -119,7 +136,7 @@ namespace config {
 		//     {"daemon", "off", ";", "events", "{", "}"}
 		//   ->
 		//     Module{
-		//       name: "main",
+		//       name: "global",
 		//       directives: { Directive{name:"", args:{"off"}} },
 		//       modules: {
 		//         Module {name: "events", directives: {}, modules: {}}
@@ -139,7 +156,29 @@ namespace config {
 		// will be expend during the progress of creation program
 		// May throw exception in case of bad directive or module name,
 		// bad module nesting or bad arguments in directive
-		void _fill_options(const Module &global_module);
+		void _fill_options();
+
+		void _fill_http_options(const Module& http_module);
+		void _fill_virtual_server_options(
+				http::VirtualServer::Options& virtual_server_opts,
+				const Module& server_module);
+		void _fill_virtual_server_location_options(
+				http::VirtualServer::Options::Location& virtual_server_location_opts,
+				const Module& location_module);
+
+		void _fill_listen_directive(
+				http::VirtualServer::Options& virtual_server_opts,
+				const Directive& listen_dir);
+		void _fill_server_name_directive(
+				http::VirtualServer::Options& virtual_server_opts,
+				const Directive& server_name_dir);
+		void _fill_error_log_directive(const Directive& logger_dir);
+		void _fill_error_page_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& error_page_dir);
+		void _fill_root_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& root_dir);
 
 	private:
 		Module _global_module;
