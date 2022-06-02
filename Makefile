@@ -44,7 +44,7 @@ SERVER	=	Server EventManager PollFds
 
 HTTP	=	Response RequestParser ServerMux VirtualServer
 
-UTILS	=
+UTILS	=	utils
 
 MAIN 	=	main
 
@@ -60,7 +60,7 @@ OBJS_BUILD	=	$(patsubst $(SRCDIR)/%,$(OBJSDIR)/%,$(SRCS:.cpp=.o))
 
 HDRS = -I $(SRCDIR)/config -I $(SRCDIR)/logger -I $(SRCDIR)/server -I $(SRCDIR)/server/http
 
-DIRS	=	$(OBJSDIR) $(LOGGER_DIR) $(CONFIG_DIR) $(SERVER_DIR) $(HTTP_DIR)
+DIRS	=	$(OBJSDIR) $(LOGGER_DIR) $(CONFIG_DIR) $(SERVER_DIR) $(HTTP_DIR) $(UTILS_DIR)
 
 RM		=	rm -f
 
@@ -88,6 +88,9 @@ $(SERVER_DIR): |$(OBJSDIR)
 
 $(HTTP_DIR): |$(OBJSDIR)
 		mkdir $(HTTP_DIR)
+
+$(UTILS_DIR): |$(OBJSDIR)
+		mkdir $(UTILS_DIR)
 
 $(OBJSDIR)/%.o:	$(SRCDIR)/%.cpp
 	$(CC) $(CFLAGS) $(HDRS) -c $^ -o $@

@@ -10,70 +10,54 @@
 
 namespace http {
 	enum ConnectionStatus {
-		keepAlive,
-		close
+		KeepAlive,
+		Close,
 	};
 
-	// Есть ли необходимость в этом поле???
-	enum ContentType {
-		text,
-		image,
-		audio,
-		video,
-		// other types
+	enum StatusCode {
+		BadRequest=400,
+		NotFound=404,
+		MethodNotAllowed=405,
 	};
 
 	class Response {
-	public:
+		public:
+			class Header {
+				public:
+					Header();
 
-		Response() : _protocol_version(11), _status_code(200), _connection(close), _length(0) {
-			std::time_t current_time;
-			current_time = time(NULL);
-			_date = std::localtime(&current_time);
-		}
+					void set(const std::string& key, const std::string& value);
+					void set_date();
 
-		// serialize return raw response
-		const std::string serialize() const;
+					const std::string& get(const std::string& key);
+				private:
+					std::map<std::string, std::string> headers;
+			};
+		public:
+			Response();
+			Response(const Response resp);
 
-		// Setters for private members
-		void setProtocolVersion(int protocolVersion);
-		void setStatusCode(int statusCode);
-		void setConnection(ConnectionStatus connection);
-		void setMessage(const std::string &message);
-		void setLength(size_t length);
+			// serialize return raw response
+			const std::string serialize() const;
 
-	private:
-		void _create_status_line(std::ostringstream& _str) const;
+			void write_header(StatusCode code);
 
-		void _create_header(std::ostringstream& _str) const;
-
-		void _create_body(std::ostringstream& _str) const;
-
-		std::string _convert_status_code_to_string() const;
-
-		std::string _convert_connection_to_string() const;
-
-	private:
-		/// status line
-		int _protocol_version;
-		int _status_code;
-
-		/// general headers
-		http::ConnectionStatus _connection;
-		std::tm *_date;
-
-		/// response headers
-
-		/// entity headers
-		size_t _length;
-		// content type
-			//	int _type; // ?
-			//	int _subtype; // ?
-
-		/// message body
-		std::string _message;
+			void write(const char* begin, const char* end);
+		private:
+			void _create_status_line(std::ostringstream& _str) const;
+			void _create_header(std::ostringstream& _str) const;
+			void _create_body(std::ostringstream& _str) const;
+		public:
+			Header header;
+		private:
+			StatusCode       _status;
+			ConnectionStatus _connection_status;
+			std::string      _body;
+			int              _body_size;
+			int              _protocol_version;
 	};
 
-} // namespace http
+	extern Response::StatusCode int_to_status_code(int status_code);
+}; // namespace http
 
 #endif
