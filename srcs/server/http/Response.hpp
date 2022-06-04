@@ -14,28 +14,30 @@ namespace http {
 		Close,
 	};
 
-	enum StatusCode {
-		BadRequest=400,
-		NotFound=404,
-		MethodNotAllowed=405,
-	};
-
 	class Response {
 		public:
+			enum StatusCode {
+				OK=200,
+				BadRequest=400,
+				NotFound=404,
+				MethodNotAllowed=405,
+			};
+
 			class Header {
 				public:
 					Header();
+					~Header();
 
-					void set(const std::string& key, const std::string& value);
-					void set_date();
-
-					const std::string& get(const std::string& key);
+					void               set(const std::string& key, const std::string& value);
+		//			const std::string& get(const std::string& key) const;
+					const std::string  str() const;
 				private:
-					std::map<std::string, std::string> headers;
+					std::map<std::string, std::string> _headers;
 			};
 		public:
 			Response();
-			Response(const Response resp);
+			Response(const Response& resp);
+			~Response();
 
 			// serialize return raw response
 			const std::string serialize() const;
@@ -43,6 +45,7 @@ namespace http {
 			void write_header(StatusCode code);
 
 			void write(const char* begin, const char* end);
+			void write(const std::string& str);
 		private:
 			void _create_status_line(std::ostringstream& _str) const;
 			void _create_header(std::ostringstream& _str) const;
@@ -58,6 +61,7 @@ namespace http {
 	};
 
 	extern Response::StatusCode int_to_status_code(int status_code);
+	extern const std::string status_code_to_str(Response::StatusCode code);
 }; // namespace http
 
 #endif

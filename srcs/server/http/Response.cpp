@@ -1,124 +1,97 @@
 #include "Response.hpp"
+#include "../../utils/utils.hpp"
 
 using namespace http;
+
+Response::Response() : _status(OK), _connection_status(Close),
+	_body_size(0), _protocol_version(11) {
+}
+
+Response::Response(const Response& resp)
+	: _status(resp._status),
+	_connection_status(resp._connection_status),
+	_body(resp._body),
+	_body_size(resp._body_size),
+	_protocol_version(resp._protocol_version) {
+}
+
+Response::~Response() { }
 
 const std::string Response::serialize() const {
 	std::ostringstream sstr;
 
-	if (!_body.empty()) {
-		heade.set("Content-Length", _body_size_to_string());
+	//if (!_body.empty()) {
+	//	std::ostringstream body_size_sstr;
+	//	body_size_sstr << _body_size;
+	//	header.set("Content-Length", body_size_sstr.str());
 
-		if (header.get("Content-Type").empty()) {
-			heade.set("Content-Type", "plain/text");
-		}
-	}
+	//	if (header.get("Content-Type").empty()) {
+	//		header.set("Content-Type", "plain/text");
+	//	}
+	//}
 
-	_create_status_line(sstr);
-	_create_header(sstr);
-	_create_body(sstr);
+	sstr << "HTTP/" << _protocol_version / 10 << "." << _protocol_version % 10 << " ";
+	sstr << _status << " " << status_code_to_str(_status) << ENDL;
+
+	sstr << header.str();
+
+	sstr << _body << ENDL;
 
 	 return sstr.str();
 }
 
-void Response::_create_status_line(std::ostringstream& _str) const
-{
-	_str << "HTTP/" << _protocol_version / 10 << "." << _protocol_version % 10 << " ";
-	_str << _status_code << " " << _convert_status_code_to_string() << ENDL;
-}
-
-void Response::_create_header(std::ostringstream& _str) const
-{
-	// general header
-	// date
-	_str << "Date: ";
-	_str << (_date->tm_year + 1900) << "/";
-	_str << std::setfill('0') << std::setw(2) << (_date->tm_mon + 1) << "/";
-	_str << std::setfill('0') << std::setw(2) << (_date->tm_mday);
-	// time
-	_str << " " << std::setfill('0') << std::setw(2) << _date->tm_hour << ":";
-	_str << std::setfill('0') << std::setw(2) << _date->tm_min << ":";
-	_str << std::setfill('0') << std::setw(2) << _date->tm_sec;
-	_str << ENDL;
-
-	_str << "Connection: " << _convert_connection_to_string() << ENDL;
-
-	// entity header
-//	_str << "Content-Length: " << _length << ENDL;
-	_str << "Content-Length: " << "20" << ENDL;
-
-	// useless!! пока что
-	_str << "Content-Type: text/html" << ENDL;
-
-
-}
-
-void Response::_create_body(std::ostringstream& _str) const
-{
-	_str << ENDL << "Hello from Nastya!!!" << ENDL;
-}
-
-
-std::string Response::_convert_status_code_to_string() const {
-	// todo: compare code for http 1.1 and other versions
-	// todo: add other codes
-	switch (_status_code)
-	{
-		case 200:
-			return "OK";
-		case 404:
-		default:
-			return "Not Found";
-	}
-}
-
-std::string Response::_convert_connection_to_string() const {
-	switch (_connection) {
-		case ::keepAlive:
-			return "keep alive";
-		case ::close:
-		default:
-			return "close";
-	}
-}
-
-void Response::setProtocolVersion(int protocolVersion)
-{
-	_protocol_version = protocolVersion;
-}
-
-void Response::setStatusCode(int statusCode)
-{
-	_status_code = statusCode;
-}
-
-void Response::setConnection(ConnectionStatus connection)
-{
-	_connection = connection;
-}
-
-void Response::setMessage(const std::string &message)
-{
-	_message = message;
-	_length = _message.size();
-}
-
-void Response::setLength(size_t length)
-{
-	_length = length;
-}
-
-void Response::write_header(Response::StatusCode code) {
-	(void)code;
+void Response::write_header(StatusCode code) {
+	_status = code;
 }
 
 void Response::write(const char* begin, const char* end) {
-	(void)begin;
-	(void)end;
+	for (const char* it = begin; it != end; ++it) {
+		++_body_size;
+		_body.push_back(*it);
+	}
 }
 
+void Response::write(const std::string& str) {
+	_body_size += str.size();
+	_body.append(str);
+}
+
+Response::Header::Header() { }
+
+Response::Header::~Header() { }
+
 void Response::Header::set(const std::string& key, const std::string& value) {
-	(void)key;
-	(void)value;
+	this->_headers[key] = value;
+}
+
+//const std::string& Response::Header::get(const std::string& key) const {
+//	return this->_headers[key];
+//}
+
+const std::string Response::Header::str() const {
+	std::ostringstream sstr;
+
+	for (std::map<std::string, std::string>::const_iterator it = _headers.begin();
+				it != _headers.end(); ++it) {
+		sstr << it->first << ": " << it->second << ENDL;
+	}
+	sstr << ENDL;
+	return sstr.str();
+}
+
+const std::string http::status_code_to_str(Response::StatusCode code) {
+	switch (code) {
+		case Response::OK:
+			return "OK";
+		case Response::BadRequest:
+			return "Bad Request";
+		case Response::NotFound:
+			return "Not Found";
+		case Response::MethodNotAllowed:
+			return "Method Not Allowed";
+		default:
+			return "Not Found";
+	}
 }
 
 Response::StatusCode http::int_to_status_code(int status_code) {
