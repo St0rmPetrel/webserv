@@ -20,22 +20,14 @@ Response::~Response() { }
 const std::string Response::serialize() const {
 	std::ostringstream sstr;
 
-	//if (!_body.empty()) {
-	//	std::ostringstream body_size_sstr;
-	//	body_size_sstr << _body_size;
-	//	header.set("Content-Length", body_size_sstr.str());
-
-	//	if (header.get("Content-Type").empty()) {
-	//		header.set("Content-Type", "plain/text");
-	//	}
-	//}
-
 	sstr << "HTTP/" << _protocol_version / 10 << "." << _protocol_version % 10 << " ";
 	sstr << _status << " " << status_code_to_str(_status) << ENDL;
 
 	sstr << header.str();
 
-	sstr << _body << ENDL;
+	if (!_body.empty()) {
+		sstr << _body << ENDL;
+	}
 
 	 return sstr.str();
 }
@@ -44,16 +36,18 @@ void Response::write_header(StatusCode code) {
 	_status = code;
 }
 
-void Response::write(const char* begin, const char* end) {
+void Response::write(const char* begin, const char* end, const std::string& type = mime_type_txt) {
 	for (const char* it = begin; it != end; ++it) {
 		++_body_size;
 		_body.push_back(*it);
 	}
+	header.set_content(_body_size, type);
 }
 
-void Response::write(const std::string& str) {
+void Response::write(const std::string& str, const std::string& type = mime_type_txt) {
 	_body_size += str.size();
 	_body.append(str);
+	header.set_content(_body_size, type);
 }
 
 Response::Header::Header() { }
@@ -64,9 +58,23 @@ void Response::Header::set(const std::string& key, const std::string& value) {
 	this->_headers[key] = value;
 }
 
-//const std::string& Response::Header::get(const std::string& key) const {
-//	return this->_headers[key];
-//}
+void Response::Header::set_content(const int length, const std::string& type = "") {
+	std::ostringstream length_sstr;
+
+	length_sstr << length;
+	set("Content-Length", length_sstr.str());
+	if (!type.empty()) {
+		set("Content-Type", type);
+	}
+}
+
+const std::string Response::Header::get(const std::string& key) const {
+	const std::map<std::string, std::string>::const_iterator it = _headers.find(key);
+	if (it == _headers.end()) {
+		return "";
+	}
+	return it->second;
+}
 
 const std::string Response::Header::str() const {
 	std::ostringstream sstr;

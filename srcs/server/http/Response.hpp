@@ -9,6 +9,11 @@
 #include <map>
 
 namespace http {
+	const std::string mime_type_html = "text/html";
+	const std::string mime_type_gif  = "image/gif";
+	const std::string mime_type_json  = "application/json";
+	const std::string mime_type_txt  = "text/plain";
+
 	enum ConnectionStatus {
 		KeepAlive,
 		Close,
@@ -29,7 +34,8 @@ namespace http {
 					~Header();
 
 					void               set(const std::string& key, const std::string& value);
-		//			const std::string& get(const std::string& key) const;
+					void               set_content(const int size, const std::string& type);
+					const std::string  get(const std::string& key) const;
 					const std::string  str() const;
 				private:
 					std::map<std::string, std::string> _headers;
@@ -44,8 +50,8 @@ namespace http {
 
 			void write_header(StatusCode code);
 
-			void write(const char* begin, const char* end);
-			void write(const std::string& str);
+			void write(const char* begin, const char* end, const std::string& type);
+			void write(const std::string& str, const std::string& type);
 		private:
 			void _create_status_line(std::ostringstream& _str) const;
 			void _create_header(std::ostringstream& _str) const;
