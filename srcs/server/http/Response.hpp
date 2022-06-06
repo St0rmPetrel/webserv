@@ -35,6 +35,8 @@ namespace http {
 
 					void               set(const std::string& key, const std::string& value);
 					void               set_content(const int size, const std::string& type);
+					void               set_connection(const ConnectionStatus status);
+
 					const std::string  get(const std::string& key) const;
 					const std::string  str() const;
 				private:
@@ -52,10 +54,6 @@ namespace http {
 
 			void write(const char* begin, const char* end, const std::string& type);
 			void write(const std::string& str, const std::string& type);
-		private:
-			void _create_status_line(std::ostringstream& _str) const;
-			void _create_header(std::ostringstream& _str) const;
-			void _create_body(std::ostringstream& _str) const;
 		public:
 			Header header;
 		private:

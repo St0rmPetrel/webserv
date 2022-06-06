@@ -68,6 +68,17 @@ void Response::Header::set_content(const int length, const std::string& type = "
 	}
 }
 
+void Response::Header::set_connection(const ConnectionStatus status) {
+	switch (status) {
+		case KeepAlive:
+			set("Connection", "keep-alive");
+			break;
+		default:
+			set("Connection", "close");
+			break;
+	}
+}
+
 const std::string Response::Header::get(const std::string& key) const {
 	const std::map<std::string, std::string>::const_iterator it = _headers.find(key);
 	if (it == _headers.end()) {
@@ -103,15 +114,5 @@ const std::string http::status_code_to_str(Response::StatusCode code) {
 }
 
 Response::StatusCode http::int_to_status_code(int status_code) {
-	switch (status_code) {
-		case 400:
-			return Response::BadRequest;
-		case 404:
-			return Response::NotFound;
-		case 405:
-			return Response::MethodNotAllowed;
-		default:
-			// TODO make exception
-			throw "";
-	}
+	return static_cast<Response::StatusCode>(status_code);
 }
