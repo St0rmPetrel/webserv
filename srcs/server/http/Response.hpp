@@ -52,8 +52,10 @@ namespace http {
 
 			void write_header(StatusCode code);
 
-			void write(const char* begin, const char* end, const std::string& type);
-			void write(const std::string& str, const std::string& type);
+			void write(const char* begin, const char* end,
+					const std::string& type = mime_type_txt);
+			void write(const std::string& str,
+					const std::string& type = mime_type_txt);
 		public:
 			Header header;
 		private:
