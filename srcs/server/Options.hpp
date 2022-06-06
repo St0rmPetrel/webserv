@@ -7,6 +7,8 @@
 
 namespace server {
 	struct Options {
+		Options();
+
 		unsigned int recv_buffer_size;
 		std::vector<http::VirtualServer::Options> servers;
 	};

@@ -34,7 +34,7 @@ namespace http {
 					~Header();
 
 					void               set(const std::string& key, const std::string& value);
-					void               set_content(const int size, const std::string& type);
+					void               set_content(const int size, const std::string& type = "");
 					void               set_connection(const ConnectionStatus status);
 
 					const std::string  get(const std::string& key) const;

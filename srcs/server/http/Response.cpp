@@ -36,7 +36,7 @@ void Response::write_header(StatusCode code) {
 	_status = code;
 }
 
-void Response::write(const char* begin, const char* end, const std::string& type = mime_type_txt) {
+void Response::write(const char* begin, const char* end, const std::string& type) {
 	for (const char* it = begin; it != end; ++it) {
 		++_body_size;
 		_body.push_back(*it);
@@ -44,7 +44,7 @@ void Response::write(const char* begin, const char* end, const std::string& type
 	header.set_content(_body_size, type);
 }
 
-void Response::write(const std::string& str, const std::string& type = mime_type_txt) {
+void Response::write(const std::string& str, const std::string& type) {
 	_body_size += str.size();
 	_body.append(str);
 	header.set_content(_body_size, type);
@@ -58,7 +58,7 @@ void Response::Header::set(const std::string& key, const std::string& value) {
 	this->_headers[key] = value;
 }
 
-void Response::Header::set_content(const int length, const std::string& type = "") {
+void Response::Header::set_content(const int length, const std::string& type) {
 	std::ostringstream length_sstr;
 
 	length_sstr << length;

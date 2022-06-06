@@ -40,7 +40,7 @@ LOGGER =    Logger Options
 
 CONFIG =	Config
 
-SERVER	=	Server EventManager PollFds
+SERVER	=	Server EventManager PollFds Options
 
 HTTP	=	Response RequestParser ServerMux VirtualServer
 

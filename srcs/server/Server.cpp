@@ -61,8 +61,10 @@ void Server::listen_and_serve() {
 
 					// read raw data from socket
 					int bytes_read = recv((*it)->sock, recv_buf, _opts.recv_buffer_size, 0);
-					if (bytes_read < 0) {
-						_log.fatal(SSTR("recv socket error client_sock = " << (*it)->sock));
+					_log.debug(SSTR("server: recv raw body: \"" <<
+								recv_buf << "\" bytes_read=" << bytes_read));
+					if (bytes_read <= 0) {
+						_log.fatal(SSTR("server: recv socket error client_sock = " << (*it)->sock));
 						_event_manager.finish_event(*it);
 						continue;
 					}
@@ -89,7 +91,7 @@ void Server::listen_and_serve() {
 					}
 					// send response via socket
 					if (_finish_request((*it)->sock, res) < 0) {
-						_log.fatal(SSTR("send socket error client_sock = " << (*it)->sock));
+						_log.fatal(SSTR("server: send socket error client_sock = " << (*it)->sock));
 						_event_manager.finish_event(*it);
 						continue;
 					}
