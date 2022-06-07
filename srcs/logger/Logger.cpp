@@ -3,59 +3,54 @@
 #include <iostream>
 
 #include "Logger.hpp"
+#include "../utils/utils.hpp"
 #include "Options.hpp"
 
 using namespace logger;
 
-Logger::Logger() : _opt() {
-	_base_stream.open("/dev/stderr", std::fstream::out | std::fstream::app);
-	_file_stream = &_base_stream;
-}
+Logger::Logger() : _opt("/dev/stderr", WARN, true) { }
 
-Logger::Logger(const Logger& src) : _opt(src._opt)
-{
-	_bfile_output = src._bfile_output;
-	_base_stream.open(&(src._opt.file_name[0]), std::fstream::out | std::fstream::app);
-	if (!_base_stream.is_open())
-	{
-		_bfile_output = false;
-		_base_stream.open("/dev/stderr", std::fstream::out | std::fstream::app);
-		// todo: check if it's open
-	}
-	_file_stream = &_base_stream;
-}
+Logger::Logger(const Options& opts) : _opt(opts) { }
 
-Logger::~Logger() {
-	_base_stream.close();
-}
+Logger::Logger(const Logger& src) : _opt(src._opt) { }
+
+Logger::~Logger() { }
 
 void Logger::debug(const std::string& msg) const {
-	if (_opt.enabled_level <= DEBUG)
-		_print_message(DEBUG_MSG, msg, BLUE);
+	if (_opt.level <= DEBUG) {
+		_print_message(DEBUG, msg, BLUE);
+	}
 }
 
 void Logger::info(const std::string& msg) const {
-	if (_opt.enabled_level <= INFO)
-		_print_message(INFO_MSG, msg, GREEN);
+	if (_opt.level <= INFO) {
+		_print_message(INFO, msg, GREEN);
+	}
 }
 
 void Logger::warn(const std::string& msg) const {
-	if (_opt.enabled_level <= WARN)
-		_print_message(WARN_MSG, msg, YELLOW);
+	if (_opt.level <= WARN) {
+		_print_message(WARN, msg, YELLOW);
+	}
+}
+
+void Logger::error(const std::string& msg) const {
+	if (_opt.level <= ERROR) {
+		_print_message(ERROR, msg, RED);
+	}
 }
 
 void Logger::fatal(const std::string& msg) const {
-	if (_opt.enabled_level <= FATAL)
-		_print_message(FATAL_MSG, msg, RED);
+	if (_opt.level <= FATAL) {
+		_print_message(FATAL, msg, RED);
+	}
 }
 
-void Logger::set_up(const Options& opts)
-{
+void Logger::set_up(const Options& opts) {
 	this->_opt = opts;
 }
 
-std::string Logger::_generate_time_code(void) const
-{
+std::string Logger::_generate_time_code(void) const {
 	std::ostringstream str;
 	std::time_t current_time;
 	std::tm* tm;
@@ -75,38 +70,21 @@ std::string Logger::_generate_time_code(void) const
 	return (str.str());
 }
 
-void Logger::_print_message(const std::string & level, const std::string &msg, const std::string & color) const
-{
-	if (!_bfile_output)
-		*_file_stream << _generate_time_code() << " " << color;
-	*_file_stream << level << msg << std::endl;
-	if (!_bfile_output)
-		*_file_stream << BLANK;
-}
+void Logger::_print_message(const Level& level, const std::string& msg,
+		const std::string& color) const {
+	std::ofstream output;
 
-Level logger::string_to_level(const std::string& level) {
-	if (level == "debug") {
-		return DEBUG;
-	} else if (level == "info") {
-		return INFO;
-	} else if (level == "warn") {
-		return WARN;
-	} else if (level == "fatal") {
-		return FATAL;
-	}
-	//throw "bad logger level: " + it->args[1];
-	return FATAL;
-}
+	output.open(_opt.file_name.c_str(), std::fstream::out | std::fstream::app);
 
-std::string logger::level_to_string(const Level& level) {
-	switch (level) {
-		case DEBUG:
-			return "debug";
-		case INFO:
-			return "info";
-		case WARN:
-			return "warn";
-		case FATAL:
-			return "fatal";
+	output << _generate_time_code() << " ";
+	if (_opt.with_color) {
+		output << color;
 	}
+	output << level_to_msg(level) << msg;
+	if (_opt.with_color) {
+		output << BLANK;
+	}
+	output << std::endl;
+
+	output.close();
 }

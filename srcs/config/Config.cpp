@@ -373,9 +373,9 @@ void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
 	}
 	// fill log message level
 	{
-		_log_opts.enabled_level = logger::string_to_level(logger_dir.args.at(1));
+		_log_opts.level = logger::str_to_level(logger_dir.args.at(1));
 		_log.debug(SSTR("filling: logger message level to: " <<
-					logger::level_to_string(_log_opts.enabled_level)));
+					logger::level_to_str(_log_opts.level)));
 	}
 }
 
