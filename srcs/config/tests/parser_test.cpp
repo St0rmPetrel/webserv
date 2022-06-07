@@ -16,7 +16,7 @@ int main(void)
 {
     logger::Options opt;
     //	opt.enabled_level = logger::INFO;
-    opt.enabled_level = logger::DEBUG;
+    opt.level = logger::DEBUG;
     logger::Logger log;
     log.set_up(opt);
 

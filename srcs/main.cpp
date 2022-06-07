@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Set up logger and server according to configuration file
-//	log.set_up(conf.get_logger());
+	log.set_up(conf.get_logger());
 
 	// Serve HTTP connections
 	try {
