@@ -236,6 +236,7 @@ void ServerMux::Route::handle(const std::string& path, const IHandler& handler) 
 		throw ServerMux::Route::ExistHandlerException();
 	}
 	this->_handler = handler.clone();
+	this->_path = path;
 	_mux._add_route(path, this);
 }
 
