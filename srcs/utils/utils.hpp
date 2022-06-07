@@ -11,6 +11,8 @@
 #define STDOUT 1
 #define STDERR 2
 
+#define ENDL "\r\n"
+
 namespace utils {
 	extern bool is_number(const std::string& str);
 };

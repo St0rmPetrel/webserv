@@ -1,6 +1,7 @@
 a.out
-.idea/
 nginx.conf
+.idea/
+cmake-build-debug
+objs/
 cmake-build-debug/
 webserv
-objs

@@ -80,14 +80,13 @@ void ServerMux::bad_request(Response& res, const Request& req) const {
 	}
 	// default
 	res.write_header(Response::BadRequest);
-	res.header.set("Content-Type", "text/html");
 	std::string body = "<html>\n"
 		" <body>\n"
 		"  <h1>400 Bad Request</h1>\n"
 		"  <p>This page isn't work.</p>\n"
 		" </body>\n"
 		"</html>\n";
-	res.write(&(*(body.begin())),&(*(--(body.end()))));
+	res.write(body, http::mime_type_html);
 }
 
 // set_not_found set not found handler
@@ -106,14 +105,13 @@ void ServerMux::not_found(Response& res, const Request& req) const {
 	}
 	// default
 	res.write_header(Response::NotFound);
-	res.header.set("Content-Type", "text/html");
 	std::string body = "<html>\n"
 		" <body>\n"
 		"  <h1>404 Not Found</h1>\n"
 		"  <p>The requested URL was not found on server.</p>\n"
 		" </body>\n"
 		"</html>\n";
-	res.write(&(*(body.begin())),&(*(--(body.end()))));
+	res.write(body, http::mime_type_html);
 }
 
 // set_method_not_allowed set method not allowed handler (405)
@@ -132,14 +130,13 @@ void ServerMux::method_not_allowed(Response& res, const Request& req) const {
 	}
 	// default
 	res.write_header(Response::MethodNotAllowed);
-	res.header.set("Content-Type", "text/html");
 	std::string body = "<html>\n"
 		" <body>\n"
 		"  <h1>405 Not Allowed</h1>\n"
 		"  <p>webserv</p>\n"
 		" </body>\n"
 		"</html>\n";
-	res.write(&(*(body.begin())),&(*(--(body.end()))));
+	res.write(body, http::mime_type_html);
 }
 
 // new_route create new route for set it and than handle (bind to ServerMux)
@@ -239,6 +236,7 @@ void ServerMux::Route::handle(const std::string& path, const IHandler& handler) 
 		throw ServerMux::Route::ExistHandlerException();
 	}
 	this->_handler = handler.clone();
+	this->_path = path;
 	_mux._add_route(path, this);
 }
 
