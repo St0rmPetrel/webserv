@@ -13,8 +13,8 @@
 namespace server {
 	class Server {
 		private:
-			const logger::Logger& _log;
-			Options	              _opts;
+			logger::Logger _log;
+			Options        _opts;
 
 			EventManager          _event_manager;
 			http::RequestParser   _request_parser;

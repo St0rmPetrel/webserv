@@ -11,6 +11,7 @@
 #include "IHandler.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
+#include "../../logger/Logger.hpp"
 
 namespace http {
 	class ServerMux : public IHandler {
@@ -58,7 +59,7 @@ namespace http {
 					std::set<std::pair<std::string, std::string> > _mandatory_headers;
 			};
 		public:
-			ServerMux();
+			ServerMux(const logger::Logger log);
 			ServerMux(const ServerMux& mux);
 			~ServerMux();
 
@@ -77,6 +78,8 @@ namespace http {
 		private:
 			void _add_route(const std::string& path, const Route* route);
 		private:
+			logger::Logger _log;
+
 			// routes in order of priority search
 			// the longest routes path are at the beginning of vector
 			// and searching starts from the longest path to the shortest one

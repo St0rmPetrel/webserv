@@ -8,6 +8,7 @@
 
 #include "ServerMux.hpp"
 #include "Response.hpp"
+#include "../../logger/Logger.hpp"
 
 namespace http {
 	class VirtualServer {
@@ -28,11 +29,19 @@ namespace http {
 				Options();
 			};
 		public:
-			VirtualServer(const Options& opts);
+			VirtualServer(const logger::Logger& log, const Options& opts);
 			VirtualServer(const VirtualServer& vs);
 			~VirtualServer();
+
+			const unsigned short int&             get_port() const;
+			const std::string&                    get_addr() const;
+			const std::set<std::string>&          get_names() const;
+			const std::vector<Options::Location>& get_locations() const;
+		private:
+			logger::Logger _log;
+			Options        _opts;
+		public:
 			ServerMux mux;
-			Options   opts;
 	};
 };
 

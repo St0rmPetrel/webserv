@@ -57,7 +57,7 @@ int EventManager::new_listener(const std::string& addr, unsigned short int port,
 	}
 	// add new listener in to PollFds
 	this->_fds.add_listener(listener);
-	_log.info(SSTR("event_manager: open listener on " << addr << ":" << port <<
+	_log.info(SSTR("[EventManager] open listener on " << addr << ":" << port <<
 				" with sock=" << listener));
 	return listener;
 }
@@ -95,7 +95,7 @@ Event* EventManager::_get_event(int sock, Event::Type type) {
 const std::set<Event*>& EventManager::accept_events() {
 	Event* event;
 
-	_log.debug("start waiting for an event");
+	_log.debug("[EventManager] start waiting for an event");
 	this->_active_events.clear();
 	// wait some action in poll
 	_fds.do_poll();
@@ -103,7 +103,7 @@ const std::set<Event*>& EventManager::accept_events() {
 	const std::set<int>& active_term = _fds.check_term();
 	for (std::set<int>::const_iterator it = active_term.begin();
 			it != active_term.end(); ++it) {
-		_log.debug("receive a termination action");
+		_log.debug("[EventManager] receive a termination action");
 		event = this->_get_event(*it, Event::terminate);
 		this->_active_events.insert(event);
 		return (this->_active_events);
@@ -112,7 +112,7 @@ const std::set<Event*>& EventManager::accept_events() {
 	const std::set<int>& active_clients = _fds.check_clients();
 	for (std::set<int>::const_iterator it = active_clients.begin();
 			it != active_clients.end(); ++it) {
-		_log.debug("receive client action");
+		_log.debug("[EventManager] receive client action");
 		event = this->_get_event(*it, Event::client);
 		this->_active_events.insert(event);
 	}
@@ -120,7 +120,7 @@ const std::set<Event*>& EventManager::accept_events() {
 	const std::set<int>& active_listeners = _fds.check_listeners();
 	for (std::set<int>::const_iterator it = active_listeners.begin();
 			it != active_listeners.end(); ++it) {
-		_log.debug("receive listener action");
+		_log.debug("[EventManager] receive listener action");
 		event = this->_get_event(*it, Event::listener);
 		this->_active_events.insert(event);
 	}
@@ -130,7 +130,7 @@ const std::set<Event*>& EventManager::accept_events() {
 // finish_event finish client event - close according client socket and delete event
 // from _events
 void EventManager::finish_event(Event* event) {
-	_log.debug(SSTR("finish event: sock=" << event->sock ));
+	_log.debug(SSTR("[EventManager] finish event: sock=" << event->sock ));
 	// close socket and delete it from file descriptor warden PollFds
 	this->_fds.erase_sock(event->sock);
 	// delete event from events tree and from heap (all events is allocated on a heap)

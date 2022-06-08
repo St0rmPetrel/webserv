@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 	// Check that number of command line arguments is strictly one - name
 	//  of configuration file of a web server
 	if (argc != 2) {
-		log.fatal("wrong command argument number");  //TODO better message
+		log.fatal("[MAIN] wrong command argument number");  //TODO better message
 		return (1); // TODO error codes put in define or constant enum
 	}
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	}
 	// Walk into this catch block only in case of internal server fatal error
 	catch (const std::exception& ex) { // TODO specific exeption set
-		log.fatal(SSTR("internal server error: " << ex.what()));  //TODO better message
+		log.fatal(SSTR("[MAIN] internal server error: " << ex.what()));  //TODO better message
 		return (3); // TODO error codes put in define or constant
 	}
 	return (0); // TODO error codes put in define or constant enum

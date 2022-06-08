@@ -92,20 +92,20 @@ const std::string Config::_readFile(const char *filename) {
 }
 
 const std::vector<std::string> Config::_lexing(const std::string &filename) {
-	_log.info("start processing a file: " + filename);
+	_log.info("[Config] [Lexing] start processing a file: " + filename);
 	_tokenizer(_readFile(filename.c_str()));
-	_log.debug("lexing: read all file, deleted comments and splitted words into tokens");
+	_log.debug("[Config] [Lexing] read all file, deleted comments and splitted words into tokens");
 	return _tokens;
 }
 
 void Config::_parsing(const std::vector<std::string> &tokens) {
 	std::vector<std::string>::const_iterator it = tokens.begin();
 
-	_log.debug("parsing: start parsing tokens into global module structure");
+	_log.debug("[Config] [Parsing] start parsing tokens into global module structure");
 	std::vector<std::string> name;
 	name.push_back("global");
 	_global_module = _collect_module(name, tokens, it, true);
-	_log.debug("parsing: all directives and modules are filled");
+	_log.debug("[Config] [Parsing] all directives and modules are filled");
 }
 
 Config::Directive Config::_collect_directive(const std::vector<std::string> &tokens) const {
@@ -132,11 +132,11 @@ Config::Module Config::_collect_module(const std::vector<std::string> &name, con
 	for (; it != tokens.end() && (*it != "}" || is_global); ++it) {
 		if (*it == ";") {
 			local_module.directives.push_back(_collect_directive(tokens_accumulator));
-			_log.debug("parsing: filled directive " + tokens_accumulator[0]);
+			_log.debug("[Config] [Parsing] filled directive " + tokens_accumulator[0]);
 			tokens_accumulator.clear();
 		} else if (*it == "{") {
 			local_module.modules.push_back(_collect_module(tokens_accumulator, tokens, ++it, false));
-			_log.debug("parsing: filled module " + tokens_accumulator[0]);
+			_log.debug("[Config] [Parsing] filled module " + tokens_accumulator[0]);
 			tokens_accumulator.clear();
 		} else
 			tokens_accumulator.push_back(*it);
@@ -154,7 +154,7 @@ void Config::_fill_options() {
 		} else if (it->name == "daemon") {
 			// fill daemon option
 		} else {
-			_log.debug(SSTR("filling: unknown directive name: " << it->name));
+			_log.debug(SSTR("[Config] [Filling] unknown directive name: " << it->name));
 			throw FillingUnknownDirectiveException();
 		}
 	}
@@ -163,16 +163,16 @@ void Config::_fill_options() {
 			it != _global_module.modules.end(); ++it) {
 		if (it->name == "http") {
 			_fill_http_options(*it);
-			_log.debug("filling: filled http module");
+			_log.debug("[Config] [Filling] filled http module");
 		} else if (it->name == "events") {
 			// for nginx compatibility
 			continue;
 		} else {
-			_log.fatal(SSTR("filling: unknown module name: " << it->name));
+			_log.fatal(SSTR("[Config] [Filling] unknown module name: " << it->name));
 			throw FillingUnknownModuleException();
 		}
 	}
-	_log.debug("filling: filled global module");
+	_log.debug("[Config] [Filling] filled global module");
 }
 
 void Config::_fill_http_options(const Module& http_module) {
@@ -187,7 +187,7 @@ void Config::_fill_http_options(const Module& http_module) {
 
 			_fill_virtual_server_options(virtual_server_opts, *it);
 			_serv_opts.servers.push_back(virtual_server_opts);
-			_log.debug("filling: filled server module");
+			_log.debug("[Config] [Filling] filled server module");
 		}
 	}
 }
@@ -216,9 +216,9 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 					default_virtual_server_location_opts);
 			_fill_virtual_server_location_options(virtual_server_location_opts, *it);
 			virtual_server_opts.locations.push_back(virtual_server_location_opts);
-			_log.debug("filling: filled location module");
+			_log.debug("[Config] [Filling] filled location module");
 		} else {
-			_log.fatal(SSTR("filling: unknown module name: " << it->name));
+			_log.fatal(SSTR("[Config] [Filling] unknown module name: " << it->name));
 			throw FillingUnknownModuleException();
 		}
 	}
@@ -238,7 +238,7 @@ void Config::_fill_virtual_server_location_options(
 			virtual_server_location_opts.location_match = "/";
 		}
 	}
-	_log.debug(SSTR("filling: fill location match: " <<
+	_log.debug(SSTR("[Config] [Filling] fill location match: " <<
 				virtual_server_location_opts.location_match));
 
 	for (std::vector<Directive>::const_iterator it = location_module.directives.begin();
@@ -254,7 +254,7 @@ void Config::_fill_virtual_server_location_options(
 		} else if ((it->name == "listen") && (location_module.name == "server")) {
 			continue;
 		} else {
-			_log.fatal(SSTR("filling: unknown directive name: " << it->name));
+			_log.fatal(SSTR("[Config] [Filling] unknown directive name: " << it->name));
 			throw FillingUnknownDirectiveException();
 		}
 	}
@@ -264,14 +264,14 @@ void Config::_fill_server_name_directive(
 		http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& server_name_dir) {
 	if (server_name_dir.args.empty()) {
-		_log.fatal(SSTR("filling: empty directive args: " << server_name_dir.name));
+		_log.fatal(SSTR("[Config] [Filling] empty directive args: " << server_name_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
 	// fill server_names
 	for (std::vector<std::string>::const_iterator it = server_name_dir.args.begin();
 			it != server_name_dir.args.end(); ++it) {
 		virtual_server_opts.names.insert(*it);
-		_log.debug(SSTR("filling: add server_name: name=" << *it));
+		_log.debug(SSTR("[Config] [Filling] add server_name: name=" << *it));
 	}
 }
 
@@ -279,13 +279,13 @@ void Config::_fill_error_page_directive(
 		http::VirtualServer::Options::Location& location_opts,
 		const Config::Directive& error_page_dir) {
 	if (error_page_dir.args.size() != 2) {
-		_log.fatal(SSTR("filling: empty directive args: " << error_page_dir.name));
+		_log.fatal(SSTR("[Config] [filling] empty directive args: " << error_page_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
 
 	const std::string& status_code_str = error_page_dir.args.at(0);
 	if (!utils::is_number(status_code_str)) {
-		_log.fatal(SSTR("filling: bad directive args: " << status_code_str));
+		_log.fatal(SSTR("[Config] [Filling] bad directive args: " << status_code_str));
 		throw FillingBadDirectiveArgsException();
 	}
 	int status_code = 0;
@@ -293,7 +293,7 @@ void Config::_fill_error_page_directive(
 
 	location_opts.error_page[http::int_to_status_code(status_code)] =
 		error_page_dir.args.at(1);
-	_log.debug(SSTR("filling: fill error_page: status code=" << status_code <<
+	_log.debug(SSTR("[Config] [Filling] fill error_page: status code=" << status_code <<
 				" error_file_path=" << error_page_dir.args.at(1)));
 }
 
@@ -301,17 +301,17 @@ void Config::_fill_root_directive(
 		http::VirtualServer::Options::Location& location_opts,
 		const Config::Directive& root_dir) {
 	if (root_dir.args.empty()) {
-		_log.fatal(SSTR("filling: empty directive args: " << root_dir.name));
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << root_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
 	location_opts.root = root_dir.args.at(0);
-	_log.debug(SSTR("filling: fill location root: root=" << location_opts.root));
+	_log.debug(SSTR("[Config] [Filling] fill location root: root=" << location_opts.root));
 }
 
 void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& listen_dir) {
 	if (listen_dir.args.empty()) {
-		_log.fatal(SSTR("filling: empty directive args: " << listen_dir.name));
+		_log.fatal(SSTR("[Config] [Filling] empty directive args: " << listen_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
 	// fill addr and port
@@ -325,12 +325,12 @@ void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server
 			const std::string port_str = addr.substr(colon+1);
 
 			if (!utils::is_number(port_str) || port_str.empty()) {
-				_log.fatal(SSTR("filling: bad or empty listen port in addr: " << addr));
+				_log.fatal(SSTR("[Config] [Filling] bad or empty listen port in addr: " << addr));
 				throw FillingBadDirectiveArgsException();
 			}
 			std::istringstream(port_str) >> virtual_server_opts.port;
 		}
-		_log.debug(SSTR("filling: fill listener vs: " << virtual_server_opts.addr <<
+		_log.debug(SSTR("[Config] [Filling] fill listener vs: " << virtual_server_opts.addr <<
 					":" << virtual_server_opts.port));
 	}
 	if (listen_dir.args.size() == 1) {
@@ -341,19 +341,19 @@ void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server
 		const std::string& backlog = listen_dir.args.at(1);
 		std::size_t separator = backlog.find_last_of("backlog=");
 		if (separator == std::string::npos) {
-			_log.fatal(SSTR("filling: bad directive backlog args: " << backlog));
+			_log.fatal(SSTR("[Config] [Filling] bad directive backlog args: " << backlog));
 			throw FillingBadDirectiveArgsException();
 		} else {
 			const std::string backlog_str = backlog.substr(separator+1);
 
 			if (!utils::is_number(backlog_str) || backlog_str.empty()) {
-				_log.fatal(SSTR("filling: bad or empty listen backlog: " << backlog_str));
+				_log.fatal(SSTR("[Config] [Filling] bad or empty listen backlog: " << backlog_str));
 				throw FillingBadDirectiveArgsException();
 			}
 
 			std::istringstream(backlog_str) >> virtual_server_opts.listener_backlog;
 		}
-		_log.debug(SSTR("filling: fill listener backlog: " <<
+		_log.debug(SSTR("[Config] [Filling] fill listener backlog: " <<
 					virtual_server_opts.listener_backlog));
 	}
 }
@@ -365,7 +365,7 @@ void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
 	// fill log output filename
 	{
 		_log_opts.file_name = logger_dir.args.at(0);
-		_log.debug(SSTR("filling: logger output file: " <<
+		_log.debug(SSTR("[Config] [Filling] logger output file: " <<
 					_log_opts.file_name));
 	}
 	if (logger_dir.args.size() == 1) {
@@ -374,7 +374,7 @@ void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
 	// fill log message level
 	{
 		_log_opts.level = logger::str_to_level(logger_dir.args.at(1));
-		_log.debug(SSTR("filling: logger message level to: " <<
+		_log.debug(SSTR("[Config] [Filling] logger message level to: " <<
 					logger::level_to_str(_log_opts.level)));
 	}
 }

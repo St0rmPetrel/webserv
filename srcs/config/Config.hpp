@@ -56,7 +56,7 @@ namespace config {
 		// progress of the program
 		logger::Options _log_opts;
 
-		const logger::Logger &_log;
+		logger::Logger _log;
 
 		std::vector<std::string> _tokens;
 	public:

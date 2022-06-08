@@ -25,7 +25,7 @@ Server::Server(const logger::Logger &log, const Options& opts)
 			listener = _event_manager.new_listener(it->addr, it->port, it->listener_backlog);
 			_listeners_virtual_servers[listener] = std::vector<http::VirtualServer>();
 		}
-		_listeners_virtual_servers[listener].push_back(http::VirtualServer(*it));
+		_listeners_virtual_servers[listener].push_back(http::VirtualServer(_log, *it));
 	}
 }
 
@@ -34,7 +34,7 @@ Server::~Server() { }
 void Server::listen_and_serve() {
 	bool loop = true;
 
-	_log.warn("server: listener and serve: start");
+	_log.warn("[Server] listener and serve: start");
 	while (loop) {
 		// waiting for events
 		const std::set<Event*>& events = _event_manager.accept_events();
@@ -61,10 +61,10 @@ void Server::listen_and_serve() {
 
 					// read raw data from socket
 					int bytes_read = recv((*it)->sock, recv_buf, _opts.recv_buffer_size, 0);
-					_log.debug(SSTR("server: recv raw body: \"" <<
+					_log.debug(SSTR("[Server] recv raw body: \"" <<
 								recv_buf << "\" bytes_read=" << bytes_read));
 					if (bytes_read <= 0) {
-						_log.fatal(SSTR("server: recv socket error client_sock = " << (*it)->sock));
+						_log.fatal(SSTR("[Server] recv socket error client_sock = " << (*it)->sock));
 						_event_manager.finish_event(*it);
 						continue;
 					}
@@ -91,7 +91,7 @@ void Server::listen_and_serve() {
 					}
 					// send response via socket
 					if (_finish_request((*it)->sock, res) < 0) {
-						_log.fatal(SSTR("server: send socket error client_sock = " << (*it)->sock));
+						_log.fatal(SSTR("[Server] send socket error client_sock = " << (*it)->sock));
 						_event_manager.finish_event(*it);
 						continue;
 					}
@@ -111,7 +111,7 @@ void Server::listen_and_serve() {
 			}
 		}
 	}
-	_log.warn("server: listener and serve: end");
+	_log.warn("[Server] listener and serve: end");
 }
 
 // _get_client_virtual_server choice client virtual_server server based on clients
@@ -126,7 +126,7 @@ const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
 	} else {
 		for (std::vector<http::VirtualServer>::const_iterator it = servers.begin();
 				it != servers.end(); ++it) {
-			const std::set<std::string>& server_names = it->opts.names;
+			const std::set<std::string>& server_names = it->get_names();
 			if (server_names.find(req.host) != server_names.end()) {
 				return (*it);
 			}
@@ -155,7 +155,7 @@ int Server::_finish_request(int client_sock, const http::Response& res) {
 int Server::_find_listener(const std::string& addr, unsigned short int port) {
 	for (std::map<int, std::vector<http::VirtualServer> >::const_iterator it =
 			_listeners_virtual_servers.begin(); it != _listeners_virtual_servers.end(); ++it) {
-		if (it->second[0].opts.addr == addr && it->second[0].opts.port == port) {
+		if (it->second[0].get_addr() == addr && it->second[0].get_port() == port) {
 			return (it->first);
 		}
 	}

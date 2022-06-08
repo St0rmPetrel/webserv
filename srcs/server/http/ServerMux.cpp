@@ -7,14 +7,16 @@
 
 using namespace http;
 
-ServerMux::ServerMux()
-	: _bad_request_handler(NULL),
+ServerMux::ServerMux(const logger::Logger log)
+	: _log(log),
+		_bad_request_handler(NULL),
 		_not_found_handler(NULL),
 		_method_not_allowed_handler(NULL)
 { }
 
 ServerMux::ServerMux(const ServerMux& mux)
-	: _bad_request_handler(NULL),
+	: _log(mux._log),
+		_bad_request_handler(NULL),
 		_not_found_handler(NULL),
 		_method_not_allowed_handler(NULL)
 {
@@ -49,6 +51,7 @@ ServerMux::~ServerMux() {
 
 // serve_http select match route in priority order
 void ServerMux::serve_http(Response& res, const Request& req) const {
+	_log.debug("[ServerMux] Hello from server mux");
 	for (std::vector<const Route*>::const_iterator it = _routes.begin();
 			it != _routes.end(); ++it) {
 		if ((*it)->match(req)) {
