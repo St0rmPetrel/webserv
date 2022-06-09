@@ -22,10 +22,10 @@ namespace http {
 					Type        handler_type;
 
 					std::map<Response::StatusCode, std::string> error_page;
+
 					ReturnHandler::Options return_opts;
 					std::string root;
 
-					//
 					Location() : handler_type(FileServer) { }
 				};
 

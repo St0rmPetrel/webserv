@@ -1,4 +1,5 @@
 #include "ReturnHandler.hpp"
+#include "../../utils/utils.hpp"
 
 using namespace http;
 
@@ -11,6 +12,7 @@ ReturnHandler::~ReturnHandler() { }
 
 void ReturnHandler::serve_http(Response& res, const Request& req) const {
 	(void)req;
+	_log.debug(SSTR("[ReturnHandler] Hello from return handler code =" << _opts.code));
 	res.write_header(_opts.code);
 	if (is_redirect_code(_opts.code)) {
 		res.header.set("Location", _opts.url);
@@ -45,5 +47,14 @@ ReturnHandler::Options::Options(const Options& ref)
 	: code(ref.code), url(ref.url), text(ref.text) { }
 
 ReturnHandler::Options::Options() : code(http::Response::OK) { }
+
+ReturnHandler::Options& ReturnHandler::Options::operator=(const ReturnHandler::Options &rh) {
+	if (this == &rh)
+		return (*this);
+	code = rh.code;
+	url = rh.url;
+	text = rh.text;
+	return (*this);
+}
 
 ReturnHandler::Options::~Options() { }

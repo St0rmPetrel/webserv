@@ -250,7 +250,7 @@ void Config::_fill_virtual_server_location_options(
 		} else if (it->name == "index") {
 			// fill index staff
 		} else if (it->name == "return") {
-			// fill return staff
+			_fill_return_directive(virtual_server_location_opts, *it);
 		} else if ((it->name == "listen") && (location_module.name == "server")) {
 			continue;
 		} else {
@@ -308,6 +308,29 @@ void Config::_fill_root_directive(
 	_log.debug(SSTR("[Config] [Filling] fill location root: root=" << location_opts.root));
 }
 
+void Config::_fill_return_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& return_dir) {
+	if (return_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << return_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	const std::string& status_code_str = return_dir.args.at(0);
+	int status_code = 0;
+	std::istringstream(status_code_str) >> status_code;
+
+	location_opts.handler_type = http::VirtualServer::Options::Location::Return;
+	if (return_dir.args.size() == 1) {
+		location_opts.return_opts = http::ReturnHandler::Options(
+				http::int_to_status_code(status_code));
+	} else {
+		location_opts.return_opts = http::ReturnHandler::Options(
+				http::int_to_status_code(status_code), return_dir.args.at(1));
+	}
+	_log.debug("[Config] [Filling] fill location return options");
+}
+
+
 void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& listen_dir) {
 	if (listen_dir.args.empty()) {
@@ -360,6 +383,7 @@ void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server
 
 void Config::_fill_error_log_directive(const Config::Directive& logger_dir) {
 	if (logger_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << logger_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
 	// fill log output filename

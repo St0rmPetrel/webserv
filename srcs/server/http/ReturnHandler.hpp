@@ -19,6 +19,8 @@ namespace http {
 				Options();
 				Options(const Response::StatusCode& code, const std::string& text_or_url = "");
 				Options(const Options& ref);
+
+				Options& operator=(const Options& rh);
 				~Options();
 			};
 
