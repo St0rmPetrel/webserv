@@ -208,7 +208,7 @@ ServerMux::Route& ServerMux::Route::header(const std::pair<std::string, std::str
 // match check http request that it suit the route
 bool ServerMux::Route::match(const Request& req) const {
 	// check path
-	if (_path != req.path) {
+	if (req.path.find(_path) != 0) {
 		return false;
 	}
 	// check host
