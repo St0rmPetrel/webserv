@@ -116,3 +116,14 @@ const std::string http::status_code_to_str(Response::StatusCode code) {
 Response::StatusCode http::int_to_status_code(int status_code) {
 	return static_cast<Response::StatusCode>(status_code);
 }
+
+bool http::is_redirect_code(Response::StatusCode status_code) {
+	switch (status_code) {
+	case Response::MovedPermanently:
+	case Response::PermanentRedirect:
+	case Response::TemporaryRedirect:
+		return true;
+	default:
+		return false;
+	}
+}

@@ -19,6 +19,7 @@ Options &logger::Options::operator=(const logger::Options &rh) {
 		return (*this);
 	level = rh.level;
 	file_name = rh.file_name;
+	with_color = rh.with_color;
 	return (*this);
 }
 

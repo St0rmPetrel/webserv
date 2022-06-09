@@ -7,6 +7,7 @@
 #include <map>
 
 #include "ServerMux.hpp"
+#include "ReturnHandler.hpp"
 #include "Response.hpp"
 #include "../../logger/Logger.hpp"
 
@@ -15,9 +16,17 @@ namespace http {
 		public:
 			struct Options {
 				struct Location {
+					enum Type { FileServer, Return, CGI };
+
 					std::string location_match;
-					std::string root;
+					Type        handler_type;
+
 					std::map<Response::StatusCode, std::string> error_page;
+					ReturnHandler::Options return_opts;
+					std::string root;
+
+					//
+					Location() : handler_type(FileServer) { }
 				};
 
 				unsigned short int    port; // Номер порта
