@@ -179,6 +179,9 @@ namespace config {
 		void _fill_root_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& root_dir);
+		void _fill_return_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& return_dir);
 
 	private:
 		Module _global_module;

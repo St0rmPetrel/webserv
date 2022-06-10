@@ -1,6 +1,7 @@
 #include "VirtualServer.hpp"
 
 #include "SimpleHandler.hpp"
+#include "ReturnHandler.hpp"
 
 using namespace http;
 
@@ -9,7 +10,19 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 
 	for (std::vector<VirtualServer::Options::Location>::const_iterator it =
 			_opts.locations.begin(); it != _opts.locations.end(); ++it) {
-		mux.new_route().handle(it->location_match, SimpleHandler(it->root));
+		// route MUST be handle otherwise memory leaks and undefined behavior
+		ServerMux::Route& route = mux.new_route();
+
+		switch (it->handler_type) {
+		case Options::Location::FileServer:
+			route.handle(it->location_match, SimpleHandler(it->root));
+			break;
+		case Options::Location::Return:
+			route.handle(it->location_match, ReturnHandler(_log, it->return_opts));
+			break;
+		case Options::Location::CGI:
+			break;
+		}
 	}
 }
 

@@ -23,6 +23,9 @@ namespace http {
 		public:
 			enum StatusCode {
 				OK=200,
+				MovedPermanently=301,
+				TemporaryRedirect=307,
+				PermanentRedirect=308,
 				BadRequest=400,
 				NotFound=404,
 				MethodNotAllowed=405,
@@ -66,6 +69,7 @@ namespace http {
 			int              _protocol_version;
 	};
 
+	extern bool is_redirect_code(Response::StatusCode status_code);
 	extern Response::StatusCode int_to_status_code(int status_code);
 	extern const std::string status_code_to_str(Response::StatusCode code);
 }; // namespace http
