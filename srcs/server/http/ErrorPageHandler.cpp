@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "ErrorPageHandler.hpp"
 #include "../../utils/utils.hpp"
 
@@ -11,15 +13,16 @@ ErrorPageHandler::ErrorPageHandler(const logger::Logger& log, const Options& opt
 		// detect page mime_type
 		page.mime_type = utils::detect_file_mime_type(it->second);
 		// read file
-		std::ifstream file(it->second);
-		if (file.fail()) {
+		std::ifstream ifs;
+		ifs.open(it->second.c_str(), std::ifstream::in);
+		if (ifs.fail()) {
 			_log.fatal(SSTR(
 					"[ErrorPageHandler] [constructor] fail to open file with path: " <<
 					it->second));
 			throw FailOpenFileException();
 		}
 		std::stringstream buffer;
-		buffer << file.rdbuf();
+		buffer << ifs.rdbuf();
 		page.body = buffer.str();
 		// save data in _pages
 		_pages[it->first] = page;
