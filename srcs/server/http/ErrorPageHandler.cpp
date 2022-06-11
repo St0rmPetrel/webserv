@@ -1,4 +1,5 @@
 #include "ErrorPageHandler.hpp"
+#include "../../utils/utils.hpp"
 
 using namespace http;
 
@@ -11,6 +12,12 @@ ErrorPageHandler::ErrorPageHandler(const logger::Logger& log, const Options& opt
 		page.mime_type = utils::detect_file_mime_type(it->second);
 		// read file
 		std::ifstream file(it->second);
+		if (file.fail()) {
+			_log.fatal(SSTR(
+					"[ErrorPageHandler] [constructor] fail to open file with path: " <<
+					it->second));
+			throw FailOpenFileException();
+		}
 		std::stringstream buffer;
 		buffer << file.rdbuf();
 		page.body = buffer.str();
@@ -40,4 +47,8 @@ void ErrorPageHandler::serve_http(Response& res, const Request& req) const {
 
 IHandler* ErrorPageHandler::clone() const {
 	return new ErrorPageHandler(*this);
+}
+
+const char* ErrorPageHandler::FailOpenFileException::what() const throw() {
+	return "fail to open file";
 }

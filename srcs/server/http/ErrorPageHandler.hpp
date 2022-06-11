@@ -18,6 +18,10 @@ namespace http {
 				std::string body;
 				std::string mime_type;
 			};
+
+			struct FailOpenFileException : public std::exception {
+				virtual const char* what() const throw();
+			};
 		private:
 			const logger::Logger _log;
 
