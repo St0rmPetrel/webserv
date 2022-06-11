@@ -59,6 +59,9 @@ namespace http {
 					const std::string& type = mime_type_txt);
 			void write(const std::string& str,
 					const std::string& type = mime_type_txt);
+
+			const StatusCode& get_status_code() const;
+			bool              is_body() const;
 		public:
 			Header header;
 		private:
