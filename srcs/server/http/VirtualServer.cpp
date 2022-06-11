@@ -1,7 +1,7 @@
 #include "VirtualServer.hpp"
-
 #include "SimpleHandler.hpp"
 #include "ReturnHandler.hpp"
+#include "ErrorPageHandler.hpp"
 
 using namespace http;
 
@@ -10,9 +10,9 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 
 	for (std::vector<VirtualServer::Options::Location>::const_iterator it =
 			_opts.locations.begin(); it != _opts.locations.end(); ++it) {
-		// route MUST be handle otherwise memory leaks and undefined behavior
 		ServerMux::Route& route = mux.new_route();
 
+		route.set_error_handler(ErrorPageHandler(_log, it->error_page_opts));
 		switch (it->handler_type) {
 		case Options::Location::FileServer:
 			route.handle(it->location_match, SimpleHandler(it->root));

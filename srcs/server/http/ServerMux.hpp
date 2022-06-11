@@ -49,9 +49,12 @@ namespace http {
 
 					void      serve_http(Response& res, const Request& req) const;
 					IHandler* clone() const;
+
+					void set_error_handler(const IHandler& error_handler);
 				private:
 					ServerMux&  _mux;
 					IHandler*   _handler;
+					IHandler*   _error_handler;
 					std::string _path;
 
 					std::set<std::string>                          _allow_methods;
@@ -80,6 +83,8 @@ namespace http {
 		private:
 			logger::Logger _log;
 
+			// for save memory managment between new_route and handle functions
+			IHandler* _new_route;
 			// routes in order of priority search
 			// the longest routes path are at the beginning of vector
 			// and searching starts from the longest path to the shortest one

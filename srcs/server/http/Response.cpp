@@ -50,6 +50,14 @@ void Response::write(const std::string& str, const std::string& type) {
 	header.set_content(_body_size, type);
 }
 
+const Response::StatusCode& Response::get_status_code() const {
+	return _status;
+}
+
+bool Response::is_body() const {
+	return !_body.empty();
+}
+
 Response::Header::Header() { }
 
 Response::Header::~Header() { }

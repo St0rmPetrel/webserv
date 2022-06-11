@@ -9,6 +9,7 @@ using namespace http;
 
 ServerMux::ServerMux(const logger::Logger log)
 	: _log(log),
+		_new_route(NULL),
 		_bad_request_handler(NULL),
 		_not_found_handler(NULL),
 		_method_not_allowed_handler(NULL)
@@ -16,10 +17,15 @@ ServerMux::ServerMux(const logger::Logger log)
 
 ServerMux::ServerMux(const ServerMux& mux)
 	: _log(mux._log),
+		_new_route(NULL),
 		_bad_request_handler(NULL),
 		_not_found_handler(NULL),
 		_method_not_allowed_handler(NULL)
 {
+	// copy new route
+	if (mux._new_route != NULL) {
+		this->_new_route = mux._new_route->clone();
+	}
 	// copy all handlers
 	if (mux._bad_request_handler != NULL) {
 		this->_bad_request_handler = mux._bad_request_handler->clone();
@@ -38,6 +44,8 @@ ServerMux::ServerMux(const ServerMux& mux)
 }
 
 ServerMux::~ServerMux() {
+	// delete new_route
+	delete _new_route;
 	// delete all handlers
 	delete _bad_request_handler;
 	delete _not_found_handler;
@@ -144,7 +152,12 @@ void ServerMux::method_not_allowed(Response& res, const Request& req) const {
 
 // new_route create new route for set it and than handle (bind to ServerMux)
 ServerMux::Route& ServerMux::new_route() {
-	return *(new ServerMux::Route(*this));
+	if (_new_route != NULL) {
+		delete _new_route;
+		_new_route = NULL;
+	}
+	_new_route = new ServerMux::Route(*this);
+	return *(dynamic_cast<Route*>(_new_route));
 }
 
 // _add_route add configured route in to ServerMux (bind route to ServerMux)
@@ -170,19 +183,34 @@ const char* ServerMux::HandlerExistException::what() const throw() {
 	return "handler already set";
 }
 
-ServerMux::Route::Route(ServerMux& mux) : _mux(mux), _handler(NULL) { }
+ServerMux::Route::Route(ServerMux& mux)
+	: _mux(mux)
+	  , _handler(NULL)
+	  , _error_handler(NULL)
+{ }
 
 ServerMux::Route::Route(const ServerMux::Route& r)
 	: _mux(r._mux)
-	  , _handler(r._handler->clone())
 	  , _path(r._path)
 	  , _allow_methods(r._allow_methods)
 	  , _allow_hosts(r._allow_hosts)
 	  , _mandatory_headers(r._mandatory_headers)
-{ }
+{
+	if (r._handler != NULL) {
+		_handler = r._handler->clone();
+	} else {
+		_handler = NULL;
+	}
+	if (r._error_handler != NULL) {
+		_error_handler = r._error_handler->clone();
+	} else {
+		_error_handler = NULL;
+	}
+}
 
 ServerMux::Route::~Route() {
 	delete _handler;
+	delete _error_handler;
 }
 
 // method add new http allowed method in to route
@@ -241,6 +269,7 @@ void ServerMux::Route::handle(const std::string& path, const IHandler& handler) 
 	this->_handler = handler.clone();
 	this->_path = path;
 	_mux._add_route(path, this);
+	_mux._new_route = NULL;
 }
 
 // serve_http calls serve_http function of bind to route handler
@@ -249,11 +278,22 @@ void ServerMux::Route::serve_http(Response& res, const Request& req) const {
 		throw ServerMux::Route::EmptyHandlerException();
 	}
 	this->_handler->serve_http(res, req);
+	if (this->_error_handler != NULL) {
+		this->_error_handler->serve_http(res, req);
+	}
 }
 
 // clone deep copy on heap a Route
 IHandler* ServerMux::Route::clone() const {
 	return (new ServerMux::Route(*this));
+}
+
+void ServerMux::Route::set_error_handler(const IHandler& error_handler) {
+	if (_error_handler != NULL) {
+		delete _error_handler;
+		_error_handler = NULL;
+	}
+	_error_handler = error_handler.clone();
 }
 
 const char* ServerMux::Route::EmptyHandlerException::what() const throw() {

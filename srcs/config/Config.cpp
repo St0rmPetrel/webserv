@@ -291,7 +291,7 @@ void Config::_fill_error_page_directive(
 	int status_code = 0;
 	std::istringstream(status_code_str) >> status_code;
 
-	location_opts.error_page[http::int_to_status_code(status_code)] =
+	location_opts.error_page_opts.pages_path[http::int_to_status_code(status_code)] =
 		error_page_dir.args.at(1);
 	_log.debug(SSTR("[Config] [Filling] fill error_page: status code=" << status_code <<
 				" error_file_path=" << error_page_dir.args.at(1)));
