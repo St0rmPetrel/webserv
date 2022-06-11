@@ -183,19 +183,34 @@ const char* ServerMux::HandlerExistException::what() const throw() {
 	return "handler already set";
 }
 
-ServerMux::Route::Route(ServerMux& mux) : _mux(mux), _handler(NULL) { }
+ServerMux::Route::Route(ServerMux& mux)
+	: _mux(mux)
+	  , _handler(NULL)
+	  , _error_handler(NULL)
+{ }
 
 ServerMux::Route::Route(const ServerMux::Route& r)
 	: _mux(r._mux)
-	  , _handler(r._handler->clone())
 	  , _path(r._path)
 	  , _allow_methods(r._allow_methods)
 	  , _allow_hosts(r._allow_hosts)
 	  , _mandatory_headers(r._mandatory_headers)
-{ }
+{
+	if (r._handler != NULL) {
+		_handler = r._handler->clone();
+	} else {
+		_handler = NULL;
+	}
+	if (r._error_handler != NULL) {
+		_error_handler = r._error_handler->clone();
+	} else {
+		_error_handler = NULL;
+	}
+}
 
 ServerMux::Route::~Route() {
 	delete _handler;
+	delete _error_handler;
 }
 
 // method add new http allowed method in to route
@@ -263,6 +278,9 @@ void ServerMux::Route::serve_http(Response& res, const Request& req) const {
 		throw ServerMux::Route::EmptyHandlerException();
 	}
 	this->_handler->serve_http(res, req);
+	if (this->_error_handler != NULL) {
+		this->_error_handler->serve_http(res, req);
+	}
 }
 
 // clone deep copy on heap a Route
