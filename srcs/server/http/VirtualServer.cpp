@@ -10,7 +10,6 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 
 	for (std::vector<VirtualServer::Options::Location>::const_iterator it =
 			_opts.locations.begin(); it != _opts.locations.end(); ++it) {
-		// route MUST be handle otherwise memory leaks and undefined behavior
 		ServerMux::Route& route = mux.new_route();
 
 		switch (it->handler_type) {

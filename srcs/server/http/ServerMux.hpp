@@ -80,6 +80,7 @@ namespace http {
 		private:
 			logger::Logger _log;
 
+			IHandler* _new_route;
 			// routes in order of priority search
 			// the longest routes path are at the beginning of vector
 			// and searching starts from the longest path to the shortest one
