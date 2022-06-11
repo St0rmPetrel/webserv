@@ -288,6 +288,14 @@ IHandler* ServerMux::Route::clone() const {
 	return (new ServerMux::Route(*this));
 }
 
+void ServerMux::Route::set_error_handler(const IHandler& error_handler) {
+	if (_error_handler != NULL) {
+		delete _error_handler;
+		_error_handler = NULL;
+	}
+	_error_handler = error_handler.clone();
+}
+
 const char* ServerMux::Route::EmptyHandlerException::what() const throw() {
 	return "handler not bind to route";
 }

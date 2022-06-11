@@ -29,10 +29,12 @@ void ErrorPageHandler::serve_http(Response& res, const Request& req) const {
 	if (res.is_body()) {
 		return ;
 	}
-	if (_pages.find(res.get_status_code()) == _pages.end()) {
+	std::map<Response::StatusCode, ErrorPageHandler::ErrorPage>::const_iterator
+		error_page = _pages.find(res.get_status_code());
+	if (error_page == _pages.end()) {
 		return ;
 	}
-	const ErrorPageHandler::ErrorPage& page = _pages(res.get_status_code());
+	const ErrorPageHandler::ErrorPage& page = error_page->second;
 	res.write(page.body, page.mime_type);
 }
 

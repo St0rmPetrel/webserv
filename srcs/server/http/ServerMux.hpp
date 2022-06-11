@@ -49,6 +49,8 @@ namespace http {
 
 					void      serve_http(Response& res, const Request& req) const;
 					IHandler* clone() const;
+
+					void set_error_handler(const IHandler& error_handler);
 				private:
 					ServerMux&  _mux;
 					IHandler*   _handler;
