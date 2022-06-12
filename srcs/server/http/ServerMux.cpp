@@ -185,8 +185,6 @@ const char* ServerMux::HandlerExistException::what() const throw() {
 
 ServerMux::Route::Route(ServerMux& mux)
 	: _mux(mux)
-	  , _handler(NULL)
-	  , _error_handler(NULL)
 { }
 
 ServerMux::Route::Route(const ServerMux::Route& r)
@@ -196,21 +194,17 @@ ServerMux::Route::Route(const ServerMux::Route& r)
 	  , _allow_hosts(r._allow_hosts)
 	  , _mandatory_headers(r._mandatory_headers)
 {
-	if (r._handler != NULL) {
-		_handler = r._handler->clone();
-	} else {
-		_handler = NULL;
-	}
-	if (r._error_handler != NULL) {
-		_error_handler = r._error_handler->clone();
-	} else {
-		_error_handler = NULL;
+	for (std::vector<IHandler*>::const_iterator it = r._handler_chain.begin();
+			it != r._handler_chain.end(); ++it) {
+		_handler_chain.push_back((*it)->clone());
 	}
 }
 
 ServerMux::Route::~Route() {
-	delete _handler;
-	delete _error_handler;
+	for (std::vector<IHandler*>::const_iterator it = _handler_chain.begin();
+			it != _handler_chain.end(); ++it) {
+		delete *it;
+	}
 }
 
 // method add new http allowed method in to route
@@ -260,13 +254,18 @@ bool ServerMux::Route::match(const Request& req) const {
 	return true;
 }
 
-// handle registers the handler for the given pattern.
-// If a handler already exists for pattern, handle throw exception.
-void ServerMux::Route::handle(const std::string& path, const IHandler& handler) {
-	if (this->_handler != NULL) {
+void ServerMux::Route::push_back_handler(const IHandler& handler) {
+	this->_handler_chain.push_back(handler.clone());
+}
+
+void ServerMux::Route::mux_register(const std::string& path) {
+	if (_mux._new_route == NULL) {
 		throw ServerMux::Route::ExistHandlerException();
 	}
-	this->_handler = handler.clone();
+	if (_handler_chain.empty()) {
+		throw ServerMux::Route::EmptyHandlerException();
+	}
+
 	this->_path = path;
 	_mux._add_route(path, this);
 	_mux._new_route = NULL;
@@ -274,26 +273,15 @@ void ServerMux::Route::handle(const std::string& path, const IHandler& handler) 
 
 // serve_http calls serve_http function of bind to route handler
 void ServerMux::Route::serve_http(Response& res, const Request& req) const {
-	if (this->_handler == NULL) {
-		throw ServerMux::Route::EmptyHandlerException();
-	}
-	this->_handler->serve_http(res, req);
-	if (this->_error_handler != NULL) {
-		this->_error_handler->serve_http(res, req);
+	for (std::vector<IHandler*>::const_iterator it = _handler_chain.begin();
+			it != _handler_chain.end(); ++it) {
+		(*it)->serve_http(res, req);
 	}
 }
 
 // clone deep copy on heap a Route
 IHandler* ServerMux::Route::clone() const {
 	return (new ServerMux::Route(*this));
-}
-
-void ServerMux::Route::set_error_handler(const IHandler& error_handler) {
-	if (_error_handler != NULL) {
-		delete _error_handler;
-		_error_handler = NULL;
-	}
-	_error_handler = error_handler.clone();
 }
 
 const char* ServerMux::Route::EmptyHandlerException::what() const throw() {

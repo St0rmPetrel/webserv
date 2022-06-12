@@ -43,19 +43,15 @@ namespace http {
 
 					bool match(const Request& req) const;
 
-					// handle registers the handler for the given pattern.
-					// If a handler already exists for pattern, handle throw exception.
-					void handle(const std::string& path, const IHandler& handler);
+					void push_back_handler(const IHandler& handler);
+					void mux_register(const std::string& path);
 
 					void      serve_http(Response& res, const Request& req) const;
 					IHandler* clone() const;
-
-					void set_error_handler(const IHandler& error_handler);
 				private:
-					ServerMux&  _mux;
-					IHandler*   _handler;
-					IHandler*   _error_handler;
-					std::string _path;
+					ServerMux&             _mux;
+					std::string            _path;
+					std::vector<IHandler*> _handler_chain;
 
 					std::set<std::string>                          _allow_methods;
 					std::set<std::string>                          _allow_hosts;
