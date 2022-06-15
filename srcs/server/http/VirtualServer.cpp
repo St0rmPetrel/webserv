@@ -12,6 +12,13 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 			_opts.locations.begin(); it != _opts.locations.end(); ++it) {
 		ServerMux::Route& route = mux.new_route();
 
+		// set allow methods to route
+		for (std::set<std::string>::const_iterator am_it = it->allow_methods.begin();
+				am_it != it->allow_methods.end(); ++it) {
+			route.method(*am_it);
+		}
+
+		// set handler chain bound to route
 		switch (it->handler_type) {
 		case Options::Location::FileServer:
 			route.push_back_handler(SimpleHandler(it->root));

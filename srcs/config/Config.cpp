@@ -247,6 +247,8 @@ void Config::_fill_virtual_server_location_options(
 			_fill_root_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "error_page") {
 			_fill_error_page_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "allow_methods") {
+			_fill_allow_methods_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "index") {
 			// fill index staff
 		} else if (it->name == "return") {
@@ -295,6 +297,20 @@ void Config::_fill_error_page_directive(
 		error_page_dir.args.at(1);
 	_log.debug(SSTR("[Config] [Filling] fill error_page: status code=" << status_code <<
 				" error_file_path=" << error_page_dir.args.at(1)));
+}
+
+void Config::_fill_allow_methods_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& allow_methods_dir) {
+	if (allow_methods_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [filling] empty directive args: " << allow_methods_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	for (std::vector<std::string>::const_iterator it = allow_methods_dir.args.begin();
+			it != allow_methods_dir.args.end(); ++it) {
+		location_opts.allow_methods.insert(*it);
+	}
+	_log.debug("[Config] [Filling] fill allow_methods");
 }
 
 void Config::_fill_root_directive(

@@ -19,8 +19,9 @@ namespace http {
 				struct Location {
 					enum Type { FileServer, Return, CGI };
 
-					std::string location_match;
-					Type        handler_type;
+					std::string           location_match;
+					Type                  handler_type;
+					std::set<std::string> allow_methods;
 
 					ErrorPageHandler::Options error_page_opts;
 					ReturnHandler::Options    return_opts;
