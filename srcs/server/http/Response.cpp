@@ -116,6 +116,8 @@ const std::string http::status_code_to_str(Response::StatusCode code) {
 			return "Not Found";
 		case Response::MethodNotAllowed:
 			return "Method Not Allowed";
+		case Response::InternalServerError:
+			return "Internal Server Error";
 		default:
 			return "Not Found";
 	}
