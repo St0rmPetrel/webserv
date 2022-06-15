@@ -12,17 +12,25 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 			_opts.locations.begin(); it != _opts.locations.end(); ++it) {
 		ServerMux::Route& route = mux.new_route();
 
-		route.set_error_handler(ErrorPageHandler(_log, it->error_page_opts));
+		// set allow methods to route
+		for (std::set<std::string>::const_iterator am_it = it->allow_methods.begin();
+				am_it != it->allow_methods.end(); ++it) {
+			route.method(*am_it);
+		}
+
+		// set handler chain bound to route
 		switch (it->handler_type) {
 		case Options::Location::FileServer:
-			route.handle(it->location_match, SimpleHandler(it->root));
+			route.push_back_handler(SimpleHandler(it->root));
 			break;
 		case Options::Location::Return:
-			route.handle(it->location_match, ReturnHandler(_log, it->return_opts));
+			route.push_back_handler(ReturnHandler(_log, it->return_opts));
 			break;
 		case Options::Location::CGI:
 			break;
 		}
+		route.push_back_handler(ErrorPageHandler(_log, it->error_page_opts));
+		route.mux_register(it->location_match);
 	}
 }
 

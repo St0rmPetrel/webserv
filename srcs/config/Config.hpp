@@ -176,6 +176,9 @@ namespace config {
 		void _fill_error_page_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& error_page_dir);
+		void _fill_allow_methods_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& allow_methods_dir);
 		void _fill_root_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& root_dir);
