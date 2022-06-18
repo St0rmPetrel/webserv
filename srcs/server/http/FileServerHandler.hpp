@@ -28,10 +28,10 @@ namespace http {
 			void serve_http(Response& res, const Request& req) const;
 			IHandler* clone() const;
 
-			void bad_request(Response& res, const Request& req) const;
-			void not_found(Response& res, const Request& req) const;
-			void method_not_allowed(Response& res, const Request& req) const;
-			void internal_server_error(Response& res, const Request& req) const;
+			void bad_request(Response& res) const;
+			void not_found(Response& res) const;
+			void method_not_allowed(Response& res) const;
+			void internal_server_error(Response& res) const;
 
 			static bool path_is_valid(const std::string& path);
 		private:

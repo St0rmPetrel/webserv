@@ -86,7 +86,7 @@ void Server::listen_and_serve() {
 						case http::RequestParser::ParsingIncompleted :
 							continue;
 						case http::RequestParser::ParsingError :
-							virtual_server.mux.bad_request(res, req);
+							virtual_server.mux.bad_request(res);
 							break;
 					}
 					// send response via socket
