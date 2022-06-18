@@ -83,6 +83,20 @@ void FileServerHandler::internal_server_error(Response& res) const {
 
 bool FileServerHandler::path_is_valid(const std::string& path) {
 	(void)path;
+	// In most cases URL path validation does via regex
+	// I can't do that because of the subject
+	// so that simple validation check that path is absolute
+	// and go up of directory tree is forbidden
+
+	if (path.emty()) {
+		return false;
+	}
+	if (path.find("..") != std::string::npos) {
+		return false;
+	}
+	if (path[0] != '/') {
+		return false;
+	}
 	return true;
 }
 
