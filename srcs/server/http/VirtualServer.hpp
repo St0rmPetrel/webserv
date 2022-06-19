@@ -27,8 +27,6 @@ namespace http {
 					ErrorPageHandler::Options  error_page_opts;
 					ReturnHandler::Options     return_opts;
 					FileServerHandler::Options file_server_opts;
-					// TODO legacy
-					std::string               root;
 
 					Location() : handler_type(FileServer) { }
 				};

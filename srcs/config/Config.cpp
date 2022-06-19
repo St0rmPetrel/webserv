@@ -251,6 +251,8 @@ void Config::_fill_virtual_server_location_options(
 			_fill_allow_methods_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "index") {
 			// fill index staff
+		} else if (it->name == "autoindex") {
+			// fill index staff
 		} else if (it->name == "return") {
 			_fill_return_directive(virtual_server_location_opts, *it);
 		} else if ((it->name == "listen") && (location_module.name == "server")) {
@@ -320,8 +322,9 @@ void Config::_fill_root_directive(
 		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << root_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
-	location_opts.root = root_dir.args.at(0);
-	_log.debug(SSTR("[Config] [Filling] fill location root: root=" << location_opts.root));
+	location_opts.file_server_opts.root = root_dir.args.at(0);
+	_log.debug(SSTR("[Config] [Filling] fill location root: root=" <<
+				location_opts.file_server_opts.root));
 }
 
 void Config::_fill_return_directive(

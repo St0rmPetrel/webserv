@@ -10,9 +10,17 @@
 
 namespace http {
 	const std::string mime_type_html = "text/html";
-	const std::string mime_type_gif  = "image/gif";
-	const std::string mime_type_json  = "application/json";
+	const std::string mime_type_css  = "text/css";
 	const std::string mime_type_txt  = "text/plain";
+
+	const std::string mime_type_gif  = "image/gif";
+	const std::string mime_type_jpeg  = "image/jpeg";
+	const std::string mime_type_png  = "image/png";
+	const std::string mime_type_webp  = "image/webp";
+
+	const std::string mime_type_bin  = "application/octet-stream";
+	const std::string mime_type_json  = "application/json";
+	const std::string mime_type_js  = "application/javascript";
 
 	enum ConnectionStatus {
 		KeepAlive,

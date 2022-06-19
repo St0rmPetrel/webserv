@@ -1,4 +1,10 @@
+#include <string>
+#include <fstream>
+#include <dirent.h>
+#include <sys/types.h>
+
 #include "FileServerHandler.hpp"
+#include "../../utils/utils.hpp"
 
 using namespace http;
 
@@ -88,7 +94,7 @@ bool FileServerHandler::path_is_valid(const std::string& path) {
 	// so that simple validation check that path is absolute
 	// and go up of directory tree is forbidden
 
-	if (path.emty()) {
+	if (path.empty()) {
 		return false;
 	}
 	if (path.find("..") != std::string::npos) {
@@ -101,8 +107,61 @@ bool FileServerHandler::path_is_valid(const std::string& path) {
 }
 
 void FileServerHandler::get_file(Response& res, const Request& req) const {
-	(void)res;
-	(void)req;
+	std::string   path = _opts.root + req.path;
+
+	//TODO check that file is directory
+	_get_file(res, path);
+}
+
+void FileServerHandler::_get_file(Response& res, const std::string& path) const {
+	std::ifstream ifs;
+
+	_log.info(SSTR("[FileServerHandler] GET FILE path =" << path));
+	ifs.open(path.c_str(), std::ifstream::in);
+	if (ifs.fail()) {
+		not_found(res);
+		return;
+	}
+	std::stringstream buffer;
+	buffer << ifs.rdbuf();
+	res.write_header(Response::OK);
+	res.write(buffer.str(), utils::detect_file_mime_type(path));
+}
+
+void FileServerHandler::_get_dir(Response& res, const std::string& path) const {
+	_log.info(SSTR("[FileServerHandler] GET DIR path =" << path));
+	if (!_opts.autoindex && _opts.index.empty()) {
+		not_found(res);
+		return ;
+	}
+	std::set<std::string> entry_names;
+	// read file names in directory
+	{
+		struct dirent *entry = NULL;
+		DIR *dir = opendir(path.c_str());
+		if (dir == NULL) {
+			not_found(res);
+			return;
+		}
+		while ((entry = readdir(dir)) != NULL) {
+			std::string entry_name = std::string(entry->d_name);
+			entry_names.insert(entry_name);
+			_log.debug(SSTR("[FileServerHandler] find in dir=" << path << " file=" << entry_name));
+		}
+		closedir(dir);
+	}
+	// check index
+	for (std::set<std::string>::const_iterator it = _opts.index.begin(); it != _opts.index.end();
+			++it) {
+		std::set<std::string>::const_iterator index_entry_name = entry_names.find(*it);
+		if (index_entry_name != entry_names.end()) {
+			// TODO get_dir_or_file
+			_get_file(res, path + "/" + *index_entry_name);
+			return;
+		}
+	}
+	// make autoindex
+	not_found(res);
 }
 
 void FileServerHandler::post_file(Response& res, const Request& req) const {
