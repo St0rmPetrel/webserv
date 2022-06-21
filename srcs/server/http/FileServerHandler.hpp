@@ -16,6 +16,10 @@ namespace http {
 				std::string           root;
 				bool                  autoindex;
 				std::set<std::string> index;
+
+				Options();
+				Options(const Options& ref);
+				~Options();
 			};
 		private:
 			const logger::Logger _log;
@@ -39,6 +43,7 @@ namespace http {
 			void post_file(Response& res, const Request& req) const;
 			void delete_file(Response& res, const Request& req) const;
 
+			void _get_dir_or_file(Response& res, const std::string& path) const;
 			void _get_file(Response& res, const std::string& path) const;
 			void _get_dir(Response& res, const std::string& path) const;
 	}; /* FileServerHandler */

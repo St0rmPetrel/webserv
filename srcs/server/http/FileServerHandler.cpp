@@ -109,8 +109,24 @@ bool FileServerHandler::path_is_valid(const std::string& path) {
 void FileServerHandler::get_file(Response& res, const Request& req) const {
 	std::string   path = _opts.root + req.path;
 
-	//TODO check that file is directory
-	_get_file(res, path);
+	_get_dir_or_file(res, path);
+}
+
+void FileServerHandler::_get_dir_or_file(Response& res, const std::string& path) const {
+	bool is_directory = false;
+	// check if file is directory
+	{
+		DIR *dir = opendir(path.c_str());
+		if (dir != NULL) {
+			closedir(dir);
+			is_directory = true;
+		}
+	}
+	if (is_directory) {
+		_get_dir(res, path);
+	} else {
+		_get_file(res, path);
+	}
 }
 
 void FileServerHandler::_get_file(Response& res, const std::string& path) const {
@@ -155,8 +171,7 @@ void FileServerHandler::_get_dir(Response& res, const std::string& path) const {
 			++it) {
 		std::set<std::string>::const_iterator index_entry_name = entry_names.find(*it);
 		if (index_entry_name != entry_names.end()) {
-			// TODO get_dir_or_file
-			_get_file(res, path + "/" + *index_entry_name);
+			_get_dir_or_file(res, path + "/" + *index_entry_name);
 			return;
 		}
 	}
@@ -173,3 +188,10 @@ void FileServerHandler::delete_file(Response& res, const Request& req) const {
 	(void)res;
 	(void)req;
 }
+
+FileServerHandler::Options::Options() : autoindex(false) { }
+
+FileServerHandler::Options::Options(const Options& ref)
+	: root(ref.root), autoindex(ref.autoindex), index(ref.index) { }
+
+FileServerHandler::Options::~Options() { }
