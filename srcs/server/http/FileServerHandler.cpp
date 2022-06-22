@@ -109,10 +109,10 @@ bool FileServerHandler::path_is_valid(const std::string& path) {
 void FileServerHandler::get_file(Response& res, const Request& req) const {
 	std::string   path = _opts.root + req.path;
 
-	_get_dir_or_file(res, path);
+	_get_dir_or_file(res, req, path);
 }
 
-void FileServerHandler::_get_dir_or_file(Response& res, const std::string& path) const {
+void FileServerHandler::_get_dir_or_file(Response& res, const Request& req, const std::string& path) const {
 	bool is_directory = false;
 	// check if file is directory
 	{
@@ -123,7 +123,7 @@ void FileServerHandler::_get_dir_or_file(Response& res, const std::string& path)
 		}
 	}
 	if (is_directory) {
-		_get_dir(res, path);
+		_get_dir(res, req, path);
 	} else {
 		_get_file(res, path);
 	}
@@ -144,7 +144,7 @@ void FileServerHandler::_get_file(Response& res, const std::string& path) const 
 	res.write(buffer.str(), utils::detect_file_mime_type(path));
 }
 
-void FileServerHandler::_get_dir(Response& res, const std::string& path) const {
+void FileServerHandler::_get_dir(Response& res, const Request& req, const std::string& path) const {
 	_log.info(SSTR("[FileServerHandler] GET DIR path =" << path));
 	if (!_opts.autoindex && _opts.index.empty()) {
 		not_found(res);
@@ -171,12 +171,38 @@ void FileServerHandler::_get_dir(Response& res, const std::string& path) const {
 			++it) {
 		std::set<std::string>::const_iterator index_entry_name = entry_names.find(*it);
 		if (index_entry_name != entry_names.end()) {
-			_get_dir_or_file(res, path + "/" + *index_entry_name);
+			_get_dir_or_file(res, req, path + "/" + *index_entry_name);
 			return;
 		}
 	}
 	// make autoindex
-	not_found(res);
+	if (_opts.autoindex) {
+		res.write_header(Response::OK);
+		std::string files_list;
+		std::map<std::string, std::string>::const_iterator host = req.headers.find("host");
+		if (host == req.headers.end()) {
+			_log.error("[FileServerHandler] not found host header in request");
+			not_found(res);
+			return;
+		}
+		for (std::set<std::string>::const_iterator it = entry_names.begin();
+				it != entry_names.end(); ++it) {
+			std::string href = "<p><a href=http://" +
+				host->second + req.path + "/" + *it +">"+
+				*it + "</a></p>\n";
+			files_list += href;
+		}
+		std::string body = "<html>\n"
+			"<body>\n"
+			"  <h1>Index of "+path+"</h1>\n" +
+			files_list +
+			"</body>\n"
+			"</html>\n";
+		res.write(body, http::mime_type_html);
+
+	} else {
+		not_found(res);
+	}
 }
 
 void FileServerHandler::post_file(Response& res, const Request& req) const {
