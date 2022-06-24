@@ -39,13 +39,18 @@ namespace http {
 
 			static bool path_is_valid(const std::string& path);
 		private:
-			void get_file(Response& res, const Request& req) const;
+			void method_get(Response& res, const Request& req) const;
 			void post_file(Response& res, const Request& req) const;
 			void delete_file(Response& res, const Request& req) const;
 
 			void _get_dir_or_file(Response& res, const Request& req, const std::string& path) const;
 			void _get_file(Response& res, const std::string& path) const;
-			void _get_dir(Response& res, const Request& req, const std::string& path) const;
+
+			bool                 _is_dir(const std::string& path) const;
+			std::set<std::string> _dir_entry(const std::string& path) const;
+			std::string          _get_index(const std::set<std::string>& dir_entry) const;
+			void                 _generate_autoindex(Response& res, const Request& req,
+					const std::set<std::string>& dir_entry) const;
 	}; /* FileServerHandler */
 }; /* namespace http */
 
