@@ -115,6 +115,16 @@ const std::string http::status_code_to_str(Response::StatusCode code) {
 	switch (code) {
 		case Response::OK:
 			return "OK";
+		case Response::Created:
+			return "Created";
+		case Response::NoContent:
+			return "No Content";
+		case Response::MovedPermanently:
+			return "Moved Permanently";
+		case Response::PermanentRedirect:
+			return "Permanent Redirect";
+		case Response::TemporaryRedirect:
+			return "Temporary Redirect";
 		case Response::BadRequest:
 			return "Bad Request";
 		case Response::NotFound:

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <dirent.h>
 #include <sys/types.h>
+#include <cstdio>
 
 #include "FileServerHandler.hpp"
 #include "../../utils/utils.hpp"
@@ -17,6 +18,7 @@ FileServerHandler::FileServerHandler(const FileServerHandler& ref)
 FileServerHandler::~FileServerHandler() { }
 
 void FileServerHandler::serve_http(Response& res, const Request& req) const {
+	_log.info(SSTR("[FileServerHandler] [serve_http] " << req.method << " " << req.path));
 	if (!path_is_valid(req.path)) {
 		this->bad_request(res);
 		return ;
@@ -114,15 +116,15 @@ void FileServerHandler::method_get(Response& res, const Request& req) const {
 
 void FileServerHandler::_get_dir_or_file(Response& res, const Request& req, const std::string& path) const {
 	if (!_is_dir(path)) {
-		_log.info(SSTR("[FileServerHandler] GET FILE path =" << path));
+		_log.info(SSTR("[FileServerHandler] [GET FILE] path =" << path));
 		_get_file(res, path);
 		return ;
 	}
-	_log.info(SSTR("[FileServerHandler] GET DIR path =" << path));
+	_log.info(SSTR("[FileServerHandler] [GET DIR] path =" << path));
 	std::set<std::string> entry_names = _dir_entry(path);
 	std::string index = _get_index(entry_names);
 	if (index != "") {
-		_log.info(SSTR("[FileServerHandler] GET find index in dir: " << index));
+		_log.info(SSTR("[FileServerHandler] [GET] find index in dir: " << index));
 		_get_dir_or_file(res, req, path + "/" + index);
 		return;
 	}
@@ -193,7 +195,7 @@ void FileServerHandler::_generate_autoindex(Response& res, const Request& req,
 	std::string files_list;
 	std::map<std::string, std::string>::const_iterator host_header = req.headers.find("host");
 	if (host_header == req.headers.end()) {
-		_log.error("[FileServerHandler] not found host header in request");
+		_log.error("[FileServerHandler] [Autoindex] not found host header in request");
 		not_found(res);
 		return;
 	}
@@ -219,19 +221,65 @@ std::pair<std::string, std::string> FileServerHandler::_file_path_split(const st
 	if (path_separator_lacation == std::string::npos) {
 		return std::make_pair("", path);
 	}
-	std::string dir_path = path.substr(0, path.size() -path_separator_lacation);
+	std::string dir_path = path.substr(0, path_separator_lacation);
 	std::string file_path = path.substr(path_separator_lacation+1);
 	return std::make_pair(dir_path, file_path);
 }
 
+bool FileServerHandler::_is_file_exist(const std::string& path) const {
+	std::ifstream f(path.c_str());
+    return f.good();
+}
+
 void FileServerHandler::post_file(Response& res, const Request& req) const {
-	(void)res;
-	(void)req;
+	_log.info(SSTR("[FileServerHandler] [POST] " << req.path));
+	std::pair<std::string, std::string> dir_file_path_pair = _file_path_split(req.path);
+	if (dir_file_path_pair.first != "" &&
+			!_is_dir(_opts.root + dir_file_path_pair.first)) {
+		_log.error(SSTR("[FileServerHandler] [POST] dir does not exist: " <<
+					dir_file_path_pair.first));
+		res.write_header(http::Response::NoContent);
+		res.write("no content", http::mime_type_txt);
+		return;
+	}
+	std::string new_file_path = _opts.root + req.path;
+	if (_is_file_exist(new_file_path)) {
+		_log.warn(SSTR("[FileServerHandler] [POST] file already exist: " <<
+					dir_file_path_pair.second));
+		res.write_header(http::Response::OK);
+		res.header.set("Location", req.path);
+		res.write("file exist", http::mime_type_txt);
+		return;
+	}
+	std::ofstream new_file;
+
+	new_file.open(new_file_path.c_str());
+	if (!new_file.good()) {
+		res.write_header(http::Response::InternalServerError);
+		res.write("fail to post file", http::mime_type_txt);
+		return;
+	}
+	new_file << req.body;
+	res.write_header(http::Response::Created);
+	res.header.set("Location", req.path);
+	res.write("file created", http::mime_type_txt);
 }
 
 void FileServerHandler::delete_file(Response& res, const Request& req) const {
-	(void)res;
-	(void)req;
+	_log.info(SSTR("[FileServerHandler] [DELETE] " << req.path));
+	std::string delete_file_path = _opts.root + req.path;
+	if (!_is_file_exist(delete_file_path)) {
+		res.write_header(http::Response::NoContent);
+		res.write("no content", http::mime_type_txt);
+		return;
+	}
+	if (remove(delete_file_path.c_str()) != 0) {
+		res.write_header(http::Response::InternalServerError);
+		res.write("fail to delete file", http::mime_type_txt);
+		return;
+	}
+	res.write_header(http::Response::OK);
+	res.write("file deleted", http::mime_type_txt);
 }
 
 FileServerHandler::Options::Options() : autoindex(false) { }

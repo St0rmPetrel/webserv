@@ -39,7 +39,7 @@ ServerMux::~ServerMux() {
 
 // serve_http select match route in priority order
 void ServerMux::serve_http(Response& res, const Request& req) const {
-	_log.debug("[ServerMux] Hello from server mux");
+	_log.info(SSTR("[ServerMux] " << req.method << " " << req.path));
 	for (std::vector<const Route*>::const_iterator it = _routes.begin();
 			it != _routes.end(); ++it) {
 		if ((*it)->match(req)) {

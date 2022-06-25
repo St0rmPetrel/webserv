@@ -54,6 +54,7 @@ namespace http {
 					const std::set<std::string>& dir_entry) const;
 
 			std::pair<std::string, std::string> _file_path_split(const std::string& path) const;
+			bool _is_file_exist(const std::string& path) const;
 	}; /* FileServerHandler */
 }; /* namespace http */
 

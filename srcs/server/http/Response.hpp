@@ -31,6 +31,8 @@ namespace http {
 		public:
 			enum StatusCode {
 				OK=200,
+				Created=201,
+				NoContent=204,
 				MovedPermanently=301,
 				TemporaryRedirect=307,
 				PermanentRedirect=308,
