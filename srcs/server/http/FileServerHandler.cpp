@@ -213,6 +213,17 @@ void FileServerHandler::_generate_autoindex(Response& res, const Request& req,
 	res.write(body, http::mime_type_html);
 }
 
+std::pair<std::string, std::string> FileServerHandler::_file_path_split(const std::string& path) const {
+	size_t path_separator_lacation = path.find_last_of("/");
+
+	if (path_separator_lacation == std::string::npos) {
+		return std::make_pair("", path);
+	}
+	std::string dir_path = path.substr(0, path.size() -path_separator_lacation);
+	std::string file_path = path.substr(path_separator_lacation+1);
+	return std::make_pair(dir_path, file_path);
+}
+
 void FileServerHandler::post_file(Response& res, const Request& req) const {
 	(void)res;
 	(void)req;

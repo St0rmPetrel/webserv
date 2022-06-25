@@ -2,6 +2,7 @@
 # define FILE_SERVER_HANDLER_HPP
 
 #include <string>
+#include <utility>      // std::pair, std::make_pai
 #include <set>
 
 #include "IHandler.hpp"
@@ -51,6 +52,8 @@ namespace http {
 			std::string          _get_index(const std::set<std::string>& dir_entry) const;
 			void                 _generate_autoindex(Response& res, const Request& req,
 					const std::set<std::string>& dir_entry) const;
+
+			std::pair<std::string, std::string> _file_path_split(const std::string& path) const;
 	}; /* FileServerHandler */
 }; /* namespace http */
 
