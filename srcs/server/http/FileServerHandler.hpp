@@ -38,11 +38,10 @@ namespace http {
 			void method_not_allowed(Response& res) const;
 			void internal_server_error(Response& res) const;
 
-			static bool path_is_valid(const std::string& path);
 		private:
-			void method_get(Response& res, const Request& req) const;
-			void post_file(Response& res, const Request& req) const;
-			void delete_file(Response& res, const Request& req) const;
+			void _method_get(Response& res, const Request& req) const;
+			void _method_post(Response& res, const Request& req) const;
+			void _method_delete(Response& res, const Request& req) const;
 
 			void _get_dir_or_file(Response& res, const Request& req, const std::string& path) const;
 			void _get_file(Response& res, const std::string& path) const;
@@ -55,6 +54,7 @@ namespace http {
 
 			std::pair<std::string, std::string> _file_path_split(const std::string& path) const;
 			bool _is_file_exist(const std::string& path) const;
+			bool _path_is_valid(const std::string& path) const;
 	}; /* FileServerHandler */
 }; /* namespace http */
 

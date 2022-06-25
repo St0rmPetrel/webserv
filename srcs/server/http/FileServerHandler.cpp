@@ -19,17 +19,17 @@ FileServerHandler::~FileServerHandler() { }
 
 void FileServerHandler::serve_http(Response& res, const Request& req) const {
 	_log.info(SSTR("[FileServerHandler] [serve_http] " << req.method << " " << req.path));
-	if (!path_is_valid(req.path)) {
+	if (!_path_is_valid(req.path)) {
 		this->bad_request(res);
 		return ;
 	}
 
 	if (req.method == http::method_get) {
-		this->method_get(res, req);
+		this->_method_get(res, req);
 	} else if (req.method == http::method_post) {
-		this->post_file(res, req);
+		this->_method_post(res, req);
 	} else if (req.method == http::method_delete) {
-		this->delete_file(res, req);
+		this->_method_delete(res, req);
 	} else {
 		this->method_not_allowed(res);
 	}
@@ -89,8 +89,7 @@ void FileServerHandler::internal_server_error(Response& res) const {
 	res.write(body, http::mime_type_html);
 }
 
-bool FileServerHandler::path_is_valid(const std::string& path) {
-	(void)path;
+bool FileServerHandler::_path_is_valid(const std::string& path) const {
 	// In most cases URL path validation does via regex
 	// I can't do that because of the subject
 	// so that simple validation check that path is absolute
@@ -108,7 +107,7 @@ bool FileServerHandler::path_is_valid(const std::string& path) {
 	return true;
 }
 
-void FileServerHandler::method_get(Response& res, const Request& req) const {
+void FileServerHandler::_method_get(Response& res, const Request& req) const {
 	std::string   path = _opts.root + req.path;
 
 	_get_dir_or_file(res, req, path);
@@ -227,11 +226,12 @@ std::pair<std::string, std::string> FileServerHandler::_file_path_split(const st
 }
 
 bool FileServerHandler::_is_file_exist(const std::string& path) const {
-	std::ifstream f(path.c_str());
+	std::ifstream f;
+	f.open(path.c_str());
     return f.good();
 }
 
-void FileServerHandler::post_file(Response& res, const Request& req) const {
+void FileServerHandler::_method_post(Response& res, const Request& req) const {
 	_log.info(SSTR("[FileServerHandler] [POST] " << req.path));
 	std::pair<std::string, std::string> dir_file_path_pair = _file_path_split(req.path);
 	if (dir_file_path_pair.first != "" &&
@@ -254,7 +254,7 @@ void FileServerHandler::post_file(Response& res, const Request& req) const {
 	std::ofstream new_file;
 
 	new_file.open(new_file_path.c_str());
-	if (!new_file.good()) {
+	if (new_file.fail()) {
 		res.write_header(http::Response::InternalServerError);
 		res.write("fail to post file", http::mime_type_txt);
 		return;
@@ -265,7 +265,7 @@ void FileServerHandler::post_file(Response& res, const Request& req) const {
 	res.write("file created", http::mime_type_txt);
 }
 
-void FileServerHandler::delete_file(Response& res, const Request& req) const {
+void FileServerHandler::_method_delete(Response& res, const Request& req) const {
 	_log.info(SSTR("[FileServerHandler] [DELETE] " << req.path));
 	std::string delete_file_path = _opts.root + req.path;
 	if (!_is_file_exist(delete_file_path)) {
