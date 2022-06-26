@@ -40,7 +40,12 @@ namespace http {
 			void internal_server_error(Response& res) const;
 		private:
 			std::map<std::string, std::string> _set_envp(const Request& req) const;
+			// TODO move it into utils
 			bool _file_exist(const std::string& path) const;
+
+			std::string _exec_cgi(const std::string& interpretator_path,
+				const std::string& script_path,
+				const std::map<std::string, std::string>& envp) const;
 	}; /* class CGIHandler */
 }; /* namespace http */
 

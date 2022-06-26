@@ -35,8 +35,8 @@ void CGIHandler::serve_http(Response& res, const Request& req) const {
 		internal_server_error(res);
 		return;
 	}
-	(void)res;
-	(void)req;
+	std::map<std::string, std::string> envp = _set_envp(req);
+	std::string raw_cgi_output = _exec_cgi(interpretator_path, script_path, envp);
 }
 
 IHandler* CGIHandler::clone() const {
@@ -121,6 +121,15 @@ std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) con
 	}
 
 	return envp;
+}
+
+std::string CGIHandler::_exec_cgi(const std::string& interpretator_path,
+		const std::string& script_path,
+		const std::map<std::string, std::string>& envp) const {
+	(void)interpretator_path;
+	(void)script_path;
+	(void)envp;
+	return "";
 }
 
 
