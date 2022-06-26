@@ -27,6 +27,7 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 			route.push_back_handler(ReturnHandler(_log, it->return_opts));
 			break;
 		case Options::Location::CGI:
+			route.push_back_handler(CGIHandler(_log, it->cgi_opts));
 			break;
 		}
 		route.push_back_handler(ErrorPageHandler(_log, it->error_page_opts));

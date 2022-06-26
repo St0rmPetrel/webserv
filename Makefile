@@ -48,7 +48,8 @@ HTTP	=	Response \
 			ReturnHandler \
 			ErrorPageHandler \
 			VirtualServer \
-			FileServerHandler
+			FileServerHandler \
+			CGIHandler
 
 UTILS	=	utils
 

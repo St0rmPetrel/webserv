@@ -10,6 +10,7 @@
 #include "ReturnHandler.hpp"
 #include "ErrorPageHandler.hpp"
 #include "FileServerHandler.hpp"
+#include "CGIHandler.hpp"
 #include "Response.hpp"
 #include "../../logger/Logger.hpp"
 
@@ -27,6 +28,7 @@ namespace http {
 					ErrorPageHandler::Options  error_page_opts;
 					ReturnHandler::Options     return_opts;
 					FileServerHandler::Options file_server_opts;
+					CGIHandler::Options        cgi_opts;
 
 					Location() : handler_type(FileServer) { }
 				};
