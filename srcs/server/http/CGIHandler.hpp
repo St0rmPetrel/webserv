@@ -9,7 +9,14 @@
 namespace http {
 	class CGIHandler : public IHandler {
 		public:
+			struct EmptyRootException : public std::exception {
+				virtual const char* what() const throw();
+			};
+			struct EmptyInterpretatorException : public std::exception {
+				virtual const char* what() const throw();
+			};
 			struct Options {
+				std::string                        root;
 				std::map<std::string, std::string> extention_to_interpretator_path;
 				std::map<std::string, std::string> params;
 
@@ -31,6 +38,9 @@ namespace http {
 			void bad_request(Response& res) const;
 			void not_found(Response& res) const;
 			void internal_server_error(Response& res) const;
+		private:
+			std::map<std::string, std::string> _set_envp(const Request& req) const;
+			bool _file_exist(const std::string& path) const;
 	}; /* class CGIHandler */
 }; /* namespace http */
 

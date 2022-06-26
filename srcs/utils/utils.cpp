@@ -8,13 +8,19 @@ bool utils::is_number(const std::string& str) {
 }
 
 
-const std::string utils::detect_file_mime_type(const std::string& file_path) {
+const std::string utils::file_extension(const std::string& file_path) {
 	size_t position = file_path.find_last_of(".");
 	if (position == std::string::npos) {
-		return http::mime_type_bin;
+		return "";
 	}
-	std::string extension = file_path.substr(position+1);
-	if (extension == "html") {
+	return file_path.substr(position+1);
+}
+
+const std::string utils::detect_file_mime_type(const std::string& file_path) {
+	std::string extension = file_extension(file_path);
+	if (extension == "") {
+		return http::mime_type_txt;
+	} else if (extension == "html") {
 		return http::mime_type_html;
 	} else if (extension == "css") {
 		return http::mime_type_css;
