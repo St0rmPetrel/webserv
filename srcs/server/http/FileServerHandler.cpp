@@ -10,7 +10,12 @@
 using namespace http;
 
 FileServerHandler::FileServerHandler(const logger::Logger& log, const Options& opts)
-	: _log(log), _opts(opts) { }
+	: _log(log), _opts(opts) {
+
+	if (_opts.root.empty()) {
+		throw FileServerHandler::EmptyRootException();
+	}
+}
 
 FileServerHandler::FileServerHandler(const FileServerHandler& ref)
 	: _log(ref._log), _opts(ref._opts) { }
@@ -225,12 +230,6 @@ std::pair<std::string, std::string> FileServerHandler::_file_path_split(const st
 	return std::make_pair(dir_path, file_path);
 }
 
-bool FileServerHandler::_is_file_exist(const std::string& path) const {
-	std::ifstream f;
-	f.open(path.c_str());
-    return f.good();
-}
-
 void FileServerHandler::_method_post(Response& res, const Request& req) const {
 	_log.info(SSTR("[FileServerHandler] [POST] " << req.path));
 	std::pair<std::string, std::string> dir_file_path_pair = _file_path_split(req.path);
@@ -243,7 +242,7 @@ void FileServerHandler::_method_post(Response& res, const Request& req) const {
 		return;
 	}
 	std::string new_file_path = _opts.root + req.path;
-	if (_is_file_exist(new_file_path)) {
+	if (utils::file_exist(new_file_path)) {
 		_log.warn(SSTR("[FileServerHandler] [POST] file already exist: " <<
 					dir_file_path_pair.second));
 		res.write_header(http::Response::OK);
@@ -268,7 +267,7 @@ void FileServerHandler::_method_post(Response& res, const Request& req) const {
 void FileServerHandler::_method_delete(Response& res, const Request& req) const {
 	_log.info(SSTR("[FileServerHandler] [DELETE] " << req.path));
 	std::string delete_file_path = _opts.root + req.path;
-	if (!_is_file_exist(delete_file_path)) {
+	if (!utils::file_exist(delete_file_path)) {
 		res.write_header(http::Response::NoContent);
 		res.write("no content", http::mime_type_txt);
 		return;
@@ -280,6 +279,10 @@ void FileServerHandler::_method_delete(Response& res, const Request& req) const 
 	}
 	res.write_header(http::Response::OK);
 	res.write("file deleted", http::mime_type_txt);
+}
+
+const char* FileServerHandler::EmptyRootException::what() const throw() {
+	return "opts.root in FileServerHandler must be not empty";
 }
 
 FileServerHandler::Options::Options() : autoindex(false) { }

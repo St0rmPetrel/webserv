@@ -1,4 +1,5 @@
 #include <string>
+#include <fstream>
 
 #include "utils.hpp"
 #include "../server/http/Response.hpp"
@@ -36,4 +37,10 @@ const std::string utils::detect_file_mime_type(const std::string& file_path) {
 		return http::mime_type_js;
 	}
 	return http::mime_type_bin;
+}
+
+bool utils::file_exist(const std::string& path) {
+	std::ifstream f;
+	f.open(path.c_str());
+    return f.good();
 }

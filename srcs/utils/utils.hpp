@@ -23,6 +23,7 @@
 namespace utils {
 	extern bool is_number(const std::string& str);
 	extern const std::string detect_file_mime_type(const std::string& file_path);
+	extern bool file_exist(const std::string& path);
 };
 
 #endif
