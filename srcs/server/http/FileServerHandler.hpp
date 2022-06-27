@@ -13,6 +13,9 @@
 namespace http {
 	class FileServerHandler : public IHandler {
 		public:
+			struct EmptyRootException : public std::exception {
+				virtual const char* what() const throw();
+			};
 			struct Options {
 				std::string           root;
 				bool                  autoindex;
