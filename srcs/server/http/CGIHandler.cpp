@@ -1,4 +1,11 @@
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <set>
+#include <string>
+
 #include "CGIHandler.hpp"
+#include "../../utils/utils.hpp"
 
 using namespace http;
 
@@ -37,6 +44,7 @@ void CGIHandler::serve_http(Response& res, const Request& req) const {
 	}
 	std::map<std::string, std::string> envp = _set_envp(req);
 	std::string raw_cgi_output = _exec_cgi(interpretator_path, script_path, envp);
+	_parse_cgi_output(res, raw_cgi_output);
 }
 
 IHandler* CGIHandler::clone() const {
@@ -126,16 +134,86 @@ std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) con
 std::string CGIHandler::_exec_cgi(const std::string& interpretator_path,
 		const std::string& script_path,
 		const std::map<std::string, std::string>& envp) const {
-	(void)interpretator_path;
-	(void)script_path;
-	(void)envp;
-	return "";
-}
+	int pipefds[2];
+	if (pipe(pipefds) < 0) {
+		return "";
+	}
 
+	std::set<std::string> envp_set;
+	for (std::map<std::string, std::string>::const_iterator cit = envp.begin();
+			cit != envp.end(); ++cit) {
+		std::string env_var = cit->first + "=" + cit->second;
+		envp_set.insert(env_var);
+	}
+
+	int cgi_stat = 0;
+	/* ATTENTION C PURE CODE UNSAFE */
+	/* throw is forbidden may cause to memory leak */
+	{
+		char** command = NULL;
+		char** environment = NULL;
+
+		command = (char **)malloc(3 * sizeof(char*));
+		command[0] = (char *)interpretator_path.c_str();
+		command[1] = (char *)script_path.c_str();
+		command[2] = NULL;
+
+		environment = (char **)malloc((envp_set.size() + 1) * sizeof(char*));
+		{
+			int i = 0;
+			for (std::set<std::string>::const_iterator cit = envp_set.begin();
+					cit != envp_set.end(); ++cit) {
+				environment[i] = (char *)cit->c_str();
+				++i;
+			}
+		}
+		environment[envp_set.size()] = NULL;
+
+		pid_t pid = fork();
+		if (pid < 0) {
+			free(command);
+			free(environment);
+			return "";
+		} else if (pid == 0) {
+			// cgi child script
+			close(pipefds[0]);
+			if (dup2(pipefds[1], 1) < 0) {
+				exit(1);
+			}
+			close(0);
+			close(pipefds[1]);
+			close(2);
+			execve(interpretator_path.c_str(), command, environment);
+			free(command);
+			free(environment);
+			exit(2);
+		}
+		close(pipefds[1]);
+		wait(&cgi_stat);
+		free(environment);
+		free(command);
+	}
+	/* END OF C PURE CODE UNSAFE */
+	if (cgi_stat != 0) {
+		return "";
+	}
+	return (utils::read_file_fd(pipefds[0]));
+}
 
 bool CGIHandler::_file_exist(const std::string& path) const {
 	(void)path;
 	return true;
+}
+
+void CGIHandler::_parse_cgi_output(Response& res, const std::string& raw_cgi_output) const {
+	// TODO
+	//
+	if (raw_cgi_output.empty()) {
+		internal_server_error(res);
+		return;
+	}
+	res.write_header(http::Response::OK);
+	res.write(raw_cgi_output, http::mime_type_txt);
 }
 
 CGIHandler::Options::Options() { }

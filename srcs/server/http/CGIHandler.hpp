@@ -46,6 +46,7 @@ namespace http {
 			std::string _exec_cgi(const std::string& interpretator_path,
 				const std::string& script_path,
 				const std::map<std::string, std::string>& envp) const;
+			void _parse_cgi_output(Response& res, const std::string& raw_cgi_output) const;
 	}; /* class CGIHandler */
 }; /* namespace http */
 

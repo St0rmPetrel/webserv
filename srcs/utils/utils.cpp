@@ -1,5 +1,6 @@
 #include <string>
 #include <fstream>
+#include <unistd.h>
 
 #include "utils.hpp"
 #include "../server/http/Response.hpp"
@@ -49,4 +50,14 @@ bool utils::file_exist(const std::string& path) {
 	std::ifstream f;
 	f.open(path.c_str());
     return f.good();
+}
+
+const std::string utils::read_file_fd(int fd) {
+	char        buffer[1024] = {0};
+	std::string ret;
+
+	while (read(fd, buffer, 1023) > 0) {
+		ret += std::string(buffer);
+	}
+	return ret;
 }

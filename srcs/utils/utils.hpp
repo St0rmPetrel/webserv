@@ -25,6 +25,7 @@ namespace utils {
 	extern const std::string detect_file_mime_type(const std::string& file_path);
 	extern const std::string file_extension(const std::string& file_path);
 	extern bool              file_exist(const std::string& path);
+	extern const std::string read_file_fd(int fd);
 };
 
 #endif
