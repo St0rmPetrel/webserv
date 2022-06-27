@@ -26,6 +26,7 @@ namespace utils {
 	extern const std::string file_extension(const std::string& file_path);
 	extern bool              file_exist(const std::string& path);
 	extern const std::string read_file_fd(int fd);
+	extern const std::string str_to_lower(const std::string& str);
 };
 
 #endif

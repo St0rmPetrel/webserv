@@ -27,7 +27,7 @@ CGIHandler::~CGIHandler() { }
 
 void CGIHandler::serve_http(Response& res, const Request& req) const {
 	std::string script_path = _opts.root + req.path;
-	if (!_file_exist(script_path)) {
+	if (!utils::file_exist(script_path)) {
 		not_found(res);
 		return;
 	}
@@ -38,7 +38,7 @@ void CGIHandler::serve_http(Response& res, const Request& req) const {
 		return;
 	}
 	std::string interpretator_path = ext_to_intr_it->second;
-	if (!_file_exist(interpretator_path)) {
+	if (!utils::file_exist(interpretator_path)) {
 		internal_server_error(res);
 		return;
 	}
@@ -200,20 +200,43 @@ std::string CGIHandler::_exec_cgi(const std::string& interpretator_path,
 	return (utils::read_file_fd(pipefds[0]));
 }
 
-bool CGIHandler::_file_exist(const std::string& path) const {
-	(void)path;
-	return true;
-}
-
 void CGIHandler::_parse_cgi_output(Response& res, const std::string& raw_cgi_output) const {
-	// TODO
-	//
 	if (raw_cgi_output.empty()) {
 		internal_server_error(res);
 		return;
 	}
-	res.write_header(http::Response::OK);
-	res.write(raw_cgi_output, http::mime_type_txt);
+	size_t header_sep = raw_cgi_output.find("\n\n");
+	if (header_sep == std::string::npos) {
+		internal_server_error(res);
+		return;
+	}
+	std::string raw_headers = raw_cgi_output.substr(0, header_sep);
+	std::string body = raw_cgi_output.substr(header_sep+2);
+
+	http::Response::StatusCode status       = http::Response::OK;
+	std::string                content_type = http::mime_type_txt;
+	{
+		std::stringstream raw_headers_stream(raw_headers);
+		std::string raw_header;
+		while (std::getline(raw_headers_stream, raw_header, '\n')) {
+			size_t key_sep = raw_header.find(": ");
+			if (key_sep == std::string::npos) {
+				continue;
+			}
+			std::string key   = raw_header.substr(0, key_sep);
+			std::string value = raw_header.substr(key_sep+2);
+			if (utils::str_to_lower(key) == "content-type") {
+				content_type = value;
+			} else if (utils::str_to_lower(key) == "status") {
+				status = http::str_to_status_code(value);
+			} else {
+				res.header.set(key, value);
+			}
+    	}
+	}
+
+	res.write_header(status);
+	res.write(body, content_type);
 }
 
 CGIHandler::Options::Options() { }

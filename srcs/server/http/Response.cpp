@@ -142,6 +142,12 @@ Response::StatusCode http::int_to_status_code(int status_code) {
 	return static_cast<Response::StatusCode>(status_code);
 }
 
+Response::StatusCode http::str_to_status_code(const std::string& str_status_code) {
+	// TODO
+	(void)str_status_code;
+	return http::Response::OK;
+}
+
 bool http::is_redirect_code(Response::StatusCode status_code) {
 	switch (status_code) {
 	case Response::MovedPermanently:

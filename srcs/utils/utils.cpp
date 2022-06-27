@@ -36,6 +36,8 @@ const std::string utils::detect_file_mime_type(const std::string& file_path) {
 		return http::mime_type_png;
 	} else if (extension == "webp") {
 		return http::mime_type_webp;
+	} else if (extension == "ico") {
+		return http::mime_type_ico;
 	} else if (extension == "bin") {
 		return http::mime_type_bin;
 	} else if (extension == "json") {
@@ -60,4 +62,18 @@ const std::string utils::read_file_fd(int fd) {
 		ret += std::string(buffer);
 	}
 	return ret;
+}
+
+char asciitolower(char in) {
+    if (in <= 'Z' && in >= 'A')
+        return in - ('Z' - 'z');
+    return in;
+}
+
+const std::string utils::str_to_lower(const std::string& str) {
+	std::string data(str);
+
+	std::transform(data.begin(), data.end(), data.begin(), asciitolower);
+
+	return data;
 }
