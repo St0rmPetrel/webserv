@@ -96,31 +96,37 @@ const char* CGIHandler::EmptyInterpretatorException::what() const throw() {
 }
 
 std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) const {
-	(void)req;
 	std::map<std::string, std::string> envp;
 
+	std::string host_header = _get_request_header(req, "content-type");
+	std::string host, port = "80";
+	size_t host_sep = host_header.find(":");
+	if (host_sep != std::string::npos) {
+		host = host_header.substr(0, host_sep);
+		port = host_header.substr(host_sep);
+	}
 	// https://www.oreilly.com/openbook/cgi/ch02_02.html
 	envp["GATEWAY_INTERFACE"] = "CGI/1.1";
-	envp["SERVER_NAME"] = "webserv";
-	envp["SERVER_SOFTWARE"] = "";
-	envp["SERVER_PROTOCOL"] = "";
-	envp["SERVER_PORT"] = "";
-	envp["REQUEST_METHOD"] = "";
+	envp["SERVER_NAME"] = host;
+	envp["SERVER_SOFTWARE"] = "webserv/0.1";
+	envp["SERVER_PROTOCOL"] = "HTTP/" + req.version;
+	envp["SERVER_PORT"] = port;
+	envp["REQUEST_METHOD"] = req.method;
 	envp["PATH_INFO"] = "";
 	envp["PATH_TRANSLATED"] = "";
 	envp["SCRIPT_NAME"] = "";
-	envp["DOCUMENT_ROOT"] = "";
-	envp["QUERY_STRING"] = "";
+	envp["DOCUMENT_ROOT"] = _opts.root;
+	envp["QUERY_STRING"] = req.query;
 	envp["REMOTE_HOST"] = "";
 	envp["REMOTE_ADDR"] = "";
-	envp["AUTH_TYPE"] = "";
+	envp["AUTH_TYPE"] = _get_request_header(req, "authorization");
 	envp["REMOTE_USER"] = "";
 	envp["REMOTE_IDENT"] = "";
-	envp["CONTENT_TYPE"] = "";
-	envp["CONTENT_LENGTH"] = "";
+	envp["CONTENT_TYPE"] = _get_request_header(req, "content-type");
+	envp["CONTENT_LENGTH"] = _get_request_header(req, "content-length");
 	envp["HTTP_FROM"] = "";
 	envp["HTTP_ACCEPT"] = "";
-	envp["HTTP_USER_AGENT"] = "";
+	envp["HTTP_USER_AGENT"] = _get_request_header(req, "user-agent");
 	envp["HTTP_REFERER"] = "";
 
 	for (std::map<std::string, std::string>::const_iterator it = _opts.params.begin();
@@ -237,6 +243,15 @@ void CGIHandler::_parse_cgi_output(Response& res, const std::string& raw_cgi_out
 
 	res.write_header(status);
 	res.write(body, content_type);
+}
+
+std::string CGIHandler::_get_request_header(const Request& req, const std::string& key) const {
+	std::map<std::string, std::string>::const_iterator header = req.headers.find(key);
+
+	if (header == req.headers.end()) {
+		return "";
+	}
+	return header->second;
 }
 
 CGIHandler::Options::Options() { }

@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <unistd.h>
+#include <algorithm>
 
 #include "utils.hpp"
 #include "../server/http/Response.hpp"
