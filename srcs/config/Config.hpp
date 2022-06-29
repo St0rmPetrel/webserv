@@ -182,6 +182,12 @@ namespace config {
 		void _fill_root_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& root_dir);
+		void _fill_index_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& index_dir);
+		void _fill_autoindex_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& autoindex_dir);
 		void _fill_return_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& return_dir);

@@ -9,32 +9,16 @@ using namespace http;
 
 ServerMux::ServerMux(const logger::Logger log)
 	: _log(log),
-		_new_route(NULL),
-		_bad_request_handler(NULL),
-		_not_found_handler(NULL),
-		_method_not_allowed_handler(NULL)
+		_new_route(NULL)
 { }
 
 ServerMux::ServerMux(const ServerMux& mux)
 	: _log(mux._log),
-		_new_route(NULL),
-		_bad_request_handler(NULL),
-		_not_found_handler(NULL),
-		_method_not_allowed_handler(NULL)
+		_new_route(NULL)
 {
 	// copy new route
 	if (mux._new_route != NULL) {
 		this->_new_route = mux._new_route->clone();
-	}
-	// copy all handlers
-	if (mux._bad_request_handler != NULL) {
-		this->_bad_request_handler = mux._bad_request_handler->clone();
-	}
-	if (mux._not_found_handler != NULL) {
-		this->_not_found_handler = mux._not_found_handler->clone();
-	}
-	if (mux._method_not_allowed_handler != NULL) {
-		this->_method_not_allowed_handler = mux._method_not_allowed_handler->clone();
 	}
 	// copy routes
 	for (std::vector<const Route*>::const_iterator it = mux._routes.begin();
@@ -46,10 +30,6 @@ ServerMux::ServerMux(const ServerMux& mux)
 ServerMux::~ServerMux() {
 	// delete new_route
 	delete _new_route;
-	// delete all handlers
-	delete _bad_request_handler;
-	delete _not_found_handler;
-	delete _method_not_allowed_handler;
 	// delete all routes
 	for (std::vector<const Route*>::const_iterator it = _routes.begin();
 			it != _routes.end(); ++it) {
@@ -59,7 +39,7 @@ ServerMux::~ServerMux() {
 
 // serve_http select match route in priority order
 void ServerMux::serve_http(Response& res, const Request& req) const {
-	_log.debug("[ServerMux] Hello from server mux");
+	_log.info(SSTR("[ServerMux] " << req.method << " " << req.path));
 	for (std::vector<const Route*>::const_iterator it = _routes.begin();
 			it != _routes.end(); ++it) {
 		if ((*it)->match(req)) {
@@ -67,7 +47,7 @@ void ServerMux::serve_http(Response& res, const Request& req) const {
 			return;
 		}
 	}
-	this->not_found(res, req);
+	this->not_found(res);
 }
 
 // clone deep copy of ServerMux class on heap
@@ -75,21 +55,8 @@ IHandler* ServerMux::clone() const {
 	return (new ServerMux(*this));
 }
 
-// set_bad_request set bad request handler
-void ServerMux::set_bad_request(const IHandler& bad_request_handler) {
-	if (_bad_request_handler != NULL) {
-		throw ServerMux::HandlerExistException();
-	}
-	_bad_request_handler = bad_request_handler.clone();
-}
-
 // bad_request fill response with http bad request (400)
-void ServerMux::bad_request(Response& res, const Request& req) const {
-	if (_bad_request_handler != NULL) {
-		_bad_request_handler->serve_http(res, req);
-		return;
-	}
-	// default
+void ServerMux::bad_request(Response& res) const {
 	res.write_header(Response::BadRequest);
 	std::string body = "<html>\n"
 		" <body>\n"
@@ -100,21 +67,8 @@ void ServerMux::bad_request(Response& res, const Request& req) const {
 	res.write(body, http::mime_type_html);
 }
 
-// set_not_found set not found handler
-void ServerMux::set_not_found(const IHandler& not_found_handler) {
-	if (_not_found_handler != NULL) {
-		throw ServerMux::HandlerExistException();
-	}
-	_not_found_handler = not_found_handler.clone();
-}
-
 // not_found fill response with http not found (404)
-void ServerMux::not_found(Response& res, const Request& req) const {
-	if (_not_found_handler != NULL) {
-		_not_found_handler->serve_http(res, req);
-		return;
-	}
-	// default
+void ServerMux::not_found(Response& res) const {
 	res.write_header(Response::NotFound);
 	std::string body = "<html>\n"
 		" <body>\n"
@@ -125,21 +79,8 @@ void ServerMux::not_found(Response& res, const Request& req) const {
 	res.write(body, http::mime_type_html);
 }
 
-// set_method_not_allowed set method not allowed handler (405)
-void ServerMux::set_method_not_allowed(const IHandler& method_not_allowed_handler) {
-	if (_method_not_allowed_handler != NULL) {
-		throw ServerMux::HandlerExistException();
-	}
-	_method_not_allowed_handler = method_not_allowed_handler.clone();
-}
-
 // method_not_allowed fill response with http method not allowed (405)
-void ServerMux::method_not_allowed(Response& res, const Request& req) const {
-	if (_method_not_allowed_handler != NULL) {
-		_method_not_allowed_handler->serve_http(res, req);
-		return;
-	}
-	// default
+void ServerMux::method_not_allowed(Response& res) const {
 	res.write_header(Response::MethodNotAllowed);
 	std::string body = "<html>\n"
 		" <body>\n"
