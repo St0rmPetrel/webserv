@@ -143,9 +143,30 @@ Response::StatusCode http::int_to_status_code(int status_code) {
 }
 
 Response::StatusCode http::str_to_status_code(const std::string& str_status_code) {
-	// TODO
-	(void)str_status_code;
-	return http::Response::OK;
+	// It can conntent spaces so I use find
+	if (str_status_code.find("200 OK") != std::string::npos) {
+		return http::Response::OK;
+	} else if (str_status_code.find("201 Created") != std::string::npos) {
+		return http::Response::Created;
+	} else if (str_status_code.find("204 No Content") != std::string::npos) {
+		return http::Response::NoContent;
+	} else if (str_status_code.find("301 Moved Permanently") != std::string::npos) {
+		return http::Response::MovedPermanently;
+	} else if (str_status_code.find("307 Temporary Redirect") != std::string::npos) {
+		return http::Response::TemporaryRedirect;
+	} else if (str_status_code.find("308 Permanent Redirect") != std::string::npos) {
+		return http::Response::PermanentRedirect;
+	} else if (str_status_code.find("400 Bad Request") != std::string::npos) {
+		return http::Response::BadRequest;
+	} else if (str_status_code.find("404 Not Found") != std::string::npos) {
+		return http::Response::NotFound;
+	} else if (str_status_code.find("405 Method Not Allowed") != std::string::npos) {
+		return http::Response::MethodNotAllowed;
+	} else if (str_status_code.find("500 Internal Server Error") != std::string::npos) {
+		return http::Response::InternalServerError;
+	} else {
+		return http::Response::OK;
+	}
 }
 
 bool http::is_redirect_code(Response::StatusCode status_code) {
