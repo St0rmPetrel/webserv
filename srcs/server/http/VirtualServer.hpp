@@ -9,6 +9,7 @@
 #include "ServerMux.hpp"
 #include "ReturnHandler.hpp"
 #include "ErrorPageHandler.hpp"
+#include "FileServerHandler.hpp"
 #include "Response.hpp"
 #include "../../logger/Logger.hpp"
 
@@ -23,9 +24,9 @@ namespace http {
 					Type                  handler_type;
 					std::set<std::string> allow_methods;
 
-					ErrorPageHandler::Options error_page_opts;
-					ReturnHandler::Options    return_opts;
-					std::string               root;
+					ErrorPageHandler::Options  error_page_opts;
+					ReturnHandler::Options     return_opts;
+					FileServerHandler::Options file_server_opts;
 
 					Location() : handler_type(FileServer) { }
 				};

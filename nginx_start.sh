@@ -1,1 +1,1 @@
-nginx -c $PWD/webserv.conf
+nginx -c $PWD/configs/webserv.conf

@@ -258,7 +258,9 @@ void Config::_fill_virtual_server_location_options(
 		} else if (it->name == "allow_methods") {
 			_fill_allow_methods_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "index") {
-			// fill index staff
+			_fill_index_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "autoindex") {
+			_fill_autoindex_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "return") {
 			_fill_return_directive(virtual_server_location_opts, *it);
 		} else if ((it->name == "listen") && (location_module.name == "server")) {
@@ -321,6 +323,38 @@ void Config::_fill_allow_methods_directive(
 	_log.debug("[Config] [Filling] fill allow_methods");
 }
 
+void Config::_fill_index_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& index_dir) {
+	if (index_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << index_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	for (std::vector<std::string>::const_iterator it = index_dir.args.begin();
+			it != index_dir.args.end(); ++it) {
+		location_opts.file_server_opts.index.insert(*it);
+	}
+	_log.debug("[Config] [Filling] fill location root index");
+}
+
+void Config::_fill_autoindex_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& autoindex_dir) {
+	if (autoindex_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << autoindex_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	const std::string& enable = autoindex_dir.args.at(0);
+	if (enable == "on") {
+		location_opts.file_server_opts.autoindex = true;
+	} else if (enable == "off") {
+		location_opts.file_server_opts.autoindex = false;
+	} else {
+		throw FillingBadDirectiveArgsException();
+	}
+	_log.debug("[Config] [Filling] fill location root autoindex");
+}
+
 void Config::_fill_root_directive(
 		http::VirtualServer::Options::Location& location_opts,
 		const Config::Directive& root_dir) {
@@ -328,8 +362,9 @@ void Config::_fill_root_directive(
 		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << root_dir.name));
 		throw FillingEmptyDirectiveArgsException();
 	}
-	location_opts.root = root_dir.args.at(0);
-	_log.debug(SSTR("[Config] [Filling] fill location root: root=" << location_opts.root));
+	location_opts.file_server_opts.root = root_dir.args.at(0);
+	_log.debug(SSTR("[Config] [Filling] fill location root: root=" <<
+				location_opts.file_server_opts.root));
 }
 
 void Config::_fill_return_directive(

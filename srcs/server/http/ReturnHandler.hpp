@@ -2,6 +2,7 @@
 # define RETURN_HANDLER_HPP
 
 #include <string>
+#include <exception>
 
 #include "IHandler.hpp"
 #include "Response.hpp"

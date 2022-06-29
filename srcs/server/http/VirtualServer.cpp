@@ -1,5 +1,5 @@
 #include "VirtualServer.hpp"
-#include "SimpleHandler.hpp"
+#include "FileServerHandler.hpp"
 #include "ReturnHandler.hpp"
 #include "ErrorPageHandler.hpp"
 
@@ -21,7 +21,7 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 		// set handler chain bound to route
 		switch (it->handler_type) {
 		case Options::Location::FileServer:
-			route.push_back_handler(SimpleHandler(it->root));
+			route.push_back_handler(FileServerHandler(_log, it->file_server_opts));
 			break;
 		case Options::Location::Return:
 			route.push_back_handler(ReturnHandler(_log, it->return_opts));

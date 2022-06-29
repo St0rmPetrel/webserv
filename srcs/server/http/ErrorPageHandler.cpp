@@ -36,15 +36,15 @@ ErrorPageHandler::~ErrorPageHandler() { }
 
 void ErrorPageHandler::serve_http(Response& res, const Request& req) const {
 	(void)req;
-	if (res.is_body()) {
-		return ;
-	}
 	std::map<Response::StatusCode, ErrorPageHandler::ErrorPage>::const_iterator
 		error_page = _pages.find(res.get_status_code());
 	if (error_page == _pages.end()) {
 		return ;
 	}
 	const ErrorPageHandler::ErrorPage& page = error_page->second;
+	if (res.is_body()) {
+		res.reset_body();
+	}
 	res.write(page.body, page.mime_type);
 }
 

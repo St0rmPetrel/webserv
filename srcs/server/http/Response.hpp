@@ -10,9 +10,17 @@
 
 namespace http {
 	const std::string mime_type_html = "text/html";
-	const std::string mime_type_gif  = "image/gif";
-	const std::string mime_type_json  = "application/json";
+	const std::string mime_type_css  = "text/css";
 	const std::string mime_type_txt  = "text/plain";
+
+	const std::string mime_type_gif  = "image/gif";
+	const std::string mime_type_jpeg  = "image/jpeg";
+	const std::string mime_type_png  = "image/png";
+	const std::string mime_type_webp  = "image/webp";
+
+	const std::string mime_type_bin  = "application/octet-stream";
+	const std::string mime_type_json  = "application/json";
+	const std::string mime_type_js  = "application/javascript";
 
 	enum ConnectionStatus {
 		KeepAlive,
@@ -23,12 +31,15 @@ namespace http {
 		public:
 			enum StatusCode {
 				OK=200,
+				Created=201,
+				NoContent=204,
 				MovedPermanently=301,
 				TemporaryRedirect=307,
 				PermanentRedirect=308,
 				BadRequest=400,
 				NotFound=404,
 				MethodNotAllowed=405,
+				InternalServerError=500,
 			};
 
 			class Header {
@@ -59,6 +70,7 @@ namespace http {
 					const std::string& type = mime_type_txt);
 			void write(const std::string& str,
 					const std::string& type = mime_type_txt);
+			void reset_body();
 
 			const StatusCode& get_status_code() const;
 			bool              is_body() const;

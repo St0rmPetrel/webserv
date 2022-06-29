@@ -65,15 +65,11 @@ namespace http {
 			void      serve_http(Response& res, const Request& req) const;
 			IHandler* clone() const;
 
-			void bad_request(Response& res, const Request& req) const;
-			void not_found(Response& res, const Request& req) const;
-			void method_not_allowed(Response& res, const Request& req) const;
+			void bad_request(Response& res) const;
+			void not_found(Response& res) const;
+			void method_not_allowed(Response& res) const;
 
 			Route& new_route();
-
-			void set_bad_request(const IHandler& bad_request_handler);
-			void set_not_found(const IHandler& not_found_handler);
-			void set_method_not_allowed(const IHandler& method_not_allowed_handler);
 		private:
 			void _add_route(const std::string& path, const Route* route);
 		private:
@@ -85,10 +81,6 @@ namespace http {
 			// the longest routes path are at the beginning of vector
 			// and searching starts from the longest path to the shortest one
 			std::vector<const Route*> _routes;
-
-			const IHandler* _bad_request_handler;
-			const IHandler* _not_found_handler;
-			const IHandler* _method_not_allowed_handler;
 	};
 };
 
