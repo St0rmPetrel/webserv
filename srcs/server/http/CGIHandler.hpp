@@ -12,12 +12,8 @@ namespace http {
 			struct EmptyRootException : public std::exception {
 				virtual const char* what() const throw();
 			};
-			struct EmptyInterpretatorException : public std::exception {
-				virtual const char* what() const throw();
-			};
 			struct Options {
 				std::string                        root;
-				std::map<std::string, std::string> extention_to_interpretator_path;
 				std::map<std::string, std::string> params;
 
 				Options();
@@ -41,8 +37,7 @@ namespace http {
 		private:
 			std::map<std::string, std::string> _set_envp(const Request& req) const;
 
-			std::string _exec_cgi(const std::string& interpretator_path,
-				const std::string& script_path,
+			std::string _exec_cgi(const std::string& script_path, const std::string& req_body,
 				const std::map<std::string, std::string>& envp) const;
 			void        _parse_cgi_output(Response& res, const std::string& raw_cgi_output) const;
 			std::string _get_request_header(const Request& req, const std::string& key) const;

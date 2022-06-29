@@ -15,9 +15,6 @@ CGIHandler::CGIHandler(const logger::Logger& log, const CGIHandler::Options& opt
 	if (_opts.root.empty()) {
 		throw EmptyRootException();
 	}
-	if (_opts.extention_to_interpretator_path.empty()) {
-		throw EmptyInterpretatorException();
-	}
 }
 
 CGIHandler::CGIHandler(const CGIHandler& ref)
@@ -47,21 +44,11 @@ void CGIHandler::serve_http(Response& res, const Request& req) const {
 		not_found(res);
 		return;
 	}
-	std::map<std::string, std::string>::const_iterator ext_to_intr_it =
-		_opts.extention_to_interpretator_path.find(utils::file_extension(script_path));
-	if (ext_to_intr_it == _opts.extention_to_interpretator_path.end()) {
-		bad_request(res);
-		return;
-	}
-	std::string interpretator_path = ext_to_intr_it->second;
-	if (!utils::file_exist(interpretator_path)) {
-		internal_server_error(res);
-		return;
-	}
 	std::map<std::string, std::string> envp = _set_envp(req);
-	std::string raw_cgi_output = _exec_cgi(interpretator_path, script_path, envp);
-	_parse_cgi_output(res, raw_cgi_output);
+	std::string raw_cgi_output = _exec_cgi(script_path, req.body, envp);
 	_log.info(SSTR("[CGIHandler] execute script_path=" << script_path));
+	_parse_cgi_output(res, raw_cgi_output);
+	_log.info(SSTR("[CGIHandler] parse cgi output script_path=" << script_path));
 }
 
 IHandler* CGIHandler::clone() const {
@@ -108,10 +95,6 @@ const char* CGIHandler::EmptyRootException::what() const throw() {
 	return "root must be not empty";
 }
 
-const char* CGIHandler::EmptyInterpretatorException::what() const throw() {
-	return "extention to interpretator path must be not empty";
-}
-
 std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) const {
 	std::map<std::string, std::string> envp;
 
@@ -134,17 +117,19 @@ std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) con
 	envp["SCRIPT_NAME"] = script_pathinfo.first;
 	envp["DOCUMENT_ROOT"] = _opts.root;
 	envp["QUERY_STRING"] = req.query;
+	// This info come from tcp accepted socket
+	// I didn't foresee it, so values is empty
 	envp["REMOTE_HOST"] = "";
 	envp["REMOTE_ADDR"] = "";
+	//
 	envp["AUTH_TYPE"] = _get_request_header(req, "authorization");
-	envp["REMOTE_USER"] = "";
-	envp["REMOTE_IDENT"] = "";
 	envp["CONTENT_TYPE"] = _get_request_header(req, "content-type");
 	envp["CONTENT_LENGTH"] = _get_request_header(req, "content-length");
-	envp["HTTP_FROM"] = "";
-	envp["HTTP_ACCEPT"] = "";
+	envp["HTTP_HOST"] = _get_request_header(req, "host");
+	envp["HTTP_ACCEPT"] = _get_request_header(req, "accept");
+	envp["HTTP_ACCEPT_LANGUAGE"] = _get_request_header(req, "accept-language");
+	envp["HTTP_CONNECTION"] = _get_request_header(req, "connection");
 	envp["HTTP_USER_AGENT"] = _get_request_header(req, "user-agent");
-	envp["HTTP_REFERER"] = "";
 
 	for (std::map<std::string, std::string>::const_iterator it = _opts.params.begin();
 			it != _opts.params.end(); ++it) {
@@ -155,14 +140,8 @@ std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) con
 	return envp;
 }
 
-std::string CGIHandler::_exec_cgi(const std::string& interpretator_path,
-		const std::string& script_path,
+std::string CGIHandler::_exec_cgi(const std::string& script_path, const std::string& req_body,
 		const std::map<std::string, std::string>& envp) const {
-	int pipefds[2];
-	if (pipe(pipefds) < 0) {
-		return "";
-	}
-
 	std::set<std::string> envp_set;
 	for (std::map<std::string, std::string>::const_iterator cit = envp.begin();
 			cit != envp.end(); ++cit) {
@@ -170,19 +149,59 @@ std::string CGIHandler::_exec_cgi(const std::string& interpretator_path,
 		envp_set.insert(env_var);
 	}
 
-	int cgi_stat = 0;
+	int         cgi_stat = 0;
+	std::string raw_cgi_output;
 	/* ATTENTION C PURE CODE UNSAFE */
 	/* throw is forbidden may cause to memory leak */
 	{
+		// Open pipes for script input and output
+		// input is request body
+		// output is raw_cgi_output string
+		int pipefds_script_out[2];
+		if (pipe(pipefds_script_out) < 0) {
+			_log.error("[CGIHandler] pipe error");
+			return "";
+		}
+		int pipefds_script_in[2];
+		if (pipe(pipefds_script_in) < 0) {
+			close(pipefds_script_out[0]);
+			close(pipefds_script_out[1]);
+			_log.error("[CGIHandler] pipe error");
+			return "";
+		}
+		if (write(pipefds_script_in[1], req_body.c_str(), req_body.size()) < 0) {
+			close(pipefds_script_out[0]);
+			close(pipefds_script_out[1]);
+			close(pipefds_script_in[0]);
+			close(pipefds_script_in[1]);
+			_log.error("[CGIHandler] write error");
+			return "";
+		}
+		close(pipefds_script_in[1]);
+		// Create and fill arguments for execve sys call
 		char** command = NULL;
 		char** environment = NULL;
 
-		command = (char **)malloc(3 * sizeof(char*));
-		command[0] = (char *)interpretator_path.c_str();
-		command[1] = (char *)script_path.c_str();
-		command[2] = NULL;
+		command = (char **)malloc(2 * sizeof(char*));
+		if (command == NULL) {
+			close(pipefds_script_out[0]);
+			close(pipefds_script_out[1]);
+			close(pipefds_script_in[0]);
+			_log.error("[CGIHandler] malloc error");
+			return "";
+		}
+		command[0] = (char *)script_path.c_str();
+		command[1] = NULL;
 
 		environment = (char **)malloc((envp_set.size() + 1) * sizeof(char*));
+		if (environment == NULL) {
+			close(pipefds_script_out[0]);
+			close(pipefds_script_out[1]);
+			close(pipefds_script_in[0]);
+			free(command);
+			_log.error("[CGIHandler] malloc error");
+			return "";
+		}
 		{
 			int i = 0;
 			for (std::set<std::string>::const_iterator cit = envp_set.begin();
@@ -193,44 +212,61 @@ std::string CGIHandler::_exec_cgi(const std::string& interpretator_path,
 		}
 		environment[envp_set.size()] = NULL;
 
+		// Create and manage fork process for cgi script
 		pid_t pid = fork();
 		if (pid < 0) {
+			close(pipefds_script_out[0]);
+			close(pipefds_script_out[1]);
+			close(pipefds_script_in[0]);
 			free(command);
 			free(environment);
+			_log.error("[CGIHandler] fork error");
 			return "";
 		} else if (pid == 0) {
 			// cgi child script
-			close(pipefds[0]);
-			if (dup2(pipefds[1], 1) < 0) {
+			close(pipefds_script_out[0]);
+			if (dup2(pipefds_script_out[1], 1) < 0) {
 				exit(1);
 			}
-			close(0);
-			close(pipefds[1]);
+			if (dup2(pipefds_script_in[0], 0) < 0) {
+				exit(2);
+			}
+			close(pipefds_script_in[0]);
+			close(pipefds_script_out[1]);
 			close(2);
-			execve(interpretator_path.c_str(), command, environment);
+			execve(script_path.c_str(), command, environment);
+			_log.error(SSTR("[CGIHandler] execve error stcript_path =" << script_path));
 			free(command);
 			free(environment);
-			exit(2);
+			exit(3);
 		}
-		close(pipefds[1]);
+		close(pipefds_script_out[1]);
+		close(pipefds_script_in[0]);
 		wait(&cgi_stat);
 		free(environment);
 		free(command);
+		raw_cgi_output = utils::read_file_fd(pipefds_script_out[0]);
+		close(pipefds_script_out[0]);
 	}
 	/* END OF C PURE CODE UNSAFE */
 	if (cgi_stat != 0) {
+		_log.error(SSTR("[CGIHandler] script status_code = " << cgi_stat <<
+					" script_output = " << raw_cgi_output));
 		return "";
 	}
-	return (utils::read_file_fd(pipefds[0]));
+	return raw_cgi_output;
 }
 
 void CGIHandler::_parse_cgi_output(Response& res, const std::string& raw_cgi_output) const {
+	_log.debug("[CGIHandler] parsing cgi script output");
 	if (raw_cgi_output.empty()) {
+		_log.error("[CGIHandler] cgi script output is empty");
 		internal_server_error(res);
 		return;
 	}
 	size_t header_sep = raw_cgi_output.find("\n\n");
 	if (header_sep == std::string::npos) {
+		_log.error("[CGIHandler] cgi script output is not valid (no \\n\\n)");
 		internal_server_error(res);
 		return;
 	}
@@ -243,12 +279,12 @@ void CGIHandler::_parse_cgi_output(Response& res, const std::string& raw_cgi_out
 		std::stringstream raw_headers_stream(raw_headers);
 		std::string raw_header;
 		while (std::getline(raw_headers_stream, raw_header, '\n')) {
-			size_t key_sep = raw_header.find(": ");
+			size_t key_sep = raw_header.find(":");
 			if (key_sep == std::string::npos) {
 				continue;
 			}
 			std::string key   = raw_header.substr(0, key_sep);
-			std::string value = raw_header.substr(key_sep+2);
+			std::string value = raw_header.substr(key_sep+1);
 			if (utils::str_to_lower(key) == "content-type") {
 				content_type = value;
 			} else if (utils::str_to_lower(key) == "status") {
@@ -276,7 +312,6 @@ CGIHandler::Options::Options() { }
 
 CGIHandler::Options::Options(const Options& ref)
 	: root(ref.root)
-	  , extention_to_interpretator_path(ref.extention_to_interpretator_path)
 	  , params(ref.params)
 { }
 
