@@ -205,8 +205,12 @@ void FileServerHandler::_generate_autoindex(Response& res, const Request& req,
 	}
 	for (std::set<std::string>::const_iterator it = dir_entry.begin();
 			it != dir_entry.end(); ++it) {
+		std::string dir_path = req.path;
+		if (*(dir_path.rbegin()) != '/') {
+			dir_path += "/";
+		}
 		std::string href = "<p><a href=http://" +
-			host_header->second + req.path + "/" + *it +">"+
+			host_header->second + dir_path + *it +">"+
 			*it + "</a></p>\n";
 		files_list += href;
 	}
