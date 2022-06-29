@@ -93,6 +93,14 @@ const std::string Config::_readFile(const char *filename) {
 
 const std::vector<std::string> Config::_lexing(const std::string &filename) {
 	_log.info("[Config] [Lexing] start processing a file: " + filename);
+	size_t pos_of_point = filename.find_last_of('.');
+	if (pos_of_point == std::string::npos) {
+		throw Config::InvalidConfigFileException();
+	}
+	else {
+		if (filename.compare(pos_of_point, std::string::npos, ".conf") != 0)
+			throw Config::InvalidConfigFileException();
+	}
 	_tokenizer(_readFile(filename.c_str()));
 	_log.debug("[Config] [Lexing] read all file, deleted comments and splitted words into tokens");
 	return _tokens;
@@ -498,6 +506,10 @@ const char *Config::FileNotFoundException::what() const throw() {
 
 const char *Config::ReadingConfigFileException::what() const throw() {
 	return "Error while reading config file";
+}
+
+const char *Config::InvalidConfigFileException::what() const throw() {
+	return "Invalid config file";
 }
 
 const char *Config::ParsingDirException::what() const throw() {
