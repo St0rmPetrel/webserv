@@ -84,6 +84,10 @@ namespace config {
 			const char *what() const throw();
 		};
 
+		struct InvalidConfigFileException : public std::exception {
+			const char *what() const throw();
+		};
+
 		struct ParsingDirException : public std::exception {
 			const char *what() const throw();
 		};
