@@ -263,6 +263,8 @@ void Config::_fill_virtual_server_location_options(
 			_fill_autoindex_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "return") {
 			_fill_return_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "cgi_param") {
+			_fill_cgi_param_directive(virtual_server_location_opts, *it);
 		} else if ((it->name == "listen") && (location_module.name == "server")) {
 			continue;
 		} else {
@@ -363,6 +365,7 @@ void Config::_fill_root_directive(
 		throw FillingEmptyDirectiveArgsException();
 	}
 	location_opts.file_server_opts.root = root_dir.args.at(0);
+	location_opts.cgi_opts.root = root_dir.args.at(0);
 	_log.debug(SSTR("[Config] [Filling] fill location root: root=" <<
 				location_opts.file_server_opts.root));
 }
@@ -387,6 +390,21 @@ void Config::_fill_return_directive(
 				http::int_to_status_code(status_code), return_dir.args.at(1));
 	}
 	_log.debug("[Config] [Filling] fill location return options");
+}
+
+void Config::_fill_cgi_param_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& cgi_param_dir) {
+	if (cgi_param_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " <<
+					cgi_param_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	location_opts.handler_type = http::VirtualServer::Options::Location::CGI;
+	if (cgi_param_dir.args.size() != 2) {
+		throw FillingBadDirectiveArgsException();
+	}
+	location_opts.cgi_opts.params[cgi_param_dir.args.at(0)] = cgi_param_dir.args.at(1);
 }
 
 

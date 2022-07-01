@@ -21,9 +21,12 @@
 #define BLUE "\033[34m\xf0\x9f\x90\x9e"
 
 namespace utils {
-	extern bool is_number(const std::string& str);
+	extern bool              is_number(const std::string& str);
 	extern const std::string detect_file_mime_type(const std::string& file_path);
-	extern bool file_exist(const std::string& path);
+	extern const std::string file_extension(const std::string& file_path);
+	extern bool              file_exist(const std::string& path);
+	extern const std::string read_file_fd(int fd);
+	extern const std::string str_to_lower(const std::string& str);
 };
 
 #endif

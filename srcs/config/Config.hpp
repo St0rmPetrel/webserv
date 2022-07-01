@@ -195,6 +195,9 @@ namespace config {
 		void _fill_return_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& return_dir);
+		void _fill_cgi_param_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& cgi_param_dir);
 
 	private:
 		Module _global_module;
