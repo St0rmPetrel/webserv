@@ -5,3 +5,4 @@ cmake-build-debug
 objs/
 cmake-build-debug/
 webserv
+.DS_Store

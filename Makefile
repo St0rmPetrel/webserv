@@ -49,7 +49,8 @@ HTTP	=	Response \
 			ErrorPageHandler \
 			HeaderHandler \
 			VirtualServer \
-			FileServerHandler
+			FileServerHandler \
+			CGIHandler
 
 UTILS	=	utils
 
