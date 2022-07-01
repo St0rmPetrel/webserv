@@ -47,6 +47,7 @@ HTTP	=	Response \
 			ServerMux \
 			ReturnHandler \
 			ErrorPageHandler \
+			HeaderHandler \
 			VirtualServer \
 			FileServerHandler \
 			CGIHandler

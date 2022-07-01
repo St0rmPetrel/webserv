@@ -195,6 +195,9 @@ namespace config {
 		void _fill_return_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& return_dir);
+		void _fill_add_header_directive(
+				http::VirtualServer::Options::Location& location_opts,
+				const Directive& add_header_dir);
 		void _fill_cgi_param_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& cgi_param_dir);
