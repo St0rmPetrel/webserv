@@ -30,6 +30,7 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 			break;
 		}
 		route.push_back_handler(ErrorPageHandler(_log, it->error_page_opts));
+		route.push_back_handler(HeaderHandler(_log, it->header_opts));
 		route.mux_register(it->location_match);
 	}
 }

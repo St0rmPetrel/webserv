@@ -263,6 +263,8 @@ void Config::_fill_virtual_server_location_options(
 			_fill_autoindex_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "return") {
 			_fill_return_directive(virtual_server_location_opts, *it);
+		} else if (it->name == "add_header") {
+			_fill_add_header_directive(virtual_server_location_opts, *it);
 		} else if ((it->name == "listen") && (location_module.name == "server")) {
 			continue;
 		} else {
@@ -389,6 +391,16 @@ void Config::_fill_return_directive(
 	_log.debug("[Config] [Filling] fill location return options");
 }
 
+void Config::_fill_add_header_directive(
+		http::VirtualServer::Options::Location& location_opts,
+		const Config::Directive& add_header_dir) {
+	if (add_header_dir.args.size() != 2) {
+		_log.fatal(SSTR("[Config] [Filling]: empty directive args: " << add_header_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+	location_opts.header_opts.headers[add_header_dir.args.at(0)] = add_header_dir.args.at(1);
+	_log.debug("[Config] [Filling] fill location add header");
+}
 
 void Config::_fill_listen_directive(http::VirtualServer::Options& virtual_server_opts,
 		const Config::Directive& listen_dir) {
