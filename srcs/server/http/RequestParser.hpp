@@ -33,6 +33,10 @@ namespace http {
 				AddChunkToBody
 			};
 		public:
+			RequestParser(const unsigned long body_size_limit);
+			RequestParser(const RequestParser& ref);
+			~RequestParser();
+
 			Result parse(Request& req, const char* begin, const char* end);
 		private:
 			// fill http request based on given raw data
@@ -44,7 +48,8 @@ namespace http {
 			RequestParser::Result parsingChunkedBody(Request& req, const char *begin_body, const char *end);
 			void    skipSpaces(Request& req);
 		private:
-			unsigned long content_length;
+			unsigned long       content_length;
+			const unsigned long body_size_limit;
 	};
 };
 

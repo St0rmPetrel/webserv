@@ -14,7 +14,10 @@
 using namespace server;
 
 Server::Server(const logger::Logger &log, const Options& opts)
-	: _log(log), _opts(opts), _event_manager(log) {
+	: _log(log)
+	  , _opts(opts)
+	  , _event_manager(log)
+	  , _request_parser(_opts.request_body_size_limit) {
 	// create and set virtual_servers based on parsed configuration file
 	// also creates listeners and field meta data for listeners indexing
 	for (std::vector<http::VirtualServer::Options>::const_iterator it = _opts.servers.begin();
