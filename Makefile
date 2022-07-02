@@ -43,6 +43,7 @@ CONFIG =	Config
 SERVER	=	Server EventManager PollFds Options
 
 HTTP	=	Response \
+			Request \
 			RequestParser \
 			ServerMux \
 			ReturnHandler \

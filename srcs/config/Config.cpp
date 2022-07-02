@@ -267,7 +267,8 @@ void Config::_fill_virtual_server_location_options(
 			_fill_add_header_directive(virtual_server_location_opts, *it);
 		} else if (it->name == "cgi_param") {
 			_fill_cgi_param_directive(virtual_server_location_opts, *it);
-		} else if ((it->name == "listen") && (location_module.name == "server")) {
+		} else if (((it->name == "listen") && (location_module.name == "server")) ||
+				((it->name == "server-name") && (location_module.name == "server"))) {
 			continue;
 		} else {
 			_log.fatal(SSTR("[Config] [Filling] unknown directive name: " << it->name));

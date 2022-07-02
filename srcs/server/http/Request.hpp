@@ -20,6 +20,8 @@ namespace http {
 		std::string                        version;
 		std::map<std::string, std::string> headers;
 	};
+
+	extern void fill_request_host_close(Request& req);
 };
 
 #endif

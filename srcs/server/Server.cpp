@@ -71,6 +71,7 @@ void Server::listen_and_serve() {
 					// parse raw data to http request representation
 					http::RequestParser::Result parsing_result = _request_parser.parse(req,
 							recv_buf, recv_buf + bytes_read);
+					fill_request_host_close(req);
 
 					// choose virtual_server (virtual_server - have specific individual
 					// configuration for processing specific request) of a client
@@ -81,6 +82,9 @@ void Server::listen_and_serve() {
 					// processing request or go to continue reading it
 					switch (parsing_result) {
 						case http::RequestParser::ParsingCompleted :
+							if (!virtual_server.get_names().empty()) {
+								_log.info(SSTR("[Server] serving http by virtual server " << *virtual_server.get_names().begin()));
+							}
 							virtual_server.mux.serve_http(res, req);
 							break;
 						case http::RequestParser::ParsingIncompleted :
@@ -123,14 +127,17 @@ const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
 	const std::vector<http::VirtualServer>& servers = _listeners_virtual_servers[client_listener];
 	const http::VirtualServer& default_server = servers[0];
 	if (req.host.empty()) {
+		_log.warn("[Server] request host header is empty");
 		return default_server;
 	} else {
+		_log.debug("[Server] start matching host name");
 		for (std::vector<http::VirtualServer>::const_iterator it = servers.begin();
 				it != servers.end(); ++it) {
 			const std::set<std::string>& server_names = it->get_names();
 			if (server_names.find(req.host) != server_names.end()) {
 				return (*it);
 			}
+			_log.debug(SSTR("[Server] name " << req.host << " not found in virtual server names"));
 		}
 	}
 	return default_server;
