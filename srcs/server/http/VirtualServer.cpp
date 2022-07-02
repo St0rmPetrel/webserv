@@ -14,7 +14,7 @@ VirtualServer::VirtualServer(const logger::Logger& log,
 
 		// set allow methods to route
 		for (std::set<std::string>::const_iterator am_it = it->allow_methods.begin();
-				am_it != it->allow_methods.end(); ++it) {
+				am_it != it->allow_methods.end(); ++am_it) {
 			route.method(*am_it);
 		}
 
