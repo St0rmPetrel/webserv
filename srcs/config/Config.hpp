@@ -177,6 +177,8 @@ namespace config {
 				http::VirtualServer::Options& virtual_server_opts,
 				const Directive& server_name_dir);
 		void _fill_error_log_directive(const Directive& logger_dir);
+		void _fill_request_body_limit_directive(const Directive& request_body_limit_dir);
+		void _fill_recv_buffer_size_directive(const Directive& recv_buffer_size_dir);
 		void _fill_error_page_directive(
 				http::VirtualServer::Options::Location& location_opts,
 				const Directive& error_page_dir);
