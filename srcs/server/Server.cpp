@@ -150,17 +150,28 @@ const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
 int Server::_finish_request(int client_sock, const http::Response& res) {
 	const std::string& raw_res = res.serialize();
 	_log.debug(SSTR("[Server] send raw res: " << raw_res));
+
+	_log.info(SSTR("[Server] send response raw_res.size " << raw_res.size()));
 	std::size_t bytes_write_total = 0;
 
-	// TODO error in large raw_res.size
-	for (int bytes_write = 0; bytes_write_total < raw_res.size();
-			bytes_write_total += bytes_write) {
-		bytes_write = send(client_sock, raw_res.c_str() + bytes_write_total,
+	int send_try = 0;
+	while (bytes_write_total != raw_res.size()) {
+		ssize_t bytes_write = send(client_sock, raw_res.c_str() + bytes_write_total,
 				raw_res.size() - bytes_write_total, 0);
 		if (bytes_write < 0) {
-			return bytes_write;
+			// TODO what if socket is closed?
+			// try it is not very well disition, maybe better use time
+			if (send_try > 100000) {
+				return -1;
+			}
+			send_try++;
+			continue;
 		}
+		_log.info(SSTR("[Server] send response bytes_write " << bytes_write));
+		bytes_write_total += bytes_write;
+		_log.info(SSTR("[Server] send response bytes_write_total " << bytes_write_total));
 	}
+	_log.info(SSTR("[Server] sending is compleate with send_try = " << send_try));
 	return (0);
 }
 
