@@ -179,8 +179,7 @@ RequestParser::Result RequestParser::checkHeaders(Request& req, std::string &bod
 	}
 	else if (req.headers.find("content-length") != req.headers.end()) {
 		std::istringstream(req.headers.find("content-length")->second) >> content_length;
-		// TODO if ((content_length != 0) && (content_length <= body_size_limit))
-		if (content_length != 0) {
+		if (content_length != 0 && content_length <= body_size_limit) {
 			if (req.headers.find("transfer-encoding") == req.headers.end() ||
 					req.headers.find("transfer-encoding")->second != "chunked") {
 				return parsingBody(req, body);
