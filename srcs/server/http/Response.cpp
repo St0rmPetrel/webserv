@@ -27,6 +27,8 @@ const std::string Response::serialize() const {
 
 	if (!_body.empty()) {
 		sstr << _body;
+	} else {
+		sstr << ENDL;
 	}
 
 	 return sstr.str();

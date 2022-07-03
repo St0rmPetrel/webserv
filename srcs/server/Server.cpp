@@ -146,6 +146,7 @@ const http::VirtualServer& Server::_get_client_virtual_server(int client_sock,
 // _finish_request send raw response via client socket
 int Server::_finish_request(int client_sock, const http::Response& res) {
 	const std::string& raw_res = res.serialize();
+	_log.debug(SSTR("[Server] send raw res: " << raw_res));
 	std::size_t bytes_write_total = 0;
 
 	for (int bytes_write = 0; bytes_write_total < raw_res.size();
