@@ -9,7 +9,9 @@ namespace server {
 	struct Options {
 		Options();
 
-		unsigned int recv_buffer_size;
+		unsigned int  recv_buffer_size;
+		unsigned long request_body_size_limit;
+
 		std::vector<http::VirtualServer::Options> servers;
 	};
 }; /* namespace server */

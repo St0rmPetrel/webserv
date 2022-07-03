@@ -179,15 +179,16 @@ RequestParser::Result RequestParser::checkHeaders(Request& req, std::string &bod
 	}
 	else if (req.headers.find("content-length") != req.headers.end()) {
 		std::istringstream(req.headers.find("content-length")->second) >> content_length;
-		if (content_length > 0){
-			if (req.headers.find("transfer-encoding") == req.headers.end() || req.headers.find("transfer-encoding")->second != "chunked") {
-					return parsingBody(req, body);
-				}
-			else
+		if (content_length != 0 && content_length <= body_size_limit) {
+			if (req.headers.find("transfer-encoding") == req.headers.end() ||
+					req.headers.find("transfer-encoding")->second != "chunked") {
+				return parsingBody(req, body);
+			} else {
 				return ParsingError;
 			}
-			else
-				return ParsingError;
+		} else {
+			return ParsingError;
+		}
 	}
 	return ParsingCompleted;
 }
@@ -273,3 +274,11 @@ inline bool RequestParser::isControl(int c)
 {
 	return (c >= 0 && c <= 31) || (c == 127);
 }
+
+RequestParser::RequestParser(const unsigned long body_size_limit)
+	: content_length(0), body_size_limit(body_size_limit) { }
+
+RequestParser::RequestParser(const RequestParser& ref)
+	: content_length(ref.content_length), body_size_limit(ref.body_size_limit) { }
+
+RequestParser::~RequestParser() { }

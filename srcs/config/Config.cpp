@@ -186,6 +186,18 @@ void Config::_fill_options() {
 void Config::_fill_http_options(const Module& http_module) {
 	http::VirtualServer::Options default_virtual_server_opts;
 
+	for (std::vector<Config::Directive>::const_iterator it = http_module.directives.begin();
+			it != http_module.directives.end(); ++it) {
+		if (it->name == "request_body_limit") {
+			_fill_request_body_limit_directive(*it);
+		} else if (it->name == "recv_buffer_size") {
+			_fill_recv_buffer_size_directive(*it);
+		} else {
+			_log.debug(SSTR("[Config] [Filling] unknown directive name: " << it->name));
+			throw FillingUnknownDirectiveException();
+		}
+	}
+
 	_fill_virtual_server_options(default_virtual_server_opts, http_module);
 
 	for (std::vector<Config::Module>::const_iterator it = http_module.modules.begin();
@@ -200,6 +212,36 @@ void Config::_fill_http_options(const Module& http_module) {
 	}
 }
 
+void Config::_fill_request_body_limit_directive(const Config::Directive& request_body_limit_dir) {
+	if (request_body_limit_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling] empty directive args: " <<
+					request_body_limit_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+
+	std::string size_str = request_body_limit_dir.args.at(0);
+	if (!utils::is_number(size_str) || size_str.empty()) {
+		_log.fatal(SSTR("[Config] [Filling] bad or empty size: " << size_str));
+		throw FillingBadDirectiveArgsException();
+	}
+	std::istringstream(size_str) >> _serv_opts.request_body_size_limit;
+}
+
+void Config::_fill_recv_buffer_size_directive(const Config::Directive& recv_buffer_size_dir) {
+	if (recv_buffer_size_dir.args.empty()) {
+		_log.fatal(SSTR("[Config] [Filling] empty directive args: " <<
+					recv_buffer_size_dir.name));
+		throw FillingEmptyDirectiveArgsException();
+	}
+
+	std::string size_str = recv_buffer_size_dir.args.at(0);
+	if (!utils::is_number(size_str) || size_str.empty()) {
+		_log.fatal(SSTR("[Config] [Filling] bad or empty size: " << size_str));
+		throw FillingBadDirectiveArgsException();
+	}
+	std::istringstream(size_str) >> _serv_opts.recv_buffer_size;
+}
+
 void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_server_opts,
 		const Config::Module& server_module) {
 	http::VirtualServer::Options::Location default_virtual_server_location_opts;
@@ -210,6 +252,9 @@ void Config::_fill_virtual_server_options(http::VirtualServer::Options& virtual_
 			_fill_listen_directive(virtual_server_opts, *it);
 		} else if (it->name == "server-name") {
 			_fill_server_name_directive(virtual_server_opts, *it);
+		} else if (it->name == "request_body_limit" || it->name == "recv_buffer_size") {
+			// TODO bad code
+			return ;
 		} else {
 			_fill_virtual_server_location_options(default_virtual_server_location_opts,
 					server_module);
