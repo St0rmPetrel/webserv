@@ -1,0 +1,91 @@
+@import "../utils/variables";
+@import "../utils/mixins";
+
+.about {
+    @include wrapper;
+
+    // background-image: url(images/laptop.jpg);
+    // background-repeat: no-repeat;
+    // background-position: center center;
+    // background-attachment: fixed;
+    // -webkit-background-size: cover;
+    // -moz-background-size: cover;
+    // -o-background-size: cover;
+    // background-size: cover;
+}
+
+.about__block {
+    max-width: 685px;
+    padding-top: 136px;
+
+    @include desktop {
+        padding-top: 110px;
+    }
+}
+
+.about__heading {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 55px;
+    line-height: 72px;
+    color: $dark;
+
+    @include desktop {
+        font-size: 50px;
+        line-height: 70px;
+    }
+
+    @include laptop {
+        font-size: 40px;
+        line-height: 60px;
+    }
+}
+.about__subheading {
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 140%;
+
+    color: $green;
+
+    @include laptop {
+        font-size: 22px;
+    }
+}
+.about__text {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 140%;
+
+    color: $dark;
+
+    @include laptop {
+        font-size: 18px;
+    }
+}
+.about__button {
+    @include button-green;
+    margin-top: 35px;
+}
+.about__img {
+    // position: relative;
+    // position: fixed;
+    // display: none;
+    position: absolute;
+    display: block;
+    top: 8%;
+    // left: 15%;
+    right: 0;
+    z-index: -1;
+
+    @include desktop {
+        opacity: 0.4;
+        // left: 5%;
+        // right: 15%;
+    }
+
+    @include laptop {
+        opacity: 0.2;
+        // left: 5%;
+        // right: 15%;
+    }
+}

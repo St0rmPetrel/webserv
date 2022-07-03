@@ -1,0 +1,13 @@
+.popup {
+    @include wrapper;
+    display: none;
+    align-self: center;
+    width: 1200px;
+    background: $light;
+    position: absolute;
+    z-index: 200;
+    height: 500px;
+}
+.show {
+    display: block;
+}

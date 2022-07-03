@@ -1,0 +1,2147 @@
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+/* Document
+   ========================================================================== */
+/**
+ * 1. Correct the line height in all browsers.
+ * 2. Prevent adjustments of font size after orientation changes in iOS.
+ */
+html {
+  line-height: 1.15;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+}
+
+/* Sections
+     ========================================================================== */
+/**
+   * Remove the margin in all browsers.
+   */
+body {
+  margin: 0;
+}
+
+/**
+   * Render the `main` element consistently in IE.
+   */
+main {
+  display: block;
+}
+
+/**
+   * Correct the font size and margin on `h1` elements within `section` and
+   * `article` contexts in Chrome, Firefox, and Safari.
+   */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+     ========================================================================== */
+/**
+   * 1. Add the correct box sizing in Firefox.
+   * 2. Show the overflow in Edge and IE.
+   */
+hr {
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+/**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/* Text-level semantics
+     ========================================================================== */
+/**
+   * Remove the gray background on active links in IE 10.
+   */
+a {
+  background-color: transparent;
+}
+
+/**
+   * 1. Remove the bottom border in Chrome 57-
+   * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+   */
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+  /* 2 */
+}
+
+/**
+   * Add the correct font weight in Chrome, Edge, and Safari.
+   */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+   * 1. Correct the inheritance and scaling of font size in all browsers.
+   * 2. Correct the odd `em` font sizing in all browsers.
+   */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/**
+   * Add the correct font size in all browsers.
+   */
+small {
+  font-size: 80%;
+}
+
+/**
+   * Prevent `sub` and `sup` elements from affecting the line height in
+   * all browsers.
+   */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+     ========================================================================== */
+/**
+   * Remove the border on images inside links in IE 10.
+   */
+img {
+  border-style: none;
+}
+
+/* Forms
+     ========================================================================== */
+/**
+   * 1. Change the font styles in all browsers.
+   * 2. Remove the margin in Firefox and Safari.
+   */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: 1.15;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+
+/**
+   * Show the overflow in IE.
+   * 1. Show the overflow in Edge.
+   */
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+
+/**
+   * Remove the inheritance of text transform in Edge, Firefox, and IE.
+   * 1. Remove the inheritance of text transform in Firefox.
+   */
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+
+/**
+   * Correct the inability to style clickable types in iOS and Safari.
+   */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+
+/**
+   * Remove the inner border and padding in Firefox.
+   */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+   * Restore the focus styles unset by the previous rule.
+   */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+   * Correct the padding in Firefox.
+   */
+fieldset {
+  padding: 0.35em 0.75em 0.625em;
+}
+
+/**
+   * 1. Correct the text wrapping in Edge and IE.
+   * 2. Correct the color inheritance from `fieldset` elements in IE.
+   * 3. Remove the padding so developers are not caught out when they zero out
+   *    `fieldset` elements in all browsers.
+   */
+legend {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+
+/**
+   * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+   */
+progress {
+  vertical-align: baseline;
+}
+
+/**
+   * Remove the default vertical scrollbar in IE 10+.
+   */
+textarea {
+  overflow: auto;
+}
+
+/**
+   * 1. Add the correct box sizing in IE 10.
+   * 2. Remove the padding in IE 10.
+   */
+[type="checkbox"],
+[type="radio"] {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+
+/**
+   * Correct the cursor style of increment and decrement buttons in Chrome.
+   */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+   * 1. Correct the odd appearance in Chrome and Safari.
+   * 2. Correct the outline style in Safari.
+   */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+   * Remove the inner padding in Chrome and Safari on macOS.
+   */
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+   * 1. Correct the inability to style clickable types in iOS and Safari.
+   * 2. Change font properties to `inherit` in Safari.
+   */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/* Interactive
+     ========================================================================== */
+/*
+   * Add the correct display in Edge, IE 10+, and Firefox.
+   */
+details {
+  display: block;
+}
+
+/*
+   * Add the correct display in all browsers.
+   */
+summary {
+  display: list-item;
+}
+
+/* Misc
+     ========================================================================== */
+/**
+   * Add the correct display in IE 10+.
+   */
+template {
+  display: none;
+}
+
+/**
+   * Add the correct display in IE 10.
+   */
+[hidden] {
+  display: none;
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+* {
+  font-family: 'Manrope', 'Roboto', "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+button {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+a:hover {
+  opacity: 0.4;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+h2 {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 131.1%;
+  text-align: center;
+  color: #3C3F34;
+}
+
+.header {
+  position: fixed;
+  background-color: white;
+  z-index: 100;
+  width: 100%;
+}
+
+.header__wrapper {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 97px 2fr 186px;
+      grid-template-columns: 97px 2fr 186px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-style: normal;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.logo__link {
+  max-width: 97px;
+}
+
+@media screen and (max-width: 350px) {
+  .logo__link {
+    max-width: 50px;
+  }
+}
+
+.nav {
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+@media screen and (max-width: 1000px) {
+  .nav {
+    padding-top: 70px;
+    padding-left: 50px;
+    display: block;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #F7F8F3;
+    top: -100%;
+    -webkit-transition: all 0.5s ease 0s;
+    transition: all 0.5s ease 0s;
+    overflow: auto;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .nav__item {
+    font-size: 24px;
+    display: block;
+    margin: 20px;
+  }
+}
+
+.act {
+  text-decoration: underline;
+}
+
+.nav__link {
+  color: #3C3F34;
+  text-decoration: none;
+}
+
+.header__button {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: #3C3F34;
+  padding: 14px 35px;
+  border: 2px solid #87B670;
+  border-radius: 9px;
+}
+
+@media screen and (max-width: 480px) {
+  .header__button {
+    font-size: 12px;
+    line-height: 22px;
+    padding: 7px 15px;
+    margin-left: auto;
+  }
+}
+
+.header__button:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px -2px 50px rgba(135, 182, 112, 0.422);
+          box-shadow: 0px -2px 50px rgba(135, 182, 112, 0.422);
+}
+
+.header__burger {
+  display: none;
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger {
+    display: block;
+    position: relative;
+    width: 30px;
+    height: 20px;
+    position: relative;
+    z-index: 3;
+    margin-left: 16px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger span {
+    background-color: black;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    height: 2px;
+    top: 9px;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger::before,
+  .header__burger::after {
+    content: '';
+    background-color: black;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    height: 2px;
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger::before {
+    top: 0;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger::after {
+    bottom: 0;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger.active::before {
+    -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+    top: 9px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger.active::after {
+    -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+    bottom: 9px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__burger.active span {
+    -webkit-transform: scale(0);
+            transform: scale(0);
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .header__nav.active {
+    top: 0;
+  }
+}
+
+body.lock {
+  overflow: hidden;
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+.about {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.about__block {
+  max-width: 685px;
+  padding-top: 136px;
+}
+
+@media screen and (max-width: 1000px) {
+  .about__block {
+    padding-top: 110px;
+  }
+}
+
+.about__heading {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 55px;
+  line-height: 72px;
+  color: #3C3F34;
+}
+
+@media screen and (max-width: 1000px) {
+  .about__heading {
+    font-size: 50px;
+    line-height: 70px;
+  }
+}
+
+@media screen and (max-width: 868px) {
+  .about__heading {
+    font-size: 40px;
+    line-height: 60px;
+  }
+}
+
+.about__subheading {
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 140%;
+  color: #87B670;
+}
+
+@media screen and (max-width: 868px) {
+  .about__subheading {
+    font-size: 22px;
+  }
+}
+
+.about__text {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  color: #3C3F34;
+}
+
+@media screen and (max-width: 868px) {
+  .about__text {
+    font-size: 18px;
+  }
+}
+
+.about__button {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+  padding: 14px 73px;
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 9px;
+  margin-top: 35px;
+}
+
+.about__button:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+          box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+}
+
+.about__img {
+  position: absolute;
+  display: block;
+  top: 8%;
+  right: 0;
+  z-index: -1;
+}
+
+@media screen and (max-width: 1000px) {
+  .about__img {
+    opacity: 0.4;
+  }
+}
+
+@media screen and (max-width: 868px) {
+  .about__img {
+    opacity: 0.2;
+  }
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+.tools {
+  padding-top: 230px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.tools__heading {
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 131.1%;
+  color: #3C3F34;
+}
+
+.tools__list {
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  max-width: 900px;
+  margin-top: 87px;
+  row-gap: 45px;
+  margin-left: auto;
+  margin-right: auto;
+  -ms-flex-item-align: center;
+      align-self: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+@media screen and (max-width: 1000px) {
+  .tools__list {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .tools__list {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+
+.tools__item {
+  width: 238px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.tools__subheading {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  padding-top: 25px;
+  color: #3C3F34;
+}
+
+.tools__text {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 140%;
+  text-align: center;
+  padding-top: 10px;
+  color: #3C3F34;
+}
+
+.tools__button {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+  padding: 14px 73px;
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 9px;
+  margin-top: 100px;
+}
+
+.tools__button:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+          box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+}
+
+.tools__background {
+  position: absolute;
+  z-index: -1;
+}
+
+.tools__bg {
+  left: 0;
+  top: 808.36px;
+  width: 100%;
+}
+
+.tools__circles {
+  right: 0;
+  top: 926px;
+}
+
+.tools__dots {
+  left: -118px;
+  top: 727px;
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+.problems {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 140px;
+}
+
+@media screen and (max-width: 1000px) {
+  .problems {
+    padding-top: 80px;
+  }
+}
+
+.problems__heading {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 131.1%;
+  text-align: center;
+  color: #3C3F34;
+}
+
+.problems__list {
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  margin-top: 90px;
+}
+
+@media screen and (max-width: 1000px) {
+  .problems__list {
+    margin-top: 50px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .problems__list {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+
+.problems__card {
+  padding: 42px 72px;
+  width: 394px;
+  border-radius: 35px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+}
+
+.problems__card:nth-child(2) {
+  z-index: 3;
+  margin-left: -30px;
+}
+
+@media screen and (max-width: 480px) {
+  .problems__card:nth-child(2) {
+    margin-left: 0;
+  }
+}
+
+.problems__card:nth-child(3) {
+  margin-left: -30px;
+  padding-left: 50px;
+  padding-right: 30px;
+}
+
+@media screen and (max-width: 480px) {
+  .problems__card:nth-child(3) {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .problems__card {
+    margin-top: 20px;
+    width: 80%;
+  }
+}
+
+.big-type {
+  width: 489px;
+  min-height: 350px;
+}
+
+@media screen and (max-width: 480px) {
+  .big-type {
+    width: 80%;
+    height: 300px;
+  }
+}
+
+.big-type .problems-card__img {
+  max-width: 133px;
+}
+
+.problems-card__img {
+  max-width: 105px;
+}
+
+.big-type .problems-card__heading {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 140%;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.problems-card__heading {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.problems-card__text {
+  padding-top: 15px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 140%;
+  /* or 22px */
+  text-align: center;
+  color: #FFFFFF;
+}
+
+@media screen and (max-width: 1000px) {
+  .problems-card__text {
+    display: none;
+  }
+}
+
+.big-tipe .problems-card__text {
+  font-size: 20px;
+}
+
+.problems__circles {
+  position: absolute;
+  z-index: -1;
+  left: 24px;
+  top: 1850px;
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+.benefits {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 140px;
+}
+
+.benefits__list {
+  list-style: none;
+  padding-top: 72px;
+}
+
+.benefit-card {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[2];
+      grid-template-columns: repeat(2, 1fr);
+  margin-left: 100px;
+  padding-top: 80px;
+}
+
+@media screen and (max-width: 1280px) {
+  .benefit-card {
+    margin-right: 0;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+}
+
+.benefit-card__block {
+  background: #F7F8F3;
+  border-radius: 35px 0 0 35px;
+  padding: 104px 70px;
+  margin-right: -100px;
+  padding-right: 150px;
+}
+
+@media screen and (max-width: 1280px) {
+  .benefit-card__block {
+    border-radius: 35px;
+    padding: 50px 35px;
+  }
+}
+
+.benefit-card__heading {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 131.1%;
+  color: #3C3F34;
+}
+
+.benefit-card__text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  color: #3C3F34;
+  padding-top: 25px;
+  max-width: 394px;
+}
+
+@media screen and (max-width: 1280px) {
+  .benefit-card__text {
+    font-size: 16px;
+    line-height: 120%;
+  }
+}
+
+.benefit-card__button {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+  padding: 14px 73px;
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 9px;
+  margin-top: 35px;
+}
+
+.benefit-card__button:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+          box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+}
+
+.button-light {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 22px;
+  color: #3C3F34;
+  background: #FFFFFF;
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 9px;
+}
+
+.button-light:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px 10px 40px #6e945b;
+          box-shadow: 0px 10px 40px #6e945b;
+}
+
+@media screen and (max-width: 1280px) {
+  .benefit-card__img {
+    display: none;
+  }
+}
+
+.block-up {
+  padding: 0;
+  z-index: 2;
+  margin-left: -100px;
+  padding: 109px 70px;
+  max-width: 770px;
+  padding-right: 0;
+}
+
+.img-down {
+  margin-left: auto;
+  margin-right: 0;
+  z-index: 2;
+  border-radius: 35px 0 0 35px;
+}
+
+.green-type p {
+  color: white;
+}
+
+.green-type .benefit-card__heading {
+  color: white;
+}
+
+.green-type .benefit-card__block {
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 35px 0 0 35px;
+}
+
+@media screen and (max-width: 1280px) {
+  .green-type .benefit-card__block {
+    border-radius: 35px;
+  }
+}
+
+.statistic {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 150px;
+  padding-bottom: 5px;
+}
+
+.statistic__list {
+  list-style: none;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  -webkit-column-gap: 75px;
+          column-gap: 75px;
+}
+
+.statistic__info {
+  padding-top: 50px;
+  border-top: 5px solid #C0D997;
+}
+
+.statistic__number {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 131.1%;
+  color: #3C3F34;
+}
+
+.statistic__text {
+  padding-top: 25px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  color: #3C3F34;
+  max-width: 239px;
+}
+
+.statistic-button {
+  margin-top: 90px;
+  margin-bottom: 166px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+  padding: 14px 73px;
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 9px;
+}
+
+.statistic-button:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+          box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+}
+
+.statistic__bg {
+  position: absolute;
+  top: 3700px;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+}
+
+.statistic__dots {
+  position: absolute;
+  top: 4000px;
+  right: 0;
+  z-index: -1;
+}
+
+.benefits__circles {
+  position: absolute;
+  top: 2821px;
+  left: 0;
+  z-index: -1;
+}
+
+.benefits__circles.second {
+  top: 4636px;
+}
+
+.rating {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 142px;
+}
+
+@media screen and (max-width: 1000px) {
+  .rating {
+    padding-top: 80px;
+  }
+}
+
+.rating__list {
+  padding-top: 70px;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+@media screen and (max-width: 1280px) {
+  .rating__list {
+    padding-top: 40px;
+  }
+}
+
+.rating-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background: #F7F8F3;
+  border-radius: 25px;
+  padding: 30px 49px;
+}
+
+@media screen and (max-width: 1280px) {
+  .rating-card {
+    max-width: 300px;
+    margin-top: 20px;
+  }
+}
+
+.stars {
+  padding-top: 32px;
+  border-top: 1px solid #D9D9D9;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.rating-card__company-logo {
+  max-width: 272px;
+}
+
+/* manrope-regular - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/manrope-v12-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-regular.woff2") format("woff2"), url("../fonts/manrope-v12-latin-regular.woff") format("woff"), url("../fonts/manrope-v12-latin-regular.ttf") format("truetype"), url("../fonts/manrope-v12-latin-regular.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-600 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: url("../fonts/manrope-v12-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-600.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-600.woff2") format("woff2"), url("../fonts/manrope-v12-latin-600.woff") format("woff"), url("../fonts/manrope-v12-latin-600.ttf") format("truetype"), url("../fonts/manrope-v12-latin-600.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-500 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: url("../fonts/manrope-v12-latin-500.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-500.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-500.woff2") format("woff2"), url("../fonts/manrope-v12-latin-500.woff") format("woff"), url("../fonts/manrope-v12-latin-500.ttf") format("truetype"), url("../fonts/manrope-v12-latin-500.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-700 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/manrope-v12-latin-700.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-700.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-700.woff2") format("woff2"), url("../fonts/manrope-v12-latin-700.woff") format("woff"), url("../fonts/manrope-v12-latin-700.ttf") format("truetype"), url("../fonts/manrope-v12-latin-700.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+/* manrope-800 - latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/manrope-v12-latin-800.eot");
+  /* IE9 Compat Modes */
+  src: local(""), url("../fonts/manrope-v12-latin-800.eot?#iefix") format("embedded-opentype"), url("../fonts/manrope-v12-latin-800.woff2") format("woff2"), url("../fonts/manrope-v12-latin-800.woff") format("woff"), url("../fonts/manrope-v12-latin-800.ttf") format("truetype"), url("../fonts/manrope-v12-latin-800.svg#Manrope") format("svg");
+  /* Legacy iOS */
+}
+
+.faq {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 140px;
+}
+
+.faq__wrapper {
+  padding-bottom: 40px;
+  border-bottom: 1px solid #D9D9D9;
+}
+
+.faq__accordion {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 131.1%;
+  padding-top: 39px;
+  color: #3C3F34;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+@media screen and (max-width: 868px) {
+  .faq__accordion {
+    font-size: 25px;
+    line-height: 120%;
+  }
+}
+
+.faq__panel {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  -webkit-animation: open 1s ease-in-out forwards;
+          animation: open 1s ease-in-out forwards;
+}
+
+.faq__text {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  color: #3C3F34;
+  padding-top: 25px;
+}
+
+.cross {
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+
+.active .cross {
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.anime {
+  -webkit-animation: close 1s ease-in-out forwards;
+          animation: close 1s ease-in-out forwards;
+}
+
+@-webkit-keyframes open {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes close {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes close {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.faq__bg {
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 6050px;
+  width: 100%;
+}
+
+@media screen and (max-width: 868px) {
+  .faq__bg {
+    display: none;
+  }
+}
+
+.adv {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.adv__block {
+  margin-top: 140px;
+  background: linear-gradient(98.8deg, #97BC5D 0.78%, #C0D997 98.41%);
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 35px;
+  padding: 88px 313px;
+  text-align: center;
+}
+
+@media screen and (max-width: 1000px) {
+  .adv__block {
+    padding: 44px 150px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media screen and (max-width: 868px) {
+  .adv__block {
+    padding: 40px 50px;
+  }
+}
+
+.adv__heading {
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 131.1%;
+  color: #FFFFFF;
+}
+
+.adv__text {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 140%;
+  color: #FFFFFF;
+  margin-top: 25px;
+}
+
+.adv__button {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 22px;
+  color: #3C3F34;
+  background: #FFFFFF;
+  -webkit-box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+          box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+  border-radius: 9px;
+  padding: 14px 95px;
+  margin-top: 49px;
+}
+
+.adv__button:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+  -webkit-box-shadow: 0px 10px 40px #6e945b;
+          box-shadow: 0px 10px 40px #6e945b;
+}
+
+.adv__dots {
+  position: absolute;
+  z-index: -1;
+  left: 49px;
+  top: 6550px;
+}
+
+@media screen and (max-width: 868px) {
+  .adv__dots {
+    display: none;
+  }
+}
+
+.popup {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: none;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  width: 1200px;
+  background: #F7F8F3;
+  position: absolute;
+  z-index: 200;
+  height: 500px;
+}
+
+.show {
+  display: block;
+}
+
+.footer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 70px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 10px;
+  border-top: 1px solid #D9D9D9;
+  padding-bottom: 10px;
+}
+
+.footer__logo {
+  max-width: 65px;
+}
+
+.footer__text {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  /* identical to box height */
+  color: #3C3F34;
+}
+
+.footer__img {
+  max-width: 80px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 300;
+  padding-top: 20%;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: black;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 100%;
+  max-width: 500px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 9px;
+}
+
+/* The Close Button */
+.close-cross {
+  color: #aaaaaa;
+  float: right;
+  -ms-flex-item-align: end;
+  align-self: flex-end;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-cross:hover,
+.close-cross:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+body.lock {
+  overflow: hidden;
+}
+/*# sourceMappingURL=style.css.map */
