@@ -152,9 +152,10 @@ int Server::_finish_request(int client_sock, const http::Response& res) {
 	_log.debug(SSTR("[Server] send raw res: " << raw_res));
 	std::size_t bytes_write_total = 0;
 
+	// TODO error in large raw_res.size
 	for (int bytes_write = 0; bytes_write_total < raw_res.size();
 			bytes_write_total += bytes_write) {
-		bytes_write = send(client_sock, &(raw_res[bytes_write_total]),
+		bytes_write = send(client_sock, raw_res.c_str() + bytes_write_total,
 				raw_res.size() - bytes_write_total, 0);
 		if (bytes_write < 0) {
 			return bytes_write;

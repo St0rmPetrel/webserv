@@ -18,6 +18,7 @@ namespace http {
 	const std::string mime_type_png  = "image/png";
 	const std::string mime_type_webp  = "image/webp";
 	const std::string mime_type_ico  = "image/vnd.microsoft.icon";
+	const std::string mime_type_svg  = "image/svg+xml";
 
 	const std::string mime_type_bin  = "application/octet-stream";
 	const std::string mime_type_json  = "application/json";
@@ -78,11 +79,11 @@ namespace http {
 		public:
 			Header header;
 		private:
-			StatusCode       _status;
-			ConnectionStatus _connection_status;
-			std::string      _body;
-			int              _body_size;
-			int              _protocol_version;
+			StatusCode        _status;
+			ConnectionStatus  _connection_status;
+			std::string       _body;
+			size_t            _body_size;
+			int               _protocol_version;
 	};
 
 	extern bool is_redirect_code(Response::StatusCode status_code);

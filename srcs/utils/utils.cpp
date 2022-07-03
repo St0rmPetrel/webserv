@@ -43,6 +43,8 @@ const std::string utils::detect_file_mime_type(const std::string& file_path) {
 		return http::mime_type_bin;
 	} else if (extension == "json") {
 		return http::mime_type_json;
+	} else if (extension == "svg") {
+		return http::mime_type_svg;
 	} else if (extension == "js") {
 		return http::mime_type_js;
 	}
