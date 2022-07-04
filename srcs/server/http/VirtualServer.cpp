@@ -58,3 +58,20 @@ const std::vector<VirtualServer::Options::Location>& VirtualServer::get_location
 }
 
 VirtualServer::Options::Options() : port(8081), listener_backlog(1024) { }
+
+bool VirtualServer::Options::intersect(const VirtualServer::Options& opts) const {
+	if (opts.port != this->port || opts.addr != this->addr) {
+		return false;
+	}
+	if (opts.names.empty() && this->names.empty()) {
+		return true;
+	}
+	for (std::set<std::string>::const_iterator cit = opts.names.begin();
+			cit != opts.names.end(); ++cit) {
+		std::set<std::string>::const_iterator name_cit = this->names.find(*cit);
+		if (name_cit != this->names.end()) {
+			return true;
+		}
+	}
+	return false;
+}

@@ -42,6 +42,7 @@ namespace http {
 				std::vector<Location> locations;
 
 				Options();
+				bool intersect(const Options& opts) const;
 			};
 		public:
 			VirtualServer(const logger::Logger& log, const Options& opts);

@@ -20,9 +20,21 @@ namespace http {
 	const std::string mime_type_ico  = "image/vnd.microsoft.icon";
 	const std::string mime_type_svg  = "image/svg+xml";
 
+	const std::string mime_type_mp3  = "audio/mpeg";
+
+	const std::string mime_type_mp4  = "video/mp4";
+	const std::string mime_type_mpeg  = "video/mpeg";
+
 	const std::string mime_type_bin  = "application/octet-stream";
+	const std::string mime_type_pdf  = "application/pdf";
 	const std::string mime_type_json  = "application/json";
 	const std::string mime_type_js  = "application/javascript";
+	const std::string mime_type_php  = "application/x-httpd-php";
+	const std::string mime_type_eot  = "application/vnd.ms-fontobject";
+
+	const std::string mime_type_woff  = "font/woff";
+	const std::string mime_type_woff2  = "font/woff2";
+	const std::string mime_type_ttf  = "font/ttf";
 
 	enum ConnectionStatus {
 		KeepAlive,

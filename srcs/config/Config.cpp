@@ -206,6 +206,14 @@ void Config::_fill_http_options(const Module& http_module) {
 			http::VirtualServer::Options virtual_server_opts(default_virtual_server_opts);
 
 			_fill_virtual_server_options(virtual_server_opts, *it);
+			// check intersection in _serv_opts.servers[...] and virtual_server_opts
+			for (std::vector<http::VirtualServer::Options>::const_iterator vs_it =
+					_serv_opts.servers.begin(); vs_it != _serv_opts.servers.end(); ++vs_it) {
+				if (virtual_server_opts.intersect(*vs_it)) {
+					_log.fatal("[Config] [Filling] virtual server options intersection");
+					throw FillingBadDirectiveArgsException();
+				}
+			}
 			_serv_opts.servers.push_back(virtual_server_opts);
 			_log.debug("[Config] [Filling] filled server module");
 		}

@@ -39,14 +39,32 @@ const std::string utils::detect_file_mime_type(const std::string& file_path) {
 		return http::mime_type_webp;
 	} else if (extension == "ico") {
 		return http::mime_type_ico;
+	} else if (extension == "svg") {
+		return http::mime_type_svg;
+	} else if (extension == "mp3") {
+		return http::mime_type_mp3;
+	} else if (extension == "mp4") {
+		return http::mime_type_mp4;
+	} else if (extension == "mpeg") {
+		return http::mime_type_mpeg;
 	} else if (extension == "bin") {
 		return http::mime_type_bin;
 	} else if (extension == "json") {
 		return http::mime_type_json;
-	} else if (extension == "svg") {
-		return http::mime_type_svg;
 	} else if (extension == "js") {
 		return http::mime_type_js;
+	} else if (extension == "pdf") {
+		return http::mime_type_pdf;
+	} else if (extension == "php") {
+		return http::mime_type_php;
+	} else if (extension == "eot") {
+		return http::mime_type_eot;
+	} else if (extension == "woff") {
+		return http::mime_type_woff;
+	} else if (extension == "woff2") {
+		return http::mime_type_woff2;
+	} else if (extension == "ttf") {
+		return http::mime_type_ttf;
 	}
 	return http::mime_type_bin;
 }
