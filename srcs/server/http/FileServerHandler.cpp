@@ -113,7 +113,7 @@ bool FileServerHandler::_path_is_valid(const std::string& path) const {
 }
 
 void FileServerHandler::_method_get(Response& res, const Request& req) const {
-	std::string   path = _opts.root + req.path;
+	std::string   path = _opts.root + utils::url_decode(req.path);
 
 	_get_dir_or_file(res, req, path);
 }
@@ -210,7 +210,7 @@ void FileServerHandler::_generate_autoindex(Response& res, const Request& req,
 			dir_path += "/";
 		}
 		std::string href = "<p><a href=http://" +
-			host_header->second + dir_path + *it +">"+
+			host_header->second + dir_path + utils::url_encode(*it) +">"+
 			*it + "</a></p>\n";
 		files_list += href;
 	}

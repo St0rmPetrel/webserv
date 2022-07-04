@@ -2,6 +2,10 @@
 #include <fstream>
 #include <unistd.h>
 #include <algorithm>
+#include <stdio.h>
+#include <cctype>
+#include <iomanip>
+#include <sstream>
 
 #include "utils.hpp"
 #include "../server/http/Response.hpp"
@@ -97,4 +101,42 @@ const std::string utils::str_to_lower(const std::string& str) {
 	std::transform(data.begin(), data.end(), data.begin(), asciitolower);
 
 	return data;
+}
+
+const std::string utils::url_decode(const std::string& SRC) {
+	std::string ret;
+	char ch;
+	int ii;
+	for (size_t i=0; i<SRC.length(); i++) {
+		if (int(SRC[i])==37) {
+			sscanf(SRC.substr(i+1,2).c_str(), "%x", &ii);
+			ch=static_cast<char>(ii);
+			ret+=ch;
+			i=i+2;
+		} else {
+			ret+=SRC[i];
+		}
+	}
+	return (ret);
+}
+
+const std::string utils::url_encode(const std::string &value) {
+	std::ostringstream escaped;
+	escaped.fill('0');
+	escaped << std::hex;
+
+	for (std::string::const_iterator i = value.begin(), n = value.end(); i != n; ++i) {
+		std::string::value_type c = (*i);
+		
+		// Keep alphanumeric and other accepted characters intact
+		if (std::isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+			escaped << c;
+			continue;
+		}
+		// Any other characters are percent-encoded
+		escaped << std::uppercase;
+		escaped << '%' << std::setw(2) << int((unsigned char) c);
+		escaped << std::nouppercase;
+	}
+	return escaped.str();
 }
