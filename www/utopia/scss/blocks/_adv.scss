@@ -1,0 +1,54 @@
+.adv {
+    @include wrapper;
+}
+.adv__block {
+    margin-top: 140px;
+    background: $gradient-green;
+    box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+    border-radius: 35px;
+    padding: 88px 313px;
+    text-align: center;
+
+    @include desktop {
+        padding: 44px 150px;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    @include laptop {
+        padding: 40px 50px;
+    }
+}
+.adv__heading {
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 131.1%;
+
+    color: #FFFFFF;
+}
+.adv__text {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 140%;
+
+    color: #FFFFFF;
+    margin-top: 25px;
+}
+.adv__button {
+    @include button-light;
+    padding: 14px 95px;
+    margin-top: 49px;
+}
+
+.adv__dots {
+    position: absolute;
+    z-index: -1;
+    left: 49px;
+    top: 6550px;
+
+    @include laptop {
+        display: none;
+      }
+}

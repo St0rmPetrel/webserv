@@ -1,0 +1,99 @@
+@import "../utils/_fonts.scss";
+@import "../utils/variables";
+
+@mixin reset {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin Manrope-family {
+    font-family: 'Manrope', 'Roboto', "Avenir Next", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+@mixin button-reset {
+    padding: 0;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+@mixin button-green {
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 22px;
+    color: #FFFFFF;
+    padding: 14px 73px;
+    background: $gradient-green;
+    box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+    border-radius: 9px;
+
+    &:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0px 10px 40px rgba(135, 182, 112, 0.615);
+    }
+}
+
+@mixin button-light {
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 22px;
+    color: $dark;
+    background: #FFFFFF;
+    box-shadow: 0px 10px 30px rgba(135, 182, 112, 0.3);
+    border-radius: 9px;
+
+    &:hover {
+        transition: all 0.4s ease-in-out;
+        box-shadow: 0px 10px 40px rgb(110, 148, 91);
+    }
+}
+
+// @mixin media-min-width-medium {
+//     @media screen and (min-width: 768px) {
+//         @content;
+//     }
+// }
+
+// mixins популярных брекпоинтов
+@mixin max-desktop {
+    @media screen and (max-width: 1280px) {
+         @content;
+    }
+}
+
+@mixin desktop {
+    @media screen and (max-width: 1000px) {
+         @content;
+    }
+}
+@mixin laptop {
+    @media screen and (max-width: 868px) {
+        @content;
+    }
+}
+@mixin tablets {
+    @media screen and (max-width: 480px) {
+        @content;
+    }
+}
+@mixin phones {
+   @media screen and (max-width: 350px) {
+        @content;
+   }
+}
+
+
+@mixin adaptiv-font($pcSize, $mobSize) {
+	$addSize: $pcSize - $mobSize;
+	$maxWidth: $maxWidth - 320;
+	font-size: calc(#{$mobSize + px} + #{$addSize} * ((100vw - 320px) / #{$maxWidth}));
+}
+
+@mixin wrapper {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}

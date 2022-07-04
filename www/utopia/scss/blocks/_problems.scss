@@ -1,0 +1,127 @@
+@import "../utils/variables";
+@import "../utils/mixins";
+
+.problems {
+    @include wrapper;
+    padding-top: 140px;
+
+    @include desktop {
+        padding-top: 80px;
+    }
+}
+.problems__heading {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 131.1%;
+    text-align: center;
+
+    color: $dark;
+}
+.problems__list {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-top: 90px;
+
+    @include desktop {
+        margin-top: 50px;
+    }
+
+    @include tablets {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.problems__card {
+    padding: 42px 72px;
+    width: 394px;
+    border-radius: 35px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    background: $gradient-green;
+
+    &:nth-child(2) {
+        z-index: 3;
+        margin-left: -30px;
+
+        @include tablets {
+            margin-left: 0;
+        }
+    }
+    &:nth-child(3) {
+        margin-left: -30px;
+        padding-left: 50px;
+        padding-right: 30px;
+
+        @include tablets {
+            margin-left: 0;
+        }
+    }
+
+    @include tablets {
+        margin-top: 20px;
+        width: 80%;
+    }
+}
+
+.big-type {
+    width: 489px;
+    min-height: 350px;
+
+    @include tablets {
+        width: 80%;
+        height: 300px;
+    }
+}
+
+.big-type .problems-card__img {
+    max-width: 133px;
+}
+
+.problems-card__img {
+    max-width: 105px;
+}
+.big-type .problems-card__heading {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 25px;
+    line-height: 140%;
+    text-align: center;
+    color: #FFFFFF;
+}
+.problems-card__heading {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 140%;
+    text-align: center;
+    color: #FFFFFF;
+}
+.problems-card__text {
+    padding-top: 15px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    /* or 22px */
+    text-align: center;
+
+    color: #FFFFFF;
+
+    @include desktop {
+        display: none;
+    }
+}
+.big-tipe .problems-card__text {
+    font-size: 20px;
+}
+
+.problems__circles {
+    position:absolute;
+    z-index: -1;
+    left: 24px;
+    top: 1850px;
+}

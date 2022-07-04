@@ -1,0 +1,99 @@
+@import "../utils/variables";
+@import "../utils/mixins";
+
+.tools {
+    padding-top: 230px;
+    @include wrapper;
+    align-items: center;
+    text-align: center;
+}
+.tools__heading {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 131.1%;
+    color: $dark;
+}
+.tools__list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 900px;
+    // display: grid;
+    // grid-template-columns: repeat(3, 1fr);
+    margin-top: 87px;
+    row-gap: 45px;
+    // justify-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    align-self:center;
+    justify-content: space-evenly;
+
+    @include desktop {
+        margin-top: 20px;
+    }
+    @include tablets {
+        // grid-template-columns: repeat(1, 1fr);
+        flex-direction: column;
+    }
+}
+.tools__item {
+    width: 238px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+// .tools__img {
+    // width: 103px;
+    // height: 103px;
+
+    // &:hover {
+    //     transition: all 1s ease-in-out;
+    //     box-shadow: 0 0 10px $dark;
+    // }
+// }
+.tools__subheading {
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 140%;
+    text-align: center;
+    padding-top: 25px;
+
+    color: $dark;
+}
+.tools__text {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 140%;
+    text-align: center;
+    padding-top: 10px;
+
+    color: $dark;
+}
+.tools__button {
+    @include button-green;
+    margin-top: 100px;
+    // margin-left: 38%;
+}
+
+.tools__background {
+    position: absolute;
+    z-index: -1;
+}
+.tools__bg {
+    left: 0;
+    top: 808.36px;
+    width: 100%;
+}
+.tools__circles {
+    // left: 1261px;
+    right: 0;
+    top: 926px;
+
+    // opacity: 0.5;
+}
+.tools__dots {
+    left: -118px;
+    top: 727px;
+
+    // opacity: 0.2;
+}

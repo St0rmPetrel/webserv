@@ -1,0 +1,8 @@
+@import "_mixins.scss";
+
+*,
+*::after,
+*::before {
+    @include reset;
+    box-sizing: border-box;
+}
