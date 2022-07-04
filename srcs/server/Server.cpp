@@ -74,6 +74,8 @@ void Server::listen_and_serve() {
 					// parse raw data to http request representation
 					http::RequestParser::Result parsing_result = _request_parser.parse(req,
 							recv_buf, recv_buf + bytes_read);
+					// TODO that should be in _request_parser.parse but dead line
+					// bad code
 					fill_request_host_close(req);
 
 					// choose virtual_server (virtual_server - have specific individual

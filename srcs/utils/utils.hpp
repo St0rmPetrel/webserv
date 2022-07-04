@@ -27,6 +27,8 @@ namespace utils {
 	extern bool              file_exist(const std::string& path);
 	extern const std::string read_file_fd(int fd);
 	extern const std::string str_to_lower(const std::string& str);
+	extern const std::string url_decode(const std::string& src);
+	extern const std::string url_encode(const std::string &value);
 };
 
 #endif

@@ -37,7 +37,8 @@ std::pair<std::string, std::string> CGIHandler::_script_name_path_info_pair(cons
 }
 
 void CGIHandler::serve_http(Response& res, const Request& req) const {
-	std::pair<std::string, std::string> script_pathinfo = _script_name_path_info_pair(req.path);
+	std::pair<std::string, std::string> script_pathinfo = _script_name_path_info_pair(
+			utils::url_decode(req.path));
 	std::string script_path = _opts.root + script_pathinfo.first;
 	_log.debug(SSTR("[CGIHandler] try to execute script_path=" << script_path));
 	if (!utils::file_exist(script_path)) {
@@ -105,7 +106,8 @@ std::map<std::string, std::string> CGIHandler::_set_envp(const Request& req) con
 		host = host_header.substr(0, host_sep);
 		port = host_header.substr(host_sep);
 	}
-	std::pair<std::string, std::string> script_pathinfo = _script_name_path_info_pair(req.path);
+	std::pair<std::string, std::string> script_pathinfo = _script_name_path_info_pair(
+			utils::url_decode(req.path));
 	// https://www.oreilly.com/openbook/cgi/ch02_02.html
 	envp["GATEWAY_INTERFACE"] = "CGI/1.1";
 	envp["SERVER_NAME"] = host;
